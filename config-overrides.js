@@ -15,7 +15,7 @@ module.exports = override(
                 modifyVars: {
                     // '@layout-header-background': '#fff',
                     // '@font-family': 'Roboto, "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif',
-                    '@primary-color': '#F59F32',
+                    // '@primary-color': '#f59f32',
                     // '@link-color': '#ec4649',
                     '@font-size-base': '12px',
                     '@text-color':'#000000',
