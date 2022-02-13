@@ -3,9 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import {ConfigProvider} from "antd";
 import {HashRouter, Route, Routes} from "react-router-dom";
-import Products from "./containers/Products";
-import Healthy from "./containers/Healthy";
-import Vehicle from "./containers/Vehicle";
+import Home from "./containers/Home";
+import CategoryDetail from "./containers/CategoryDetail";
+import ProductDetail from "./containers/ProductDetail";
 
 function App() {
   return (
@@ -13,9 +13,9 @@ function App() {
       <ConfigProvider>
         <HashRouter>
           <Routes>
-            <Route path={'/'} element={<Products/>}></Route>
-            <Route path={'/products/healthy'} element={<Healthy/>}></Route>
-            <Route path={'/products/vehicle'} element={<Vehicle/>}></Route>
+            <Route path={'/'} element={<Home/>}></Route>
+            <Route path={'/categories/detail'} element={<CategoryDetail/>}></Route>
+            <Route path={'/products/detail'} element={<ProductDetail/>}></Route>
           </Routes>
         </HashRouter>
       </ConfigProvider>

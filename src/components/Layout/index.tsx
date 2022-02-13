@@ -1,21 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Avatar, Col, Layout, Menu, Popover, Row} from 'antd';
 import './styles.scss';
-import {
-    DownOutlined,
-    UnorderedListOutlined,
-    ShoppingCartOutlined,
-    DoubleLeftOutlined,
-    DoubleRightOutlined,
-    LogoutOutlined,
-    DashOutlined
-} from '@ant-design/icons';
 import ProgressBar from "../Spinner/ProgressBar";
 import {localStorageRead, localStorageSave} from "../../utils/LocalStorageUtils";
 import {PROFILE_KEY, TENANT_KEY, TOKEN_KEY} from "../../core/config";
-import lodash from 'lodash';
 import DocumentTitle from 'react-document-title';
-import {useLocation} from 'react-router-dom';
+import {useLocation, useSearchParams} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import useWindowDimensions from "../../hooks";
 import logo from '../../resources/images/logo.png';
@@ -36,6 +26,7 @@ function MainLayout(props: MainLayoutProps) {
     const [autoIncrement, setAutoIncrement] = useState<boolean>(false);
     const [intervalTime, setIntervalTime] = useState<number>(200);
     const [activeKey, setActiveKey] = useState<string>('');
+    let [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation();
     const navigate = useNavigate();
     const {height} = useWindowDimensions();
@@ -48,8 +39,10 @@ function MainLayout(props: MainLayoutProps) {
     }, [showProgressBar]);
     useEffect(() => {
         if (location.pathname && location.pathname !== '/') {
-            let pathname: string[] = location.pathname.split('/');
-            setActiveKey(pathname[pathname.length - 1])
+            if(location.pathname.indexOf('categories/detail')>0){
+                let code = searchParams.get('code');
+                if(code) setActiveKey(code);
+            }
         }
         // this.setState({activeKey: activeKey})
     }, []);
@@ -104,8 +97,10 @@ function MainLayout(props: MainLayoutProps) {
         }
     };
     const clickMenu=(key: string)=>{
-        if(key)
-            navigate(`/products/${key}`);
+        if(key) {
+            navigate(`/categories/detail?code=${key}`);
+            window.location.reload();
+        }
         else navigate(`/`);
     }
     return (
@@ -116,9 +111,9 @@ function MainLayout(props: MainLayoutProps) {
                         <img style={{height: 60, backgroundColor:'white', paddingLeft:10}} src={logo}></img>
                         <span onClick={()=>clickMenu('')} className={`${activeKey===''?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
                         <span onClick={()=>clickMenu('healthy')} className={`${activeKey==='healthy'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Sức khỏe</span>
-                        <span onClick={()=>clickMenu('')} className={`${activeKey==='travel'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Du lịch</span>
-                        <span onClick={()=>clickMenu('')} className={`${activeKey==='accident'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Tai nạn</span>
-                        <span onClick={()=>clickMenu('')} className={`${activeKey==='assets'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Tài sản</span>
+                        <span onClick={()=>clickMenu('travel')} className={`${activeKey==='travel'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Du lịch</span>
+                        <span onClick={()=>clickMenu('accident')} className={`${activeKey==='accident'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Tai nạn</span>
+                        <span onClick={()=>clickMenu('assets')} className={`${activeKey==='assets'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Tài sản</span>
                         <span onClick={()=>clickMenu('vehicle')} className={`${activeKey==='vehicle'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Xe</span>
 
                     </Row>

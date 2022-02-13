@@ -2,7 +2,7 @@ import {Button, Carousel} from "antd";
 import MainLayout from "../../components/Layout";
 import {useState} from "react";
 
-function Products(){
+function Home(){
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
     return <MainLayout showProgressBar={showProgressBar} title={'Danh mục sản phẩm'}>
         <div>
@@ -23,4 +23,4 @@ function Products(){
         </div>
     </MainLayout>
 }
-export default Products;
+export default Home;

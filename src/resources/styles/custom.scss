@@ -30,7 +30,7 @@
     border: 1px solid #F9A400;
     width: 10px !important;
     height: 10px !important;
-   
+
     .ant-steps-icon-dot {
       top: 15% !important;
       left: 5% !important;
@@ -50,13 +50,15 @@
     -o-transform:rotate(90deg); /* Opera */
   }
 }
-
+.main-content{
+  padding-left: 200px;
+  padding-right: 200px;
+}
 
 @import "helpers/variables";
 @import "helpers/mixins";
 
 @import "module/common";
 @import "module/form";
-@import "module/button";
 @import "module/table";
 @import "module/popup";

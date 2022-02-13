@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import MainLayout from "../../components/Layout";
 import {Carousel} from "antd";
 
-function Healthy(){
+function ProductDetail(){
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
     return <MainLayout showProgressBar={showProgressBar} title={'Danh mục sản phẩm'}>
         <div>
@@ -10,4 +10,4 @@ function Healthy(){
         </div>
     </MainLayout>
 };
-export default Healthy;
+export default ProductDetail;
