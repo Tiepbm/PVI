@@ -79,6 +79,11 @@ function ProductDetail(){
                     <span className={'txt-size-h6'}>Không quá 10 triệu đồng/ người</span>
                 </Col>
             </Row>
+            <Row><span className={'robotobold txt-size-h4 mgt20 mgbt20'}>Mô tả chi tiết</span></Row>
+            <div className={'dpl-flex justify-content-center'}>
+                <img src={'https://baohiem.viettelpay.vn/filepath/images/FileUpload/40ee56bd-a6df-4677-8026-8d0e7a56c011.jpg'}></img>
+
+            </div>
         </div>
     </MainLayout>
 };
