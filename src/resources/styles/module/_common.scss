@@ -211,6 +211,7 @@
 
 .mgt5-minus{margin-top: -5px};
 .mgt0{margin-top: 0}
+.mgt1{margin-top: 1px}
 .mgt4{margin-top: 4px}
 .mgt5{margin-top: 5px}
 .mgt6{margin-top: 6px}
@@ -259,6 +260,10 @@
 .line-height167{line-height: 1.67;}
 
 //Border-color
+.border-top-radius {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
 .border-bottom-0x{border-bottom: 0!important}
 .border-bottom-1x{border-bottom: 1px solid}
 .border-bottom-1x-grey{border-bottom: 1px solid #e8e8e8}
@@ -274,12 +279,13 @@
 .bdbt0{border-bottom: 0}
 .bdt0{border-top: 0}
 .border-top-3x{border-top: 3px solid}
+.border-bottom-2x-yellow{border-bottom: 2px solid #edee0a}
 
 .bd-color-black{border-color: #2f3439}
 .bd-color-gray{border-color: rgba(0,0,0,.14)}
 .bd-color-gray2{border-color: rgba(0,0,0,.25)}
 .bd-color-gray3{border-color: #E5E5E5}
-.bd-color-blue{border-color: #1890ff}
+.bd-color-blue{border-color: #0082c8}
 .bd-color-green{border-color: #7CB305!important}
 .bd-color-red{border-color: red}
 .bd-color-white{border-color: white}

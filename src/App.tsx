@@ -15,7 +15,7 @@ function App() {
           <Routes>
             <Route path={'/'} element={<Home/>}></Route>
             <Route path={'/categories/detail'} element={<CategoryDetail/>}></Route>
-            <Route path={'/products/detail'} element={<ProductDetail/>}></Route>
+            <Route path={'/products/:productId'} element={<ProductDetail/>}></Route>
           </Routes>
         </HashRouter>
       </ConfigProvider>

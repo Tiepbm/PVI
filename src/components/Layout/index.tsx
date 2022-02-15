@@ -39,10 +39,10 @@ function MainLayout(props: MainLayoutProps) {
     }, [showProgressBar]);
     useEffect(() => {
         if (location.pathname && location.pathname !== '/') {
-            if(location.pathname.indexOf('categories/detail')>0){
+            if (location.pathname.indexOf('categories/detail') > 0) {
                 let code = searchParams.get('code');
-                if(code) setActiveKey(code);
-            }
+                if (code) setActiveKey(code);
+            }else setActiveKey('other');
         }
         // this.setState({activeKey: activeKey})
     }, []);
@@ -96,26 +96,41 @@ function MainLayout(props: MainLayoutProps) {
 
         }
     };
-    const clickMenu=(key: string)=>{
-        if(key) {
+    const clickMenu = (key: string) => {
+        if (key) {
             navigate(`/categories/detail?code=${key}`);
             window.location.reload();
-        }
-        else navigate(`/`);
+        } else navigate(`/`);
     }
     return (
         <DocumentTitle title={`${title ? title : 'M24'}`}>
             <Layout className={'main-layout'}>
                 <Header className="header">
-                    <Row className={'dpl-flex align-items-center'}>
-                        <img style={{height: 60, backgroundColor:'white', paddingLeft:10}} src={logo}></img>
-                        <span onClick={()=>clickMenu('')} className={`${activeKey===''?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
-                        <span onClick={()=>clickMenu('healthy')} className={`${activeKey==='healthy'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Sức khỏe</span>
-                        <span onClick={()=>clickMenu('travel')} className={`${activeKey==='travel'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Du lịch</span>
-                        <span onClick={()=>clickMenu('accident')} className={`${activeKey==='accident'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Tai nạn</span>
-                        <span onClick={()=>clickMenu('assets')} className={`${activeKey==='assets'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Tài sản</span>
-                        <span onClick={()=>clickMenu('vehicle')} className={`${activeKey==='vehicle'?'txt-color-yellow':'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Xe</span>
-
+                    <Row className={'align-items-center'}>
+                        <img style={{height: 60, backgroundColor: 'white', paddingLeft: 10}} src={logo}></img>
+                        <div>
+                            <span style={{height: 30}} onClick={() => clickMenu('')}
+                                  className={`${activeKey === '' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
+                        </div>
+                        <div>
+                            <span onClick={() => clickMenu('healthy')}
+                                  className={`${activeKey === 'healthy' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Sức khỏe</span>
+                        </div>
+                        <div>
+                            <span onClick={() => clickMenu('travel')}
+                                  className={`${activeKey === 'travel' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Du lịch</span>
+                        </div>
+                        <div>
+                            <span onClick={() => clickMenu('accident')}
+                                  className={`${activeKey === 'accident' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Tai nạn</span>
+                        </div>
+                        <div><span onClick={() => clickMenu('assets')}
+                                  className={`${activeKey === 'assets' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Tài sản</span>
+                        </div>
+                        <div>
+                            <span onClick={() => clickMenu('vehicle')}
+                                  className={`${activeKey === 'vehicle' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Xe</span>
+                        </div>
                     </Row>
                 </Header>
                 <ProgressBar
