@@ -11,7 +11,7 @@ function RegisterInsurance(){
         return current && current > moment().endOf('day');
     }
     return <MainLayout showProgressBar={showProgressBar} title={'Đăng ký'}>
-        <div className={'main-content mgt20'}>
+        <div className={'main-content mgt30'}>
             <Row className={'justify-content-center'}>
                 <Col span={12}>
                     <Steps labelPlacement={'vertical'} current={currentStep}>
@@ -21,7 +21,7 @@ function RegisterInsurance(){
                     </Steps>
                 </Col>
             </Row>
-            <Row className={'justify-content-between'}>
+            <Row className={'justify-content-between mgt20'}>
                 <Col span={12} className={'pdr20'}>
                     <span className={'robotobold txt-size-h1'}>Người mua bảo hiểm</span>
                     <Form

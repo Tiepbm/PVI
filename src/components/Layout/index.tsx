@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Avatar, Col, Layout, Menu, Popover, Row} from 'antd';
+import {Avatar, Col, Divider, Layout, Menu, Popover, Row} from 'antd';
 import './styles.scss';
 import ProgressBar from "../Spinner/ProgressBar";
 import {localStorageRead, localStorageSave} from "../../utils/LocalStorageUtils";
@@ -38,6 +38,7 @@ function MainLayout(props: MainLayoutProps) {
         }
     }, [showProgressBar]);
     useEffect(() => {
+        window.scrollTo(0, 0);
         if (location.pathname && location.pathname !== '/') {
             if (location.pathname.indexOf('categories/detail') > 0) {
                 let code = searchParams.get('code');
@@ -97,40 +98,34 @@ function MainLayout(props: MainLayoutProps) {
         }
     };
     const clickMenu = (key: string) => {
-        if (key) {
-            navigate(`/categories/detail?code=${key}`);
-            window.location.reload();
-        } else navigate(`/`);
+       navigate(`/${key}`);
     }
     return (
         <DocumentTitle title={`${title ? title : 'M24'}`}>
             <Layout className={'main-layout'}>
                 <Header className="header">
-                    <Row className={'align-items-center'}>
-                        <img style={{height: 60, backgroundColor: 'white', paddingLeft: 10}} src={logo}></img>
-                        <div>
+                    <Row className={'align-items-center justify-content-between'}>
+                        <Col span={18}>
+                            <Row className={'align-items-center'}>
+                                <img style={{height: 60, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
+                            <div>
                             <span style={{height: 30}} onClick={() => clickMenu('')}
                                   className={`${activeKey === '' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
-                        </div>
-                        <div>
-                            <span onClick={() => clickMenu('healthy')}
-                                  className={`${activeKey === 'healthy' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Sức khỏe</span>
-                        </div>
-                        <div>
-                            <span onClick={() => clickMenu('travel')}
-                                  className={`${activeKey === 'travel' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Du lịch</span>
-                        </div>
-                        <div>
-                            <span onClick={() => clickMenu('accident')}
-                                  className={`${activeKey === 'accident' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Tai nạn</span>
-                        </div>
-                        <div><span onClick={() => clickMenu('assets')}
-                                  className={`${activeKey === 'assets' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Tài sản</span>
-                        </div>
-                        <div>
-                            <span onClick={() => clickMenu('vehicle')}
-                                  className={`${activeKey === 'vehicle' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Xe</span>
-                        </div>
+                            </div>
+                            <div>
+                            <span onClick={() => clickMenu('about')}
+                                  className={`${activeKey === 'about' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Giới thiệu</span>
+                            </div>
+                            </Row>
+                        </Col>
+                        <Col>
+                            <Row className={'justify-content-end align-items-center'}>
+                                <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng nhập</span>
+                                <Divider type={'vertical'} className={'bg-color-white'}></Divider>
+                                <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng ký</span>
+                            </Row>
+                        </Col>
+
                     </Row>
                 </Header>
                 <ProgressBar
