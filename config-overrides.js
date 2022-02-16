@@ -17,7 +17,7 @@ module.exports = override(
                     '@font-family': 'Roboto, "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif',
                     '@primary-color': '#1890ff',
                     // '@link-color': '#ec4649',
-                    '@font-size-base': '16px',
+                    '@font-size-base': '14px',
                     '@text-color':'#000000',
                 }
             }
