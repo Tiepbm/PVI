@@ -14,7 +14,6 @@ export const TENANT_KEY = 'TENANT_KEY';
 export const TOKEN_KEY = 'M24_TOKEN_KEY';
 export const M1_CONNECTION_INFO = 'M1_CONNECTION_INFO';
 
-export const TAB_PRODUCT='TAB_PRODUCT';
-export const TAB_TICKET='TAB_TICKET';
-export const TAB_TRANSACTION='TAB_TRANSACTION';
-export const TAB_TRANSPORT='TAB_TRANSPORT';
+export const ENSURE_ELECTRIC='tainansudungdien';
+export const ENSURE_CAR='tndsoto';
+export const ENSURE_HOUSE='nhaotoandien';

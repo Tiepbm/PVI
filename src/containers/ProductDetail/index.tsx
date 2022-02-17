@@ -6,7 +6,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import lodash from "lodash";
 import moment from "moment";
 import {formatDate} from "../../core/helpers/date-time";
-import {STANDARD_DATE_FORMAT} from "../../core/config";
+import {ENSURE_CAR, ENSURE_ELECTRIC, ENSURE_HOUSE, STANDARD_DATE_FORMAT} from "../../core/config";
 
 const data = [
     {
@@ -246,10 +246,19 @@ function ProductDetail() {
         }
     }, []);
 
-    function handleChange(value: any) {
-        console.log(`selected ${value}`);
+    const handleChange=(value: any)=> {
+        // console.log(`selected ${value}`);
     }
-
+    const getProductName=()=>{
+        switch (productId){
+            case ENSURE_ELECTRIC:
+                return 'Bảo hiểm tại nạn hộ sử dụng điện';
+            case ENSURE_CAR:
+                return 'Bảo hiểm ô tô PVI';
+            case ENSURE_HOUSE:
+                return 'Bảo hiểm nhà ở toàn diện';
+        }
+    }
     const renderBenefit = () => {
 
         return <div>
@@ -356,10 +365,10 @@ function ProductDetail() {
     }
     const renderFee=()=>{
         switch (productId){
-            case 'tndsoto':
+            case ENSURE_CAR:
                 return renderFeeCar();
-            case 'tainansudungdien':
-            case 'nhaotoandien':
+            case ENSURE_ELECTRIC:
+            case ENSURE_HOUSE:
                 return renderFeeElectric();
         }
     }
@@ -368,12 +377,15 @@ function ProductDetail() {
             <img className={'width100'} src={lodash.get(detail, 'banner', '')}></img>
         </div>
         <div className={'main-content'}>
+            <span style={{
+                position:'absolute', top:320, zIndex:9999
+            }} className={'txt-size-72 txt-color-white robotobold'}>{getProductName()}</span>
             <span className={'txt-size-h5'}>{lodash.get(detail, 'description', '')}</span>
             {renderBenefit()}
             <div className={'bg-color-gray mgt20 pd20'}>
                 {renderFee()}
                 <Row className={'mgt10 justify-content-between align-items-center'}>
-                    <Button onClick={() => navigate(`/products/${productId}/register`)} size={'large'} className={''}
+                    <Button onClick={() => navigate(`/products/${productId}/register?packageCode=${currentPackage}`)} size={'large'} className={''}
                             type={'primary'} danger shape={'round'}>
                         <span className={'robotobold txt-size-h4'}>Đăng ký <i
                             className="mgl5 fas fa-angle-right"></i></span>

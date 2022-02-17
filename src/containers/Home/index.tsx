@@ -3,6 +3,7 @@ import MainLayout from "../../components/Layout";
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import useWindowDimensions from "../../hooks";
+import {ENSURE_CAR, ENSURE_ELECTRIC, ENSURE_HOUSE} from "../../core/config";
 
 function Home() {
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
@@ -19,7 +20,7 @@ function Home() {
                 },
                 {
                     name: 'TNDS ô tô',
-                    id:'tndsoto',
+                    id:ENSURE_CAR,
                     logo: 'https://baohiem.viettelpay.vn/filepath/files/products/77614a36-c2a6-4393-8f18-eab81551204f.png'
                 },
                 {
@@ -57,7 +58,7 @@ function Home() {
                 },
                 {
                     name: 'Tai nạn hộ sử dụng điện',
-                    id:'tainansudungdien',
+                    id:ENSURE_ELECTRIC,
                     logo: 'https://baohiem.viettelpay.vn/filepath/files/products/95568d8a-68df-4939-8519-08ac2ae55b1e.jpg'
                 }
             ]
@@ -67,7 +68,7 @@ function Home() {
             items: [
                 {
                     name: 'Nhà ở toàn diện',
-                    id:'nhaotoandien',
+                    id:ENSURE_HOUSE,
                     logo: 'https://baohiem.viettelpay.vn/filepath/files/products/31a3a17d-21a0-4326-925d-4f63e3c82b99.png'
                 },
                 {
