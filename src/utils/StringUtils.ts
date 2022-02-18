@@ -4,8 +4,8 @@
  * @returns {string}
  */
 import lodash from "lodash";
-import {formatMoneyBySuffix} from "../core/helpers/string";
-import React from "react";
+import md5 from 'md5';
+import {API_KEY} from "../core/config";
 
 export const linkOrder = (text: any, config: any) => {
     if (!text) return '';
@@ -110,3 +110,6 @@ export function handleChangeDate(key:string,e: any,  filter: any){
     }
     return temp;
 };
+export function sign(value: string){
+    return md5(`${API_KEY}${value}`);
+}

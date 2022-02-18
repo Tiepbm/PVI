@@ -6,7 +6,9 @@ import {useNavigate, useParams} from "react-router-dom";
 import lodash from "lodash";
 import moment from "moment";
 import {formatDate} from "../../core/helpers/date-time";
-import {ENSURE_CAR, ENSURE_ELECTRIC, ENSURE_HOUSE, STANDARD_DATE_FORMAT} from "../../core/config";
+import {CPID, ENSURE_CAR, ENSURE_ELECTRIC, ENSURE_HOUSE, STANDARD_DATE_FORMAT} from "../../core/config";
+import {productRepository} from "../../repositories/ProductRepository";
+import {sign} from "../../utils/StringUtils";
 
 const data = [
     {
@@ -31,7 +33,7 @@ const data = [
             packages: [
                 {
                     name: 'Gói cơ bản',
-                    code: 'basic',
+                    code: '01',
                     benefits: [
                         {
                             category: '1',
@@ -49,7 +51,7 @@ const data = [
                 },
                 {
                     name: 'Gói tiêu chuẩn',
-                    code: 'standard',
+                    code: '02',
                     benefits: [
                         {
                             category: '1',
@@ -67,7 +69,7 @@ const data = [
                 },
                 {
                     name: 'Gói nâng cao',
-                    code: 'advance',
+                    code: '03',
                     benefits: [
                         {
                             category: '1',
@@ -109,7 +111,7 @@ const data = [
             packages: [
                 {
                     name: 'Gói bắt buộc',
-                    code: 'basic',
+                    code: '01',
                     benefits: [
                         {
                             category: '1',
@@ -127,7 +129,7 @@ const data = [
                 },
                 {
                     name: 'Gói tiêu chuẩn',
-                    code: 'standard',
+                    code: '02',
                     benefits: [
                         {
                             category: '1',
@@ -145,7 +147,7 @@ const data = [
                 },
                 {
                     name: 'Gói nâng cao',
-                    code: 'advance',
+                    code: '03',
                     benefits: [
                         {
                             category: '1',
@@ -183,7 +185,7 @@ const data = [
             packages: [
                 {
                     name: 'Gói cơ bản',
-                    code: 'basic',
+                    code: '01',
                     benefits: [
                         {
                             category: '1',
@@ -197,7 +199,7 @@ const data = [
                 },
                 {
                     name: 'Gói tiêu chuẩn',
-                    code: 'standard',
+                    code: '02',
                     benefits: [
                         {
                             category: '1',
@@ -211,7 +213,7 @@ const data = [
                 },
                 {
                     name: 'Gói nâng cao',
-                    code: 'advance',
+                    code: '03',
                     benefits: [
                         {
                             category: '1',
@@ -231,9 +233,10 @@ const data = [
 
 function ProductDetail() {
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
-    const [currentPackage, setCurrentPackage] = useState<string>();
+    const [currentPackage, setCurrentPackage] = useState<string>('');
     let {productId} = useParams();
     const [detail, setDetail] = useState<any>();
+    const [fee, setFee] = useState<any>();
     const navigate = useNavigate();
     useEffect(() => {
         if (productId) {
@@ -242,10 +245,87 @@ function ProductDetail() {
                 setDetail(item);
                 setCurrentPackage(item.benefit.packages[0].code);
             }
-
+            getFee();
         }
     }, []);
 
+    const getFee=()=>{
+        switch (productId){
+            case ENSURE_ELECTRIC:
+                getFeeHSDD();
+                break;
+            case ENSURE_CAR:
+
+                break;
+            case ENSURE_HOUSE:
+
+                break;
+        }
+    }
+    const getFeeHSDD=()=>{
+        // let myHeaders = new Headers();
+        // myHeaders.append("Content-Type", "application/json");
+        //
+        // let raw = JSON.stringify({
+        //     "cpid": "WEB_VIEW",
+        //     "sign": "ba42ed603cf347d41bd826b180ac6ca7",
+        //     "package": "01"
+        // });
+        //
+        // const requestOptions = {
+        //     method: 'POST',
+        //     headers: myHeaders,
+        //     body: raw,
+        //     redirect: 'follow',
+        //     mode:'cors'
+        // };
+        // // fetch('https://baogam.admin.gobizdev.com/api/categories/currencies')
+        // //     .then(response => response.text())
+        // //     .then(result => console.log(result))
+        // //     .catch(error => console.log('error', error));
+        // fetch("http://piastest.pvi.com.vn/API_CP/ManagerApplication/Get_Phi_HSDD", requestOptions)
+        //     .then(response => response.text())
+        //     .then(result => console.log(result))
+        //     .catch(error => console.log('error', error));
+        let body = {
+            "cpid":CPID,
+            "sign":sign(currentPackage),
+            "package":"01"
+        };
+        productRepository.getFeeHSDD(body).then(res=>{
+            setFee(res);
+        }).catch(err=>{
+
+        });
+    }
+    const getFeeTNDSOTO=()=>{
+        let body = {
+            "ma_trongtai": "99999",
+            "so_cho": "5",
+            "ma_mdsd": "1",
+            "MayKeo": "false",
+            "XeChuyenDung": "false",
+            "XeChoTien": "false",
+            "XePickUp": "false",
+            "XeTaiVan": "false",
+            "XeTapLai": "false",
+            "XeBus": "false",
+            "XeCuuThuong": "false",
+            "Xetaxi": "false",
+            "XeDauKeo": "false",
+            "giodau": "14:29",
+            "giocuoi": "14:29",
+            "ngaydau": "14/02/2022",
+            "ngaycuoi": "14/02/2023",
+            "mtn_laiphu": "0",
+            "so_nguoi": "0",
+            "tyle_gp_laiphu": "0",
+            "philpx_nhap": "0",
+            "thamgia_laiphu": "false",
+            "CpId": CPID,
+            "Sign": sign(`matrongtai+socho`)
+        }
+    }
     const handleChange=(value: any)=> {
         // console.log(`selected ${value}`);
     }
@@ -378,7 +458,7 @@ function ProductDetail() {
         </div>
         <div className={'main-content'}>
             <span style={{
-                position:'absolute', top:320, zIndex:9999
+                position:'absolute', top:-120
             }} className={'txt-size-72 txt-color-white robotobold'}>{getProductName()}</span>
             <span className={'txt-size-h5'}>{lodash.get(detail, 'description', '')}</span>
             {renderBenefit()}

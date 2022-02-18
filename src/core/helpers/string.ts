@@ -1,7 +1,6 @@
-import path from 'path';
 import numeral from 'numeral';
-export function url(baseURL: string, ...segments: string[]) {
-  return `${baseURL}/${path.join(...segments)}`;
+export function url(baseURL: string, segments: string) {
+  return `${baseURL}/${segments}`;
 }
 
 export function formatNumber(value: any) {
