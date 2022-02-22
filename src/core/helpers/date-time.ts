@@ -1,4 +1,9 @@
-import {STANDARD_DATE_FORMAT, STANDARD_DATE_TIME_FORMAT, STANDARD_TIME_FORMAT} from '../config/consts';
+import {
+  STANDARD_DATE_FORMAT,
+  STANDARD_DATE_TIME_FORMAT,
+  STANDARD_TIME_FORMAT,
+  STANDARD_TIME_FORMAT2
+} from '../config/consts';
 import moment, {Moment} from 'moment';
 
 export function formatDate(date: Moment, dateFormat: string = STANDARD_DATE_FORMAT) {
@@ -9,7 +14,7 @@ export function formatDate(date: Moment, dateFormat: string = STANDARD_DATE_FORM
   return moment(date).format(dateFormat);
 }
 
-export function formatTime(time: Moment, timeFormat: string = STANDARD_TIME_FORMAT) {
+export function formatTime(time: Moment, timeFormat: string = STANDARD_TIME_FORMAT2) {
   if (typeof time === 'object' && 'format' in time) {
     return time.format(timeFormat);
   }

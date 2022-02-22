@@ -7,6 +7,7 @@ import RowItem from '../../components/RowItem';
 import {PlusCircleOutlined} from "@ant-design/icons";
 import {ENSURE_CAR, ENSURE_ELECTRIC, ENSURE_HOUSE, STANDARD_DATE_FORMAT} from "../../core/config";
 import {formatDate} from "../../core/helpers/date-time";
+import lodash from "lodash";
 const { Step } = Steps;
 function RegisterInsurance(){
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
@@ -14,6 +15,7 @@ function RegisterInsurance(){
     let {productId} = useParams();
     const [packageCode, setPackageCode] = useState<string|null>(searchParams.get('packageCode'));
     const [currentStep, setStep] = useState<number>(0);
+    const [persons,setPersons] = useState<any>([]);
     const disabledDate=(current: any)=> {
         // Can not select days before today and today
         return current && current > moment().endOf('day');
@@ -67,7 +69,6 @@ function RegisterInsurance(){
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
                 className={'mgt20'}
-                initialValues={{ remember: false }}
                 autoComplete="off"
             >
                 <Form.Item
@@ -146,14 +147,45 @@ function RegisterInsurance(){
                 </Form.Item>
                 <Form.Item
                     label="CMND/CCCD/Hộ chiếu"
-                    name="owner"
+                    name="cmnd"
                     rules={[{ required: true, message: 'Vui lòng nhập đầy đủ thông tin' }]}
                 >
                     <Input placeholder={'CMND/CCCD/Hộ chiếu'}/>
                 </Form.Item>
                 <span className={'robotobold txt-size-h1'}>Thành viên bổ sung</span>
                 <Row><span>* Thành viên trong gia đình sống cùng chủ hộ nhưng không có tên trong hộ khẩu</span></Row>
-                <Button icon={<PlusCircleOutlined />} type={'link'}>Thêm thành viên</Button>
+                {persons.map((x: any,index:number)=>{
+                    return <div key={index} className={'mgt20'}>
+                       <Row className={'justify-content-between align-items-center mgbt15'}>
+                           <span className={'robotobold txt-size-h4'}>Thành viên</span>
+                           <span onClick={()=>{
+                               let items = lodash.cloneDeep(persons);
+                               items.splice(index,1);
+                               setPersons(items);
+                           }
+                           } className={'txt-size-h4 txt-color-red'}><i className="fas fa-trash-alt"></i></span>
+                       </Row>
+                        <Form.Item
+                            label="Họ và tên"
+                            name={`name${index}`}
+                            rules={[{ required: true, message: 'Vui lòng nhập đầy đủ thông tin' }]}
+                        >
+                            <Input placeholder={'Họ và tên'}/>
+                        </Form.Item>
+                        <Form.Item
+                            label="Ngày sinh"
+                            name={`birthday${index}`}
+                            rules={[{ required: true, message: 'Vui lòng nhập đầy đủ thông tin' }]}
+                        >
+                            <DatePicker  disabledDate={disabledDate} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'} format={'dd/MM/YYYY'}/>
+                        </Form.Item>
+                    </div>
+                })}
+                <Button onClick={()=>{
+                    let items = lodash.cloneDeep(persons);
+                    items.push({name:'', birthday:''});
+                    setPersons(items);
+                }} icon={<PlusCircleOutlined />} type={'link'}>Thêm thành viên</Button>
             </div>
         }else if(productId===ENSURE_CAR){
             return <div>

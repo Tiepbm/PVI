@@ -27,8 +27,6 @@ export class Repository {
         let token: string =  localStorageRead(TOKEN_KEY);
         config.headers = {
           ...config.headers,
-          'X-Tenant': `vn`,
-          'Accept-Language':'vi'
         };
         if (token && config && isAuthen) {
           config.headers = {
@@ -40,7 +38,11 @@ export class Repository {
       });
     }
     if (typeof Repository._defaultResponseInterceptor === 'function') {
-      this.http.interceptors.response.use(Repository._defaultResponseInterceptor,(error: AxiosError)=>{
+      this.http.interceptors.response.use((res: AxiosResponse<any>)=>{
+        if(res.data.Status!=='00') return Promise.reject(res);
+        else
+        return res;
+      },(error: AxiosError)=>{
         if (error?.response?.status) {
           switch (error.response.status) {
             case 401:

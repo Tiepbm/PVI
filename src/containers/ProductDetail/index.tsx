@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import MainLayout from "../../components/Layout";
-import {Button, Carousel, Col, DatePicker, Input, Row, Select} from "antd";
+import {Button, Carousel, Checkbox, Col, DatePicker, Input, Row, Select, Spin} from "antd";
 import {UserAddOutlined} from '@ant-design/icons';
 import {useNavigate, useParams} from "react-router-dom";
 import lodash from "lodash";
 import moment from "moment";
-import {formatDate} from "../../core/helpers/date-time";
+import {formatDate, formatTime} from "../../core/helpers/date-time";
 import {CPID, ENSURE_CAR, ENSURE_ELECTRIC, ENSURE_HOUSE, STANDARD_DATE_FORMAT} from "../../core/config";
 import {productRepository} from "../../repositories/ProductRepository";
 import {sign} from "../../utils/StringUtils";
+import {formatMoneyByUnit} from "../../core/helpers/string";
+import {categoryRepository} from "../../repositories/CategoryRepository";
+import M24ErrorUtils from "../../utils/M24ErrorUtils";
 
 const data = [
     {
@@ -233,11 +236,73 @@ const data = [
 
 function ProductDetail() {
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
+    const [loading, setLoading] = useState<boolean>(false);
     const [currentPackage, setCurrentPackage] = useState<string>('');
     let {productId} = useParams();
     const [detail, setDetail] = useState<any>();
     const [fee, setFee] = useState<any>();
     const navigate = useNavigate();
+    const keyCars=['MayKeo','XeChuyenDung','XeChoTien','XePickUp','XeTaiVan','XeTapLai','XeBus','XeCuuThuong','Xetaxi','XeDauKeo'];
+    const [bodyOto, setBodyOto] = useState({
+        "ma_trongtai": "",
+        "so_cho": "",
+        "ma_mdsd": "1",
+        "MayKeo": false,
+        "XeChuyenDung": false,
+        "XeChoTien": false,
+        "XePickUp": false,
+        "XeTaiVan":  false,
+        "XeTapLai":  false,
+        "XeBus":  false,
+        "XeCuuThuong":  false,
+        "Xetaxi":  false,
+        "XeDauKeo":  false,
+        "giodau": '',
+        "giocuoi": '',
+        "ngaydau": formatDate(moment()),
+        "ngaycuoi": formatDate(moment().set('year', moment().get('year')+1)),
+        "mtn_laiphu": 0,
+        "so_nguoi": "0",
+        "tyle_gp_laiphu": "0",
+        "philpx_nhap": "0",
+        "thamgia_laiphu": false,
+        "CpId": CPID,
+        "Sign": ''
+    });
+    const categoriesCar=[
+        {
+            name:'Xe chở người không KDVT',
+            code:'1',
+            items:[
+                {name:'Xe chở tiền',code:'XeChoTien'},
+                {name:'Xe bán tải (pickup)',code:'XePickUp', dependencies:['XeTapLai']},
+                {name:'Xe tải VAN',code:'XeTaiVan', dependencies:['XeTapLai']},
+                {name:'Xe tập lái',code:'XeTapLai', dependencies:['XePickUp','XeTaiVan']},
+            ],
+        },
+        {
+            name:'Xe chở người KDVT',
+            code:'2',
+            items:[
+                {name:'Xe bán tải (pickup)',code:'XePickUp', dependencies:['Xetaxi']},
+                {name:'Xe tải VAN',code:'XeTaiVan', dependencies:['Xetaxi']},
+                {name:'Xe bus',code:'XeBus'},
+                {name:'Xe cứu thương',code:'XeCuuThuong'},
+                {name:'Xe taxi',code:'Xetaxi', dependencies:['XePickUp','XeTaiVan']},
+            ]
+        },
+        {
+            name:'Xe chở hàng',
+            code:'3',
+            items:[
+                {name:'Xe tập lái',code:'XeTapLai', dependencies:['XeDauKeo']},
+                {name:'Xe chuyên dụng khác',code:'XeChuyenDung'},
+                {name:'Xe đầu kéo rơ mooc',code:'XeDauKeo', dependencies:['XeTapLai']},
+                {name:'Máy kéo, xe máy chuyên dùng',code:'MayKeo'},
+            ]
+        }
+    ]
+    const [purpose, setPurpose] = useState<any>(categoriesCar[0]);
     useEffect(() => {
         if (productId) {
             let item = data.find((x: any) => x.id === productId);
@@ -245,89 +310,92 @@ function ProductDetail() {
                 setDetail(item);
                 setCurrentPackage(item.benefit.packages[0].code);
             }
-            getFee();
         }
     }, []);
-
+    useEffect(()=>{
+        getFee();
+    },[currentPackage]);
+    useEffect(()=>{
+       setTimeout(()=>{
+           getFeeTNDSOTO();
+       },1000);
+    },[bodyOto]);
     const getFee=()=>{
+        setLoading(true);
         switch (productId){
             case ENSURE_ELECTRIC:
                 getFeeHSDD();
                 break;
             case ENSURE_CAR:
-
+                getFeeTNDSOTO();
                 break;
             case ENSURE_HOUSE:
-
+                getFeeHouse();
                 break;
         }
     }
     const getFeeHSDD=()=>{
-        // let myHeaders = new Headers();
-        // myHeaders.append("Content-Type", "application/json");
-        //
-        // let raw = JSON.stringify({
-        //     "cpid": "WEB_VIEW",
-        //     "sign": "ba42ed603cf347d41bd826b180ac6ca7",
-        //     "package": "01"
-        // });
-        //
-        // const requestOptions = {
-        //     method: 'POST',
-        //     headers: myHeaders,
-        //     body: raw,
-        //     redirect: 'follow',
-        //     mode:'cors'
-        // };
-        // // fetch('https://baogam.admin.gobizdev.com/api/categories/currencies')
-        // //     .then(response => response.text())
-        // //     .then(result => console.log(result))
-        // //     .catch(error => console.log('error', error));
-        // fetch("http://piastest.pvi.com.vn/API_CP/ManagerApplication/Get_Phi_HSDD", requestOptions)
-        //     .then(response => response.text())
-        //     .then(result => console.log(result))
-        //     .catch(error => console.log('error', error));
+
         let body = {
             "cpid":CPID,
             "sign":sign(currentPackage),
-            "package":"01"
+            "package":currentPackage
         };
         productRepository.getFeeHSDD(body).then(res=>{
+            console.log(res);
             setFee(res);
         }).catch(err=>{
-
-        });
+            M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
+        }).finally(()=> setLoading(false));
+    }
+    const getFeeHouse=()=>{
+        let body = {
+            "cpid":CPID,
+            "sign":sign(currentPackage),
+            "package":currentPackage
+        };
+        productRepository.getFeeHouse(body).then(res=>{
+            setFee(res);
+        }).catch(err=>{
+            M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
+        }).finally(()=> setLoading(false));
     }
     const getFeeTNDSOTO=()=>{
-        let body = {
-            "ma_trongtai": "99999",
-            "so_cho": "5",
-            "ma_mdsd": "1",
-            "MayKeo": "false",
-            "XeChuyenDung": "false",
-            "XeChoTien": "false",
-            "XePickUp": "false",
-            "XeTaiVan": "false",
-            "XeTapLai": "false",
-            "XeBus": "false",
-            "XeCuuThuong": "false",
-            "Xetaxi": "false",
-            "XeDauKeo": "false",
-            "giodau": "14:29",
-            "giocuoi": "14:29",
-            "ngaydau": "14/02/2022",
-            "ngaycuoi": "14/02/2023",
-            "mtn_laiphu": "0",
-            "so_nguoi": "0",
-            "tyle_gp_laiphu": "0",
-            "philpx_nhap": "0",
-            "thamgia_laiphu": "false",
-            "CpId": CPID,
-            "Sign": sign(`matrongtai+socho`)
+        let body = lodash.cloneDeep(bodyOto);
+        if(currentPackage!='01'){
+            body.thamgia_laiphu=true;
+            if(currentPackage==='02')
+                body.mtn_laiphu=10000000;
+            else  body.mtn_laiphu=100000000;
+        }else {
+            body.thamgia_laiphu=false;
+            body.mtn_laiphu=0;
         }
+        body.giodau=formatTime(moment());
+        body.giocuoi=formatTime(moment());
+        body.Sign = sign(`${body.ma_trongtai}${body.so_cho}`);
+        if(checkDisableRegister()) {
+            setLoading(false);
+            return;
+        }
+        setLoading(true);
+        productRepository.getFeeTNDSOTO(body).then(res=>{
+            setFee(res);
+        }).catch(err=>{
+            M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
+        }).finally(()=> setLoading(false));
     }
     const handleChange=(value: any)=> {
-        // console.log(`selected ${value}`);
+        let item = categoriesCar.find((x: any)=> x.code===value);
+        setPurpose(item);
+        let body = lodash.cloneDeep(bodyOto);
+        body.ma_mdsd=value;
+        keyCars.map((x: string)=>{
+            // @ts-ignore
+            body[x]=false;
+        });
+        setBodyOto(body);
+        setFee(null);
     }
     const getProductName=()=>{
         switch (productId){
@@ -338,6 +406,44 @@ function ProductDetail() {
             case ENSURE_HOUSE:
                 return 'Bảo hiểm nhà ở toàn diện';
         }
+    }
+    const changeTypeCar=(checked: boolean, code: string)=>{
+        let body = lodash.cloneDeep(bodyOto);
+        // @ts-ignore
+        body[code]=checked;
+        let item = purpose.items.find((x: any)=> x.code===code);
+        if(!item.dependencies){
+            keyCars.map((x: string)=>{
+                if(x!==code)
+                {
+                    // @ts-ignore
+                    body[x]=false;
+                }
+            });
+        }else{
+            keyCars.map((x: string)=>{
+                if(!item.dependencies.includes(x)&&x!==code)
+                {
+                    // @ts-ignore
+                    body[x]=false;
+                }
+            });
+        }
+        setBodyOto(body);
+    }
+    const changeValueCar=(key: string, value: any)=>{
+        let body = lodash.cloneDeep(bodyOto);
+        value=value.replace(/[^\d]/g,'');
+        // @ts-ignore
+        body[key] = value;
+        setBodyOto(body);
+    }
+    const checkDisableRegister=()=>{
+        if(!bodyOto.so_cho)
+            return true;
+        else if(purpose.code==='3'&&!bodyOto.ma_trongtai)
+            return true;
+        return false;
     }
     const renderBenefit = () => {
 
@@ -404,42 +510,51 @@ function ProductDetail() {
     }
     const renderFeeCar=()=>{
         return <div>
-            <Row className={'justify-content-between'}>
-                <Col span={6}>
+
+            <Row gutter={8} className={'justify-content-start'}>
+                <Col span={8} className={''}>
                     <Row><span>Ngày hiệu lực</span></Row>
                     <DatePicker defaultValue={moment(new Date(),STANDARD_DATE_FORMAT)} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                                 format={STANDARD_DATE_FORMAT} onChange={handleChange}/>
                 </Col>
-                <Col span={6} className={'mgl10'}>
+                <Col span={8} className={''}>
                     <Row><span>Chu kỳ thanh toán</span></Row>
                     <Select defaultValue="1" onChange={handleChange} className={'width100'}>
                         <Select.Option value="1">1 năm</Select.Option>
                     </Select>
                 </Col>
-                <Col span={6} className={'mgl10'}>
-                    <Row><span>Mục đích sử dụng</span></Row>
-                    <Select defaultValue="1" onChange={handleChange} className={'width100'}>
-                        <Select.Option value="1">1 năm</Select.Option>
-                    </Select>
-                </Col>
             </Row>
-            <Row className={'mgt20 justify-content-between'}>
-                <Col span={6} className={''}>
-                    <Row><span>Số chỗ ngồi</span></Row>
-                   <Input></Input>
-                </Col>
-                <Col span={6} className={'mgl10'}>
-                    <Row><span>Phân loại</span></Row>
-                    <Select defaultValue="1" onChange={handleChange} className={'width100'}>
-                        <Select.Option value="1">1 năm</Select.Option>
+            <Row gutter={8} className={'mgt20 justify-content-start'}>
+                <Col span={8} className={''}>
+                    <Row><span>Mục đích sử dụng</span></Row>
+                    <Select value={lodash.get(purpose,'code',undefined)} onChange={handleChange} className={'width100'}>
+                        {categoriesCar.map((x: any, index: number)=>{
+                            return  <Select.Option value={x.code}>{x.name}</Select.Option>
+                        })}
                     </Select>
                 </Col>
-                <Col span={6} className={'mgl10'}>
-                    <Row><span>Loại xe</span></Row>
-                    <Select defaultValue="1" onChange={handleChange} className={'width100'}>
-                        <Select.Option value="1">1 năm</Select.Option>
-                    </Select>
+                <Col span={8} className={''}>
+                    <Row><span><span className={'txt-color-red'}>* </span>Số chỗ ngồi</span></Row>
+                   <Input onChange={(e)=> changeValueCar('so_cho',e.target.value)} value={bodyOto.so_cho}></Input>
                 </Col>
+                {purpose &&purpose.code === '3' &&
+                <Col span={8} className={''}>
+                    <Row><span><span className={'txt-color-red'}>* </span>Trọng tải (kg)</span></Row>
+                    <Input onChange={(e)=> changeValueCar('ma_trongtai',e.target.value)} value={bodyOto.ma_trongtai}></Input>
+                </Col>
+                }
+            </Row>
+            <Row gutter={8} className={'mgt20 justify-content-start'}>
+                {
+                    purpose&&purpose.items.map((x: any, index: number)=>{
+                        // let disable=false;
+                        // if(bodyOto.XeTapLai&&x.code!=='XePickUp'&&x.code!=='XeTaiVan')
+                        //     disable=true;
+                        return <Col span={8} className={''}>
+                            <Checkbox checked={lodash.get(bodyOto, x.code, false)} onChange={(e)=> changeTypeCar(e.target.checked, x.code)}>{x.name}</Checkbox>
+                        </Col>
+                    })
+                }
             </Row>
         </div>
     }
@@ -452,6 +567,7 @@ function ProductDetail() {
                 return renderFeeElectric();
         }
     }
+
     return <MainLayout showProgressBar={showProgressBar} title={'Chi Tiết Sản Phẩm'}>
         <div className={'mgbt20 mgt1'}>
             <img className={'width100'} src={lodash.get(detail, 'banner', '')}></img>
@@ -462,20 +578,23 @@ function ProductDetail() {
             }} className={'txt-size-72 txt-color-white robotobold'}>{getProductName()}</span>
             <span className={'txt-size-h5'}>{lodash.get(detail, 'description', '')}</span>
             {renderBenefit()}
+            <Spin size={'large'} spinning={loading}>
             <div className={'bg-color-gray mgt20 pd20'}>
+
                 {renderFee()}
                 <Row className={'mgt10 justify-content-between align-items-center'}>
-                    <Button onClick={() => navigate(`/products/${productId}/register?packageCode=${currentPackage}`)} size={'large'} className={''}
+                    <Button disabled={checkDisableRegister()} onClick={() => navigate(`/products/${productId}/register?packageCode=${currentPackage}`)} size={'large'} className={''}
                             type={'primary'} danger shape={'round'}>
                         <span className={'robotobold txt-size-h4'}>Đăng ký <i
                             className="mgl5 fas fa-angle-right"></i></span>
                     </Button>
                     <div>
                         <Row><span>Thành tiền:</span></Row>
-                        <span className={'robotobold txt-size-h4 txt-color-red'}>1000 đ</span>
+                        <span className={'robotobold txt-size-h4 txt-color-red'}>{formatMoneyByUnit(lodash.get(fee,'TotalFee',''))}</span>
                     </div>
                 </Row>
             </div>
+            </Spin>
             <Row><span className={'robotobold txt-size-h4 mgt20 mgbt20'}>Mô tả chi tiết</span></Row>
             <div className={'dpl-flex justify-content-center'}>
                 <img className={'width100'}

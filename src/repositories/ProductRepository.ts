@@ -24,7 +24,13 @@ export class ProductRepository extends Repository {
                 return response.data;
             });
     };
-
+    public getFeeHouse = (body: any): Promise<any> => {
+        return this.http
+            .post(`Get_Phi_Nha`, body)
+            .then((response: AxiosResponse<any>) => {
+                return response.data;
+            });
+    };
 }
 
 export const productRepository: ProductRepository = new ProductRepository();
