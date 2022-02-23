@@ -31,6 +31,13 @@ export class ProductRepository extends Repository {
                 return response.data;
             });
     };
+    public createOrderHSDD = (body: any): Promise<any> => {
+        return this.http
+            .post(`TaoDon_HSDD`, body)
+            .then((response: AxiosResponse<any>) => {
+                return response.data;
+            });
+    };
 }
 
 export const productRepository: ProductRepository = new ProductRepository();

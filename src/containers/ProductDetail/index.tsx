@@ -6,12 +6,13 @@ import {useNavigate, useParams} from "react-router-dom";
 import lodash from "lodash";
 import moment from "moment";
 import {formatDate, formatTime} from "../../core/helpers/date-time";
-import {CPID, ENSURE_CAR, ENSURE_ELECTRIC, ENSURE_HOUSE, STANDARD_DATE_FORMAT} from "../../core/config";
+import {CPID, ENSURE_CAR, ENSURE_ELECTRIC, ENSURE_HOUSE, FEE, STANDARD_DATE_FORMAT} from "../../core/config";
 import {productRepository} from "../../repositories/ProductRepository";
 import {sign} from "../../utils/StringUtils";
 import {formatMoneyByUnit} from "../../core/helpers/string";
 import {categoryRepository} from "../../repositories/CategoryRepository";
 import M24ErrorUtils from "../../utils/M24ErrorUtils";
+import {localStorageSave} from "../../utils/LocalStorageUtils";
 
 const data = [
     {
@@ -313,13 +314,19 @@ function ProductDetail() {
         }
     }, []);
     useEffect(()=>{
-        getFee();
+        if(currentPackage)
+            getFee();
     },[currentPackage]);
     useEffect(()=>{
-       setTimeout(()=>{
-           getFeeTNDSOTO();
-       },1000);
+        if(productId===ENSURE_CAR){
+            setTimeout(()=>{
+                getFeeTNDSOTO();
+            },1000);
+        }
     },[bodyOto]);
+    useEffect(()=>{
+        localStorageSave(FEE, fee);
+    },[fee]);
     const getFee=()=>{
         setLoading(true);
         switch (productId){
@@ -385,6 +392,7 @@ function ProductDetail() {
             M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
         }).finally(()=> setLoading(false));
     }
+
     const handleChange=(value: any)=> {
         let item = categoriesCar.find((x: any)=> x.code===value);
         setPurpose(item);
@@ -439,10 +447,12 @@ function ProductDetail() {
         setBodyOto(body);
     }
     const checkDisableRegister=()=>{
-        if(!bodyOto.so_cho)
-            return true;
-        else if(purpose.code==='3'&&!bodyOto.ma_trongtai)
-            return true;
+        if(productId===ENSURE_CAR){
+            if(!bodyOto.so_cho)
+                return true;
+            else if(purpose.code==='3'&&!bodyOto.ma_trongtai)
+                return true;
+        }
         return false;
     }
     const renderBenefit = () => {

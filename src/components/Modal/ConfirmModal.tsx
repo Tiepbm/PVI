@@ -15,8 +15,7 @@ const ConfirmModal = (props: ConfirmModalProps) => {
     const {title, visible, onCancel, onSubmit, content, loading, className} = props;
     return (
         <Modal
-            className={`_modal-confirm ${className}`}
-            title={<span style={{color: '#1890FF', fontWeight: 500}}>{title}</span>}
+            title={title}
             visible={visible}
             onCancel={onCancel}
             footer={[

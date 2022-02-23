@@ -12,7 +12,7 @@ export const PAGINATION_SIZE = [DEFAULT_PAGE_SIZE, 50, 100];
 export const PROFILE_KEY = 'PROFILE';
 export const TENANT_KEY = 'TENANT_KEY';
 export const TOKEN_KEY = 'M24_TOKEN_KEY';
-export const M1_CONNECTION_INFO = 'M1_CONNECTION_INFO';
+export const FEE = 'FEE';
 
 export const ENSURE_ELECTRIC='tainansudungdien';
 export const ENSURE_CAR='tndsoto';
