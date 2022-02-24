@@ -682,7 +682,7 @@ function RegisterInsurance() {
             {productId === ENSURE_ELECTRIC && <RowItem title={'Địa chỉ'} value={bodyRegister.dia_chi}></RowItem>}
             {productId === ENSURE_CAR || productId === ENSURE_HOUSE ?
                 <RowItem title={'Số điện thoại'} value={productId === ENSURE_CAR?bodyRegister.DienThoai:bodyRegister.so_dienthoai}></RowItem> : null}
-            <RowItem title={'Địa chỉ email'} value={productId === ENSURE_CAR?bodyRegister.EmailKH:bodyRegister.email}></RowItem>
+            <RowItem title={'Địa chỉ email'} value={productId === ENSURE_CAR?bodyRegister.EmailKH:bodyRegister.Email}></RowItem>
             {
                 productId === ENSURE_ELECTRIC ? <div>
                     <span className={'robotobold txt-size-h1'}>Chủ hộ</span>
