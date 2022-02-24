@@ -49,6 +49,7 @@ function RegisterInsurance() {
         // Can not select days before today and today
         return current && current > moment().endOf('day');
     }
+    console.log(feeRequest);
     const [bodyRegister, setBodyRegister] = useState<any>();
     useEffect(()=>{
        if(productId===ENSURE_CAR||productId===ENSURE_HOUSE)
@@ -62,6 +63,19 @@ function RegisterInsurance() {
        }
 
     },[]);
+    const getPurpose=()=>{
+        let purposeCode = searchParams.get('purpose');
+        switch (purposeCode){
+            case '1':
+                return 'Xe chở người không KDVT';
+            case '2':
+                return 'Xe chở người KDVT';
+            case '3':
+                return 'Xe chở hàng';
+            default:
+                return '';
+        }
+    }
     const getProductName = () => {
         switch (productId) {
             case ENSURE_ELECTRIC:
@@ -179,10 +193,10 @@ function RegisterInsurance() {
                         'ma_donvi':'',
                         'file_GYC':'',
                         'MaKhach':'',
-                        'ma_phuongthuc_thanhtoan':'',
+                        'ma_phuongthuc_thanhtoan':'0',
                         'ma_daiLy':'',
                         'ma_diadiem': values.district,
-                        'select_mahieu_ruiro':'',
+                        'select_mahieu_ruiro':'0',
                         'select_danhsach_cautruc_xd':'',
                         'ngaythanhtoan':datePaid,
                         'nguoimua_bh':'',
@@ -192,7 +206,7 @@ function RegisterInsurance() {
                         'thoihan_bh':duration,
                         'endtime':'23:59',
                         'phi_giamphi':'0',
-                        'pr_key':'',
+                        'pr_key':'0',
                         'Email':values.customerEmail,
                         'ngay_batdau':dateStart,
                         'starttime':'00:00',
@@ -203,8 +217,8 @@ function RegisterInsurance() {
                         'ma_moigioi':'',
                         'phi_moi_gioi':'',
                         'ma_phuongthuc_kt':'',
-                        'tyle_bt':'',
-                        'giatri_taisan':'',
+                        'tyle_bt':'0',
+                        'giatri_taisan':'0',
                         'ma_danhsach_msudung':'',
                         'pvbh_dkbs_01':false,
                         'pvbh_dkbs_02':false,
@@ -217,8 +231,8 @@ function RegisterInsurance() {
                         'ttin_bosung':'',
                         'muc_khautru':'',
                         'nam_xaydung':values.year,
-                        'so_tangnoi':'',
-                        'so_tangham':'',
+                        'so_tangnoi':'0',
+                        'so_tangham':'0',
                         'dk_bs_bh_khac':false,
                         'diengiai_dk_bs_bh_khac':'',
                         'ma_sp_dichvu':'',
@@ -231,7 +245,7 @@ function RegisterInsurance() {
                         'dchi_xhoadon':'',
                         'nnghe_kd':'',
                         'dk_thanhtoan':'',
-                        'tyle_cnbb':'',
+                        'tyle_cnbb':'0',
                         'diachi_nguoibh':'',
                         'sotien_bh_bentrong':'',
                         'tong_phi': lodash.get(fee, 'TotalFee', ''),
@@ -239,18 +253,134 @@ function RegisterInsurance() {
                         'tong_tienbh': totalAmount,
                         'Sign': sign(`${values.customerEmail}${datePaid}${duration}${dateStart}${fee.TotalFee}${totalAmount}`)
                     }
-                    console.log(`${values.customerEmail}-${datePaid}-${duration}-${dateStart}-${fee.TotalFee}-${totalAmount}`);
                     setProvinceSelected(provinces.find((x: any)=>x.Value===values.province));
                     setDistrictSelected(districts.find((x: any)=>x.Value===values.district));
                 }else if(productId===ENSURE_CAR){
-
+                    body = {
+                        'ma_giaodich': `${CPID}${moment().valueOf()}`,
+                        "TenKH": values.customerName,
+                        "DiaChiKH": "",
+                        "TenChuXe": values.carName,
+                        "DiaChiChuXe": values.carAddress,
+                        "KhuyenMai": "",
+                        "Ma_Phong": "",
+                        "MaKH": "",
+                        "MaKhachTH": "",
+                        "TenTH": "",
+                        "DiaChiTH": "",
+                        "MaKT": "",
+                        "MaDL": "",
+                        "NgayThanhToan": datePaid,
+                        "MaCBKT": "",
+                        "LoaiBK": "",
+                        "NhomKenh": "",
+                        "Kenh": "",
+                        "MoiGioi": false,
+                        "CongTyMG": "",
+                        "MoiGioiPhi": "0",
+                        "SoHD": false,
+                        "MucDichSD": "",
+                        "TrangThaiTT": "1",
+                        "HDDT": false,
+                        "MaSoVAT": "",
+                        "TTinHDDT": "",
+                        "DiaChiVAT": "",
+                        "TenKHVAT": "",
+                        "NgayDau": dateStart,
+                        "NgayCuoi": duration,
+                        "LoaiSP": "AUTO3PAR",
+                        "ThamGiaTNDSBB": true,
+                        "ThamGiaTNDSTN": false,
+                        "ThamGiaVCX": false,
+                        "ThamGiaLaiPhu": lodash.get(feeRequest,'thamgia_laiphu',false),
+                        "ThamGiaHang": false,
+                        "Zalo": false,
+                        "Viber": false,
+                        "SMS": false,
+                        "LoaiDon": "",
+                        "SoACNT": "",
+                        "SoDonBHNT": "",
+                        "TyLeBT": "0",
+                        "SoVuBT": "0",
+                        "NgayCap": datePaid,
+                        "MaDonViNT": "",
+                        "SoDonBH": "",
+                        "MaDonVi": "",
+                        "NgayCtu": datePaid,
+                        "MaUser": "",
+                        "EmailKH": values.customerEmail,
+                        "SoCtu": "",
+                        "LoaiXe": "",
+                        "ChoNgoi": lodash.get(feeRequest,'so_cho','0'),
+                        "TrongTai": lodash.get(feeRequest,'ma_trongtai',''),
+                        "MTNHangHoa": "0",
+                        "SoTan": "0",
+                        "TyLeGPHang": "0",
+                        "MTNLaiPhu": "0",
+                        "SoNguoiToiDa": "0",
+                        "TyLeGPLaiPhu": "0",
+                        "GioiHanMTN": "0",
+                        "MTNTNDSNguoi": "0",
+                        "MTNTNDSTaiSan": "0",
+                        "TyLeGPTNDS": "0",
+                        "GiaTriBH": "0",
+                        "GiaTriPK": "0",
+                        "TyLePhiVCX": "0",
+                        "PhiBHVatChat": "0",
+                        "PhiBHTNDSBB": "0",
+                        "MucKT": "",
+                        "PhiBHHangHoa": "0",
+                        "PhiBHLaiPhu": "0",
+                        "PhiBHTNDS": "0",
+                        "ThamGiaVatChat": false,
+                        "MaMucDichSD": "1",
+                        "MayKeo": lodash.get(feeRequest,'MayKeo',false),
+                        "XeChuyenDung":  lodash.get(feeRequest,'XeChuyenDung',false),
+                        "XeChoTien":  lodash.get(feeRequest,'XeChoTien',false),
+                        "XePickUp":  lodash.get(feeRequest,'XePickUp',false),
+                        "XeTaiVan":  lodash.get(feeRequest,'XeTaiVan',false),
+                        "XeTapLai":  lodash.get(feeRequest,'XeTapLai',false),
+                        "XeBus":  lodash.get(feeRequest,'XeBus',false),
+                        "XeCuuThuong":  lodash.get(feeRequest,'XeCuuThuong',false),
+                        "Xetaxi":  lodash.get(feeRequest,'Xetaxi',false),
+                        "XeDauKeo":  lodash.get(feeRequest,'XeDauKeo',false),
+                        "NamSD": moment().get('year'),
+                        "DongBH": "0",
+                        "PhanBoDT": false,
+                        "KhachVip": false,
+                        "AnBKS": false,
+                        "NgayTaiTuc": "",
+                        "TinhTrangXe": "",
+                        "TinhTrangTHBH": "",
+                        "BienKiemSoat": values.carNumber,
+                        "HieuXe": "",
+                        "DongXe": "",
+                        "NamSX": "",
+                        "DienThoai": values.customerPhone,
+                        "ToChuc": "",
+                        "MaTinh": values.carProvince,
+                        "SoKhung": "",
+                        "SoMay": "",
+                        "chkKDVT": true,
+                        "AnPhi": false,
+                        "SoTienTH": "0",
+                        "strMaDKBS": "",
+                        "ThamGiaDKBS": false,
+                        "NgayDangKy": "",
+                        "GiaTriXe": "0",
+                        "GhiChuPK": "",
+                        "PhuongThucCD": "",
+                        "ListDKBSKhac": [],
+                        "GioDau": "00:00",
+                        "GioCuoi": "23:59",
+                        "khach_hang": "false",
+                        "pr_key": "0",
+                        "GiaTriPin": "0",
+                        "CpId": CPID,
+                        "Sign": sign(`${dateStart}${duration}${values.carNumber}${values.customerEmail}${1}${datePaid}${values.customerPhone}`)
+                    }
+                    setProvinceSelected(provinces.find((x: any)=>x.Value===values.carProvince));
                 }
-                console.log(body);
-                productRepository.createOrderHouse(body).then(res=>{
-
-                }).catch(err=>{
-
-                });
                 setBodyRegister(body);
                 setStep(currentStep + 1);
             }).catch(err => {
@@ -268,6 +398,26 @@ function RegisterInsurance() {
         if(productId===ENSURE_ELECTRIC){
             productRepository.createOrderHSDD(bodyRegister).then(res=>{
                setResult(true);
+            }).catch(err=>{
+                setResult(false);
+            }).finally(()=>{
+                setShowConfirm(false);
+                setLoading(false);
+                setStep(3);
+            });
+        }else if(productId===ENSURE_HOUSE){
+            productRepository.createOrderHouse(bodyRegister).then(res=>{
+                setResult(true);
+            }).catch(err=>{
+                setResult(false);
+            }).finally(()=>{
+                setShowConfirm(false);
+                setLoading(false);
+                setStep(3);
+            });
+        }else if(productId===ENSURE_CAR){
+            productRepository.createOrderCar(bodyRegister).then(res=>{
+                setResult(true);
             }).catch(err=>{
                 setResult(false);
             }).finally(()=>{
@@ -437,7 +587,7 @@ function RegisterInsurance() {
                 <span className={'robotobold txt-size-h1'}>Thông tin đăng ký xe</span>
                 <Form.Item
                     label="Họ và tên"
-                    name="name"
+                    name="carName"
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Input/>
@@ -451,7 +601,7 @@ function RegisterInsurance() {
                 </Form.Item>
                 <Form.Item
                     label="Tỉnh/Thành Phố"
-                    name="province"
+                    name="carProvince"
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Select placeholder="Tỉnh/Thành Phố">
@@ -461,6 +611,14 @@ function RegisterInsurance() {
                             })
                         }
                     </Select>
+                </Form.Item>
+                <Form.Item
+                    label="Địa chỉ"
+                    name="carAddress"
+                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
+                >
+                    <Input.TextArea placeholder={''}
+                                    rows={5}></Input.TextArea>
                 </Form.Item>
             </div>
         } else if (productId === ENSURE_HOUSE) {
@@ -520,11 +678,11 @@ function RegisterInsurance() {
     const renderStep2 = () => {
         return <Card>
             <span className={'robotobold txt-size-h1'}>Thông tin người mua</span>
-            <RowItem title={'Họ và tên'} value={bodyRegister.khach_hang}></RowItem>
+            <RowItem title={'Họ và tên'} value={productId === ENSURE_CAR?bodyRegister.TenKH:bodyRegister.khach_hang}></RowItem>
             {productId === ENSURE_ELECTRIC && <RowItem title={'Địa chỉ'} value={bodyRegister.dia_chi}></RowItem>}
             {productId === ENSURE_CAR || productId === ENSURE_HOUSE ?
-                <RowItem title={'Số điện thoại'} value={bodyRegister.so_dienthoai}></RowItem> : null}
-            <RowItem title={'Địa chỉ email'} value={bodyRegister.email}></RowItem>
+                <RowItem title={'Số điện thoại'} value={productId === ENSURE_CAR?bodyRegister.DienThoai:bodyRegister.so_dienthoai}></RowItem> : null}
+            <RowItem title={'Địa chỉ email'} value={productId === ENSURE_CAR?bodyRegister.EmailKH:bodyRegister.email}></RowItem>
             {
                 productId === ENSURE_ELECTRIC ? <div>
                     <span className={'robotobold txt-size-h1'}>Chủ hộ</span>
@@ -545,13 +703,11 @@ function RegisterInsurance() {
                     }
                 </div> : productId === ENSURE_CAR ? <div>
                     <span className={'robotobold txt-size-h1'}>Thông tin đăng ký xe</span>
-                    <RowItem title={'Họ và tên'} value={''}></RowItem>
-                    <RowItem title={'Biển số xe'} value={''}></RowItem>
-                    <RowItem title={'Tỉnh/Thành Phố'} value={''}></RowItem>
-                    <RowItem title={'Mục đích sử dụng'} value={''}></RowItem>
-                    <RowItem title={'Số chỗ ngồi'} value={''}></RowItem>
-                    <RowItem title={'Loại xe'} value={''}></RowItem>
-                    <RowItem title={'Phân loại'} value={''}></RowItem>
+                    <RowItem title={'Họ và tên'} value={bodyRegister.TenChuXe}></RowItem>
+                    <RowItem title={'Biển số xe'} value={bodyRegister.BienKiemSoat}></RowItem>
+                    <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected.Text}></RowItem>
+                    <RowItem title={'Mục đích sử dụng'} value={getPurpose()}></RowItem>
+                    <RowItem title={'Số chỗ ngồi'} value={bodyRegister.ChoNgoi}></RowItem>
                 </div> : productId === ENSURE_HOUSE ? <div>
                     <span className={'robotobold txt-size-h1'}>Thông tin căn nhà</span>
                     <RowItem title={'Năm xây dựng'} value={bodyRegister.nam_xaydung}></RowItem>

@@ -45,6 +45,13 @@ export class ProductRepository extends Repository {
                 return response.data;
             });
     };
+    public createOrderCar = (body: any): Promise<any> => {
+        return this.http
+            .post(`TaoDon_Auto`, body)
+            .then((response: AxiosResponse<any>) => {
+                return response.data;
+            });
+    };
 }
 
 export const productRepository: ProductRepository = new ProductRepository();
