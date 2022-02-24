@@ -6,7 +6,15 @@ import {useNavigate, useParams} from "react-router-dom";
 import lodash from "lodash";
 import moment from "moment";
 import {formatDate, formatTime} from "../../core/helpers/date-time";
-import {CPID, ENSURE_CAR, ENSURE_ELECTRIC, ENSURE_HOUSE, FEE, STANDARD_DATE_FORMAT} from "../../core/config";
+import {
+    CPID,
+    ENSURE_CAR,
+    ENSURE_ELECTRIC,
+    ENSURE_HOUSE,
+    FEE,
+    FEE_REQUEST,
+    STANDARD_DATE_FORMAT
+} from "../../core/config";
 import {productRepository} from "../../repositories/ProductRepository";
 import {sign} from "../../utils/StringUtils";
 import {formatMoneyByUnit} from "../../core/helpers/string";
@@ -386,6 +394,7 @@ function ProductDetail() {
             return;
         }
         setLoading(true);
+        localStorageSave(FEE_REQUEST,body);
         productRepository.getFeeTNDSOTO(body).then(res=>{
             setFee(res);
         }).catch(err=>{

@@ -38,6 +38,13 @@ export class ProductRepository extends Repository {
                 return response.data;
             });
     };
+    public createOrderHouse = (body: any): Promise<any> => {
+        return this.http
+            .post(`TaoDon_TaiSan`, body)
+            .then((response: AxiosResponse<any>) => {
+                return response.data;
+            });
+    };
 }
 
 export const productRepository: ProductRepository = new ProductRepository();

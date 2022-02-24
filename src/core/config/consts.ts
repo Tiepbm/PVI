@@ -13,6 +13,7 @@ export const PROFILE_KEY = 'PROFILE';
 export const TENANT_KEY = 'TENANT_KEY';
 export const TOKEN_KEY = 'M24_TOKEN_KEY';
 export const FEE = 'FEE';
+export const FEE_REQUEST = 'FEE_REQUEST';
 
 export const ENSURE_ELECTRIC='tainansudungdien';
 export const ENSURE_CAR='tndsoto';

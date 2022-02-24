@@ -15,7 +15,11 @@ export class CategoryRepository extends Repository {
         let body = {
             ten_dmuc: categoryName,
             CpId: CPID,
-            Sign: sign(categoryName)
+            giatri_chon:'',
+            parent_value:'',
+            ma_user:'',
+            ma_donvi:'00',
+            Sign: sign(`${categoryName}00`)
         };
         return this.http
             .post(`Get_DanhMuc`, body)

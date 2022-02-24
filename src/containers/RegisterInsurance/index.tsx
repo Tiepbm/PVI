@@ -5,7 +5,15 @@ import moment from "moment";
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import RowItem from '../../components/RowItem';
 import {CheckCircleOutlined, PlusCircleOutlined} from "@ant-design/icons";
-import {CPID, ENSURE_CAR, ENSURE_ELECTRIC, ENSURE_HOUSE, FEE, STANDARD_DATE_FORMAT} from "../../core/config";
+import {
+    CPID,
+    ENSURE_CAR,
+    ENSURE_ELECTRIC,
+    ENSURE_HOUSE,
+    FEE,
+    FEE_REQUEST,
+    STANDARD_DATE_FORMAT
+} from "../../core/config";
 import {formatDate} from "../../core/helpers/date-time";
 import lodash from "lodash";
 import {localStorageRead} from "../../utils/LocalStorageUtils";
@@ -14,6 +22,7 @@ import {productRepository} from "../../repositories/ProductRepository";
 import {formatMoneyByUnit} from "../../core/helpers/string";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import M24ErrorUtils from "../../utils/M24ErrorUtils";
+import {categoryRepository} from "../../repositories/CategoryRepository";
 
 const {Step} = Steps;
 const { confirm } = Modal;
@@ -23,17 +32,36 @@ function RegisterInsurance() {
     let {productId} = useParams();
     const navigate = useNavigate();
     const [packageCode, setPackageCode] = useState<string | null>(searchParams.get('packageCode'));
-    const [currentStep, setStep] = useState<number>(3);
+    const [currentStep, setStep] = useState<number>(0);
     const [fee] = useState(localStorageRead(FEE));
+    const [feeRequest] = useState(localStorageRead(FEE_REQUEST));
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [result, setResult] = useState<boolean>(false);
+    const [provinces, setProvinces] = useState<any>([]);
+    const [districts, setDistricts] = useState<any>([]);
+    const [provinceSelected, setProvinceSelected] = useState<any>();
+    const [districtSelected, setDistrictSelected] = useState<any>();
+    const [originalDistricts, setOriginalDistricts] = useState<any>([]);
+    const [years, setYears] = useState<any>([]);
     const [form] = Form.useForm();
     const disabledDate = (current: any) => {
         // Can not select days before today and today
         return current && current > moment().endOf('day');
     }
     const [bodyRegister, setBodyRegister] = useState<any>();
+    useEffect(()=>{
+       if(productId===ENSURE_CAR||productId===ENSURE_HOUSE)
+           getProvinces();
+       if(productId===ENSURE_HOUSE) {
+           let items: any=[];
+           for(let i=0; i<=50;i++)
+               items.push(moment().add('year',-i).get('year'));
+           setYears(items);
+           getDistricts();
+       }
+
+    },[]);
     const getProductName = () => {
         switch (productId) {
             case ENSURE_ELECTRIC:
@@ -74,12 +102,29 @@ function RegisterInsurance() {
             }
         }
     }
+    const getProvinces=()=>{
+        categoryRepository.getCategories('DMTINH').then(res=>{
+            setProvinces(res.Data);
+        }).catch(err=>{
+
+        });
+    }
+    const getDistricts=()=>{
+        categoryRepository.getCategories('DIADIEM_BH').then(res=>{
+            setOriginalDistricts(res.Data);
+        }).catch(err=>{
+
+        });
+    }
     const nextStep = () => {
         if (currentStep === 0) {
             form.validateFields().then(values => {
                 // let fiels = form.getFieldsValue();
                 // console.log(values);
                 let body: any = {};
+                let dateStart = formatDate(moment().add(1, 'd'));
+                let datePaid = formatDate(moment());
+                let duration = formatDate(moment().set('year', moment().get('year') + 1));
                 if (productId === ENSURE_ELECTRIC) {
                     let listThamGia = [];
                     listThamGia.push({
@@ -95,9 +140,7 @@ function RegisterInsurance() {
                         });
                     });
                     let totalAmount = packageCode === '01' ? 10000000 : packageCode === '02' ? 20000000 : 40000000;
-                    let dateStart = formatDate(moment().add(1, 'd'));
-                    let datePaid = formatDate(moment());
-                    let duration = formatDate(moment().set('year', moment().get('year') + 1));
+
                     body = {
                         'ma_giaodich': `${CPID}${moment().valueOf()}`,
                         'package': packageCode,
@@ -124,6 +167,89 @@ function RegisterInsurance() {
                         'Sign': sign(`${values.customerEmail}${datePaid}${duration}${dateStart}${fee.TotalFee}${totalAmount}`)
                     }
                 }
+                else if(productId===ENSURE_HOUSE){
+                    let totalAmount = packageCode === '01' ? 100000000 : packageCode === '02' ? 200000000 : 400000000;
+                    body={
+                        'ma_giaodich': `${CPID}${moment().valueOf()}`,
+                        'package': packageCode,
+                        'goi_dichvu': '',
+                        'ma_tinh': values.province,
+                        'ma_user':'',
+                        'ma_pkt':'',
+                        'ma_donvi':'',
+                        'file_GYC':'',
+                        'MaKhach':'',
+                        'ma_phuongthuc_thanhtoan':'',
+                        'ma_daiLy':'',
+                        'ma_diadiem': values.district,
+                        'select_mahieu_ruiro':'',
+                        'select_danhsach_cautruc_xd':'',
+                        'ngaythanhtoan':'',
+                        'nguoimua_bh':'',
+                        'ma_canbo_kt':'',
+                        'so_donbh':'',
+                        'khach_hang':values.customerName,
+                        'thoihan_bh':duration,
+                        'endtime':'23:59',
+                        'phi_giamphi':'',
+                        'pr_key':'',
+                        'Email':values.customerEmail,
+                        'ngay_batdau':dateStart,
+                        'starttime':'00:00',
+                        'dia_chi':values.address,
+                        'ma_nhomkenh':'',
+                        'ma_kenhbh':'',
+                        'loai_dcap':'',
+                        'ma_moigioi':'',
+                        'phi_moi_gioi':'',
+                        'ma_phuongthuc_kt':'',
+                        'tyle_bt':'',
+                        'giatri_taisan':'',
+                        'ma_danhsach_msudung':'',
+                        'pvbh_dkbs_01':'',
+                        'pvbh_dkbs_02':'',
+                        'link_filehd':'',
+                        'ma_tt':'',
+                        'makhach_th':'',
+                        'diachi_th':'',
+                        'so_ctu':'',
+                        'select_loai_dichvu':'',
+                        'ttin_bosung':'',
+                        'muc_khautru':'',
+                        'nam_xaydung':values.year,
+                        'so_tangnoi':'',
+                        'so_tangham':'',
+                        'dk_bs_bh_khac':'',
+                        'diengiai_dk_bs_bh_khac':'',
+                        'ma_sp_dichvu':'',
+                        'ma_sovat':'',
+                        'is_hdon_dt':'',
+                        'ttin_hd_dientu':'',
+                        'so_dienthoai':values.customerPhone,
+                        'so_cmt_hochieu':'',
+                        'nmua_hang':'',
+                        'dchi_xhoadon':'',
+                        'nnghe_kd':'',
+                        'dk_thanhtoan':'',
+                        'tyle_cnbb':'',
+                        'diachi_nguoibh':'',
+                        'sotien_bh_bentrong':'',
+                        'tong_phi': lodash.get(fee, 'TotalFee', ''),
+                        'CpId': CPID,
+                        'tong_tienbh': totalAmount,
+                        'Sign': sign(`${values.customerEmail}${datePaid}${duration}${dateStart}${fee.TotalFee}${totalAmount}`)
+                    }
+                    setProvinceSelected(provinces.find((x: any)=>x.Value===values.province));
+                    setDistrictSelected(districts.find((x: any)=>x.Value===values.district));
+                }else if(productId===ENSURE_CAR){
+
+                }
+                console.log(body);
+                productRepository.createOrderHouse(body).then(res=>{
+
+                }).catch(err=>{
+
+                });
                 setBodyRegister(body);
                 setStep(currentStep + 1);
             }).catch(err => {
@@ -161,6 +287,14 @@ function RegisterInsurance() {
                 wrapperCol={{span: 16}}
                 className={'mgt20'}
                 autoComplete="off"
+                onFieldsChange={(changedFields, allFields)=>{
+                    let province: any = changedFields.find((x: any)=> x.name.includes('province'));
+                    if(province){
+                        form.setFieldsValue({district:undefined});
+                        setDistricts(originalDistricts.filter((x: any)=>x.Value.indexOf(province.value)===0))
+                    }
+                }
+                }
             >
                 <Form.Item
                     label="Họ và tên"
@@ -309,19 +443,22 @@ function RegisterInsurance() {
                 </Form.Item>
                 <Form.Item
                     label="Biển số xe"
-                    name="name"
+                    name="carNumber"
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Input/>
                 </Form.Item>
                 <Form.Item
                     label="Tỉnh/Thành Phố"
-                    name="name"
+                    name="province"
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Select placeholder="Tỉnh/Thành Phố">
-                        <Select.Option value="male">Nam</Select.Option>
-                        <Select.Option value="female">Nữ</Select.Option>
+                        {
+                            provinces.map((x: any,index: number)=>{
+                                return  <Select.Option key={index} value={x.Value}>{x.Text}</Select.Option>
+                            })
+                        }
                     </Select>
                 </Form.Item>
             </div>
@@ -334,8 +471,11 @@ function RegisterInsurance() {
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Select placeholder="Năm xây dựng">
-                        <Select.Option value="male">Nam</Select.Option>
-                        <Select.Option value="female">Nữ</Select.Option>
+                        {
+                            years.map((x: any,index: number)=>{
+                                return  <Select.Option key={index} value={x}>{x}</Select.Option>
+                            })
+                        }
                     </Select>
                 </Form.Item>
                 <span className={'robotobold txt-size-h1'}>Địa điểm căn nhà</span>
@@ -344,9 +484,12 @@ function RegisterInsurance() {
                     name="province"
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
-                    <Select placeholder="Tỉnh/Thành Phố">
-                        <Select.Option value="male">Nam</Select.Option>
-                        <Select.Option value="female">Nữ</Select.Option>
+                    <Select placeholder="Tỉnh/Thành Phố" >
+                        {
+                            provinces.map((x: any,index: number)=>{
+                                return  <Select.Option key={index} value={x.Value}>{x.Text}</Select.Option>
+                            })
+                        }
                     </Select>
                 </Form.Item>
                 <Form.Item
@@ -355,8 +498,11 @@ function RegisterInsurance() {
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Select placeholder="Quận/ Huyện">
-                        <Select.Option value="male">Nam</Select.Option>
-                        <Select.Option value="female">Nữ</Select.Option>
+                        {
+                            districts.map((x: any,index: number)=>{
+                                return  <Select.Option key={index} value={x.Value}>{x.Text}</Select.Option>
+                            })
+                        }
                     </Select>
                 </Form.Item>
                 <Form.Item
@@ -376,7 +522,7 @@ function RegisterInsurance() {
             <RowItem title={'Họ và tên'} value={bodyRegister.khach_hang}></RowItem>
             {productId === ENSURE_ELECTRIC && <RowItem title={'Địa chỉ'} value={bodyRegister.dia_chi}></RowItem>}
             {productId === ENSURE_CAR || productId === ENSURE_HOUSE ?
-                <RowItem title={'Số điện thoại'} value={bodyRegister.dien_thoai}></RowItem> : null}
+                <RowItem title={'Số điện thoại'} value={bodyRegister.so_dienthoai}></RowItem> : null}
             <RowItem title={'Địa chỉ email'} value={bodyRegister.email}></RowItem>
             {
                 productId === ENSURE_ELECTRIC ? <div>
@@ -407,11 +553,11 @@ function RegisterInsurance() {
                     <RowItem title={'Phân loại'} value={''}></RowItem>
                 </div> : productId === ENSURE_HOUSE ? <div>
                     <span className={'robotobold txt-size-h1'}>Thông tin căn nhà</span>
-                    <RowItem title={'Năm xây dựng'} value={''}></RowItem>
+                    <RowItem title={'Năm xây dựng'} value={bodyRegister.nam_xaydung}></RowItem>
                     <span className={'robotobold txt-size-h1'}>Địa điểm căn nhà</span>
-                    <RowItem title={'Tỉnh/Thành Phố'} value={''}></RowItem>
-                    <RowItem title={'Quận/ Huyện'} value={''}></RowItem>
-                    <RowItem title={'Địa chỉ chi tiết'} value={''}></RowItem>
+                    <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected.Text}></RowItem>
+                    <RowItem title={'Quận/ Huyện'} value={districtSelected.Text}></RowItem>
+                    <RowItem title={'Địa chỉ chi tiết'} value={bodyRegister.dia_chi}></RowItem>
                 </div> : null
             }
         </Card>
