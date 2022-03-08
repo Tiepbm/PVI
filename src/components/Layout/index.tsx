@@ -9,6 +9,7 @@ import {useLocation, useSearchParams} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import useWindowDimensions from "../../hooks";
 import logo from '../../resources/images/logo.png';
+import MediaQuery, {useMediaQuery} from 'react-responsive';
 
 const {Header, Sider, Content, Footer} = Layout;
 const PERCENT_COMPLETE = 100;
@@ -30,6 +31,8 @@ function MainLayout(props: MainLayoutProps) {
     const location = useLocation();
     const navigate = useNavigate();
     const {height} = useWindowDimensions();
+    const isDesktopOrLaptop = useMediaQuery({ minWidth: 768 })
+    const isTabletOrMobile = useMediaQuery({ maxWidth: 767 })
     useEffect(() => {
         if (showProgressBar) {
             startWithAutoIncrement();
@@ -104,18 +107,22 @@ function MainLayout(props: MainLayoutProps) {
         <DocumentTitle title={`${title ? title : 'M24'}`}>
             <Layout className={'main-layout'}>
                 <Header className="header">
-                    <Row className={'align-items-center justify-content-between'}>
+                    {isDesktopOrLaptop&&<Row className={'align-items-center justify-content-between pdl50 pdr50'}>
                         <Col span={18}>
                             <Row className={'align-items-center'}>
                                 <img style={{height: 60, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
-                            <div>
+                                <div>
                             <span style={{height: 30}} onClick={() => clickMenu('')}
                                   className={`${activeKey === '' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
-                            </div>
-                            <div>
+                                </div>
+                                <div>
+                            <span onClick={() => clickMenu('orders')}
+                                  className={`${activeKey === 'orders' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Đơn hàng</span>
+                                </div>
+                                <div>
                             <span onClick={() => clickMenu('about')}
                                   className={`${activeKey === 'about' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Giới thiệu</span>
-                            </div>
+                                </div>
                             </Row>
                         </Col>
                         <Col>
@@ -126,7 +133,17 @@ function MainLayout(props: MainLayoutProps) {
                             </Row>
                         </Col>
 
-                    </Row>
+                    </Row>}
+                    {isTabletOrMobile&&<Row className={'align-items-center justify-content-between pdl5 pdr5'}>
+
+                            <img style={{height: 60, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
+
+                            <Row className={'justify-content-end align-items-center'}>
+                                <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng nhập</span>
+                                <Divider type={'vertical'} className={'bg-color-white'}></Divider>
+                                <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng ký</span>
+                            </Row>
+                    </Row>}
                 </Header>
                 <ProgressBar
                     percent={percent}
