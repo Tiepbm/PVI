@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Avatar, Col, Divider, Layout, Menu, Popover, Row} from 'antd';
+import {Avatar, Button, Col, Divider, Layout, Menu, Popover, Row} from 'antd';
 import './styles.scss';
 import ProgressBar from "../Spinner/ProgressBar";
 import {localStorageRead, localStorageSave} from "../../utils/LocalStorageUtils";
@@ -110,15 +110,15 @@ function MainLayout(props: MainLayoutProps) {
                     {isDesktopOrLaptop&&<Row className={'align-items-center justify-content-between pdl50 pdr50'}>
                         <Col span={18}>
                             <Row className={'align-items-center'}>
-                                <img style={{height: 60, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
+                                <img className={'cursor-pointer'} onClick={()=> navigate('/')} style={{height: 60, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
                                 <div>
                             <span style={{height: 30}} onClick={() => clickMenu('')}
                                   className={`${activeKey === '' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
                                 </div>
-                                {/*<div>*/}
-                            {/*<span onClick={() => clickMenu('orders')}*/}
-                            {/*      className={`${activeKey === 'orders' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Đơn hàng</span>*/}
-                            {/*    </div>*/}
+                                <div>
+                            <span onClick={() => clickMenu('orders')}
+                                  className={`${activeKey === 'orders' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Đơn hàng</span>
+                                </div>
                                 <div>
                             <span onClick={() => window.open('http://www.pvi.com.vn/gioi-thieu-new/gioi-thieu-chung/gioi-thieu-chung.html','_blank')}
                                   className={`${activeKey === 'about' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Giới thiệu</span>
@@ -136,13 +136,13 @@ function MainLayout(props: MainLayoutProps) {
                     </Row>}
                     {isTabletOrMobile&&<Row className={'align-items-center justify-content-between pdl5 pdr5'}>
 
-                            <img style={{height: 60, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
+                            <img className={'cursor-pointer'} onClick={()=> navigate('/')}  style={{height: 60, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
 
-                            <Row className={'justify-content-end align-items-center'}>
-                                <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng nhập</span>
-                                <Divider type={'vertical'} className={'bg-color-white'}></Divider>
-                                <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng ký</span>
-                            </Row>
+                            {/*<Row className={'justify-content-end align-items-center'}>*/}
+                            {/*    <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng nhập</span>*/}
+                            {/*    <Divider type={'vertical'} className={'bg-color-white'}></Divider>*/}
+                            {/*    <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng ký</span>*/}
+                            {/*</Row>*/}
                     </Row>}
                 </Header>
                 <ProgressBar
@@ -156,7 +156,15 @@ function MainLayout(props: MainLayoutProps) {
                 >
                     {children}
                 </Content>
-                <Footer style={{textAlign: 'center'}}>©2022 Created by PVI</Footer>
+                <Footer style={{textAlign: 'center'}}>
+
+                    {isTabletOrMobile&&<Row className={'justify-content-center'}>
+                        <Button onClick={()=> navigate('/')} type={'link'}>Trang chủ</Button>
+                        <Button type={'link'}>Đơn hàng</Button>
+                        <Button onClick={()=> window.open('http://www.pvi.com.vn/gioi-thieu-new/gioi-thieu-chung/gioi-thieu-chung.html','_blank')} type={'link'}>Giới thiệu</Button>
+                    </Row>}
+
+                    <Row className={'justify-content-center'}><span>©2022 Created by PVI</span></Row></Footer>
             </Layout>
         </DocumentTitle>
     );

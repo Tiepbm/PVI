@@ -7,6 +7,7 @@ import Home from "./containers/Home";
 import CategoryDetail from "./containers/CategoryDetail";
 import ProductDetail from "./containers/ProductDetail";
 import RegisterInsurance from "./containers/RegisterInsurance";
+import RuleProductDetail from "./containers/RuleProductDetail";
 import viVN from 'antd/lib/locale-provider/vi_VN'
 import moment from "moment";
 moment.locale('vi', {
@@ -70,6 +71,7 @@ function App() {
             <Route path={'/categories/detail'} element={<CategoryDetail/>}></Route>
             <Route path={'/products/:productId/register'} element={<RegisterInsurance/>}></Route>
             <Route path={'/products/:productId'} element={<ProductDetail/>}></Route>
+            <Route path={'/rule/:productId'} element={<RuleProductDetail/>}></Route>
 
           </Routes>
         </HashRouter>

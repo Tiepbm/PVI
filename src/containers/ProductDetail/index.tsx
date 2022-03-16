@@ -21,6 +21,7 @@ import {formatMoneyByUnit} from "../../core/helpers/string";
 import {categoryRepository} from "../../repositories/CategoryRepository";
 import M24ErrorUtils from "../../utils/M24ErrorUtils";
 import {localStorageSave} from "../../utils/LocalStorageUtils";
+import {useMediaQuery} from "react-responsive";
 
 const data = [
     {
@@ -103,7 +104,7 @@ const data = [
     },
     {
         id: 'tndsoto',
-        banner: 'https://baohiem.viettelpay.vn/filepath/files/products/e647b523-2d3c-43de-9dea-ecd787cf158d.png',
+        banner: require('../../resources/images/banner-car.png'),
         description: 'Bảo hiểm TNDS ô tô là giấy tờ bắt buộc khi đăng kiểm xe và tham gia giao thông với chế tài 400.000 - 600.000 đồng/lần khi vi phạm. Trường hợp chủ xe ô tô gây tai nạn, bảo hiểm sẽ chi trả cho người bị nạn số tiền lên đến 150 triệu đồng/người/vụ cho tổn thất về người và 100 triệu đồng/vụ cho tổn thất về tài sản. Ngoài sản phẩm bắt buộc, Viettel Money cung cấp thêm cho KH các gói bảo hiểm tự nguyện dành cho lái xe, phụ xe và người ngồi trên xe ô tô với mức quyền lợi từ 10 triệu đến 100 triệu đồng/người/vụ với chi phí chỉ từ 20.000 đồng.',
         benefit: {
             categories: [
@@ -181,7 +182,7 @@ const data = [
     },
     {
         id: 'nhaotoandien',
-        banner: 'https://baohiem.viettelpay.vn/filepath/files/products/e765c579-8c18-48b7-b240-90f690af1b02.png',
+        banner: require('../../resources/images/banner-house.jpg'),
         description: 'Ngôi nhà là tài sản lớn, là thành quả tích lũy trong thời gian dài của bạn và gia đình. Thành quả đó sẽ bền lâu và tiếp tục phát triển nếu bạn luôn có những phương án để bảo vệ nó trước những rủi ro không lường trước được trong cuộc sống. Hãy tham gia Bảo hiểm toàn diện nhà ở chỉ từ 165.000đ/năm để luôn yên tâm với giải pháp bảo hiểm toàn diện cho Ngôi nhà của bạn. Bảo hiểm toàn diện nhà ở sẽ cùng gánh vác những tổn thất khi phát sinh rủi ro cho Ngôi nhà và các tài sản bên trong của bạn lên đến 600 triệu đồng/ năm',
         benefit: {
             categories: [
@@ -251,6 +252,8 @@ function ProductDetail() {
     const [detail, setDetail] = useState<any>();
     const [fee, setFee] = useState<any>();
     const navigate = useNavigate();
+    const isDesktopOrLaptop = useMediaQuery({ minWidth: 768 })
+    const isTabletOrMobile = useMediaQuery({ maxWidth: 767 })
     const keyCars=['MayKeo','XeChuyenDung','XeChoTien','XePickUp','XeTaiVan','XeTapLai','XeBus','XeCuuThuong','Xetaxi','XeDauKeo'];
     const [bodyOto, setBodyOto] = useState({
         "ma_trongtai": "",
@@ -513,12 +516,12 @@ function ProductDetail() {
     const renderFeeElectric=()=>{
         return <div>
             <Row>
-                <Col span={6}>
+                <Col sm={12} lg={6}>
                     <Row><span>Ngày hiệu lực</span></Row>
                     <DatePicker defaultValue={moment(new Date(),STANDARD_DATE_FORMAT)} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                                 format={STANDARD_DATE_FORMAT} onChange={handleChange}/>
                 </Col>
-                <Col span={6} className={'mgl10'}>
+                <Col  sm={12} lg={6} className={'mgl10'}>
                     <Row><span>Chu kỳ thanh toán</span></Row>
                     <Select defaultValue="1" onChange={handleChange} className={'width100'}>
                         <Select.Option value="1">1 năm</Select.Option>
@@ -531,12 +534,12 @@ function ProductDetail() {
         return <div>
 
             <Row gutter={8} className={'justify-content-start'}>
-                <Col span={8} className={''}>
+                <Col  sm={12} lg={8} className={''}>
                     <Row><span>Ngày hiệu lực</span></Row>
                     <DatePicker defaultValue={moment(new Date(),STANDARD_DATE_FORMAT)} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                                 format={STANDARD_DATE_FORMAT} onChange={handleChange}/>
                 </Col>
-                <Col span={8} className={''}>
+                <Col  sm={12} lg={8} className={''}>
                     <Row><span>Chu kỳ thanh toán</span></Row>
                     <Select defaultValue="1" onChange={handleChange} className={'width100'}>
                         <Select.Option value="1">1 năm</Select.Option>
@@ -544,7 +547,7 @@ function ProductDetail() {
                 </Col>
             </Row>
             <Row gutter={8} className={'mgt20 justify-content-start'}>
-                <Col span={8} className={''}>
+                <Col sm={12} xl={8} className={''}>
                     <Row><span>Mục đích sử dụng</span></Row>
                     <Select value={lodash.get(purpose,'code',undefined)} onChange={handleChange} className={'width100'}>
                         {categoriesCar.map((x: any, index: number)=>{
@@ -552,12 +555,12 @@ function ProductDetail() {
                         })}
                     </Select>
                 </Col>
-                <Col span={8} className={''}>
+                <Col sm={12} xl={8} className={''}>
                     <Row><span><span className={'txt-color-red'}>* </span>Số chỗ ngồi</span></Row>
                    <Input onChange={(e)=> changeValueCar('so_cho',e.target.value)} value={bodyOto.so_cho}></Input>
                 </Col>
                 {purpose &&purpose.code === '3' &&
-                <Col span={8} className={''}>
+                <Col sm={12} xl={8} className={''}>
                     <Row><span><span className={'txt-color-red'}>* </span>Trọng tải (kg)</span></Row>
                     <Input onChange={(e)=> changeValueCar('ma_trongtai',e.target.value)} value={bodyOto.ma_trongtai}></Input>
                 </Col>
@@ -569,7 +572,7 @@ function ProductDetail() {
                         // let disable=false;
                         // if(bodyOto.XeTapLai&&x.code!=='XePickUp'&&x.code!=='XeTaiVan')
                         //     disable=true;
-                        return <Col span={8} className={''}>
+                        return <Col lg={8} sm={10} className={''}>
                             <Checkbox checked={lodash.get(bodyOto, x.code, false)} onChange={(e)=> changeTypeCar(e.target.checked, x.code)}>{x.name}</Checkbox>
                         </Col>
                     })
@@ -593,8 +596,8 @@ function ProductDetail() {
         </div>
         <div className={'main-content'}>
             <span style={{
-                position:'absolute', top:-120
-            }} className={'txt-size-72 txt-color-white robotobold'}>{getProductName()}</span>
+                position:'absolute', top:isDesktopOrLaptop?-120:-55
+            }} className={`${isDesktopOrLaptop?'txt-size-72':'txt-size-h1'} txt-color-white robotobold`}>{getProductName()}</span>
             <span className={'txt-size-h5'}>{lodash.get(detail, 'description', '')}</span>
             {renderBenefit()}
             <Spin size={'large'} spinning={loading}>

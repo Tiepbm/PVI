@@ -97,6 +97,21 @@ function Home() {
             ]
         }
     ]
+    const banners=[
+        {
+            image:'https://baohiem.viettelpay.vn/client-assets/images/category/Xe.jpg',
+            url:'http://www.pvi.com.vn/index.html'
+        }, {
+            image:'https://baohiem.viettelpay.vn/client-assets/images/category/S%E1%BB%A9c%20kh%E1%BB%8Fe.jpg',
+            url:'http://www.pvi.com.vn/index.html'
+        }, {
+            image:'https://baohiem.viettelpay.vn/client-assets/images/category/Tai%20n%E1%BA%A1n.jpg',
+            url:'http://www.pvi.com.vn/index.html'
+        }, {
+            image:'https://baohiem.viettelpay.vn/client-assets/images/category/T%C3%A0i%20s%E1%BA%A3n.jpg',
+            url:'http://www.pvi.com.vn/index.html'
+        }
+    ]
     const renderItem = (item: any) => {
         if(isDesktopOrLaptop)
         return <Card className={'mgt20'}>
@@ -169,20 +184,14 @@ function Home() {
     }
     return <MainLayout showProgressBar={showProgressBar} title={'Danh mục sản phẩm'}>
         <div>
-            <Carousel autoplay arrows={true} prevArrow={<LeftOutlined />} nextArrow={<RightOutlined />}>
-                <div>
-                    <img className={'width100'}  src={'https://baohiem.viettelpay.vn/client-assets/images/category/Xe.jpg'}></img>
-                </div>
-                <div>
-                    <img className={'width100'} src={'https://baohiem.viettelpay.vn/client-assets/images/category/S%E1%BB%A9c%20kh%E1%BB%8Fe.jpg'}></img>
-                </div>
-                <div>
-                    <img className={'width100'} src={'https://baohiem.viettelpay.vn/client-assets/images/category/Tai%20n%E1%BA%A1n.jpg'}></img>
-                </div>
-                <div>
-                    <img className={'width100'}
-                        src={'https://baohiem.viettelpay.vn/client-assets/images/category/T%C3%A0i%20s%E1%BA%A3n.jpg'}></img>
-                </div>
+            <Carousel autoplay arrows={true} prevArrow={<LeftOutlined size={isDesktopOrLaptop?70:50} />} nextArrow={<RightOutlined size={isDesktopOrLaptop?70:50} />}>
+                {
+                    banners.map((x: any, index: number)=>{
+                        return  <div className={'cursor-pointer'} onClick={()=> window.open(x.url,'_blank')} key={index}>
+                            <Image width={'100%'} preview={false} src={x.image}></Image>
+                        </div>
+                    })
+                }
             </Carousel>
             <div className={'main-content'}>
                 {
