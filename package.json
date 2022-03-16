@@ -28,7 +28,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "cross-env PORT=9001 react-app-rewired start",
+    "start": "cross-env PORT=9000electric.jpg\nmobile-electric.png\nmobile-house.png\nmobile-car.png\nhouse.jpg\ncar.jpg react-app-rewired start",
     "build": "cross-env GENERATE_SOURCEMAP=false react-app-rewired build"
   },
   "eslintConfig": {

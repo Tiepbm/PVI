@@ -1,14 +1,17 @@
-import {Avatar, Button, Card, Carousel, Col, Row} from "antd";
+import {Avatar, Button, Card, Carousel, Col, Image, Row} from "antd";
 import MainLayout from "../../components/Layout";
 import React, {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import useWindowDimensions from "../../hooks";
+import './styles.scss';
 import {ENSURE_CAR, ENSURE_ELECTRIC, ENSURE_HOUSE} from "../../core/config";
+import {useMediaQuery} from "react-responsive";
+import {LeftOutlined, RightOutlined} from "@ant-design/icons";
 
 function Home() {
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
     const navigate = useNavigate();
-    const {width, height} = useWindowDimensions();
+    const isDesktopOrLaptop = useMediaQuery({ minWidth: 768 })
+    const isTabletOrMobile = useMediaQuery({ maxWidth: 767 })
     const categories = [
         {
             name: 'Bảo hiểm xe',
@@ -21,7 +24,7 @@ function Home() {
                 {
                     name: 'TNDS ô tô',
                     id:ENSURE_CAR,
-                    logo: 'https://baohiem.viettelpay.vn/filepath/files/products/77614a36-c2a6-4393-8f18-eab81551204f.png'
+                    logo: require(isDesktopOrLaptop?'../../resources/images/car.jpg':'../../resources/images/mobile-car.png')
                 },
                 {
                     name: 'Thân vỏ ô tô',
@@ -59,7 +62,7 @@ function Home() {
                 {
                     name: 'Tai nạn hộ sử dụng điện',
                     id:ENSURE_ELECTRIC,
-                    logo: 'https://baohiem.viettelpay.vn/filepath/files/products/95568d8a-68df-4939-8519-08ac2ae55b1e.jpg'
+                    logo: require(isDesktopOrLaptop?'../../resources/images/electric.jpg':'../../resources/images/mobile-electric.png')
                 }
             ]
         },
@@ -69,7 +72,7 @@ function Home() {
                 {
                     name: 'Nhà ở toàn diện',
                     id:ENSURE_HOUSE,
-                    logo: 'https://baohiem.viettelpay.vn/filepath/files/products/31a3a17d-21a0-4326-925d-4f63e3c82b99.png'
+                    logo: require(isDesktopOrLaptop?'../../resources/images/house.jpg':'../../resources/images/mobile-house.png')
                 },
                 {
                     name: 'Màn hình điện thoại',
@@ -95,14 +98,70 @@ function Home() {
         }
     ]
     const renderItem = (item: any) => {
-
+        if(isDesktopOrLaptop)
         return <Card className={'mgt20'}>
+            <span className={'robotobold txt-size-h6'}>{item.name}</span>
+            <Row gutter={8} className={'justify-content-center mgt20'}>
+                {item.items.map((x: any) => {
+                    // return <div className="hot-product__item">
+                    //     <div className="article " data-type="data1">
+                    //         <div className="article__tag">
+                    //             <span>Hot</span>
+                    //         </div>
+                    //         <picture className="article__picture">
+                    //             <a
+                    //             href="/ProductClient?productId=18f08498-987c-4a60-a770-ac0b813b42c8"><img
+                    //             className="article__picture--img lazy loaded"
+                    //             data-src="\filepath\files\products\f1234db6-cbad-4743-9bde-0df271402a88.png"
+                    //             alt="Bảo hiểm màn hình điện thoại Bảo Việt"
+                    //             src={x.logo}
+                    //             data-was-processed="true"/>
+                    //             </a>
+                    //             </picture>
+                    //         <div className="article__content">
+                    //             <h5 className="article__content--title"><a tabIndex={0}
+                    //                                                        href="/ProductClient?productId=18f08498-987c-4a60-a770-ac0b813b42c8">Bảo
+                    //                 hiểm màn hình điện thoại Bảo Việt</a></h5>
+                    //             <div className="article__content--price-picture">
+                    //                 <span className="article__content--price">Từ 8.000 đ</span>
+                    //                 <div className="picture">
+                    //                     <img className="lazy loaded"
+                    //                                               data-src="\filepath\images\Provider\00036b4a-372a-4520-92d8-86731c6540d8.png"
+                    //                                               alt="Bảo hiểm màn hình điện thoại Bảo Việt"
+                    //                                               src="\filepath\images\Provider\00036b4a-372a-4520-92d8-86731c6540d8.png"
+                    //                                               data-was-processed="true"/>
+                    //                     </div>
+                    //             </div>
+                    //         </div>
+                    //     </div>
+                    // </div>;
+                    return <Col onClick={()=> navigate(`/products/${x.id}`)} className={'cursor-pointer article'} span={6}>
+
+                                 <div className="article__tag">
+                                     <span>Hot</span>
+                                </div>
+                        <div className={'article__picture'}>
+                            <Image preview={false} src={x.logo} height={200} width={300}></Image>
+                        </div>
+                        <div className={'article__content'}>
+                          <span className={'robotobold txt-color-red txt-size-h4'}>{x.name}</span>
+                          <Row>
+                              <span className={'robotobold txt-color-black txt-size-h6 mgt5'}>{'Từ 8.000đ'}</span>
+                          </Row>
+                        </div>
+                    </Col>
+                })}
+            </Row>
+        </Card>
+       else return <Card className={'mgt20'}>
             <span className={'robotobold txt-size-h6'}>{item.name}</span>
             <Row className={'justify-content-center mgt20'}>
                 {item.items.map((x: any) => {
-                    return <Col onClick={()=> navigate(`/products/${x.id}`)} className={'cursor-pointer'} span={6}>
-                        <Row className={'justify-content-center'}><Avatar src={x.logo} size={150}></Avatar></Row>
-                        <Row className={'justify-content-center txt-size-h6'}><span className={'mgt10'}>{x.name}</span></Row>
+                    return <Col onClick={()=> navigate(`/products/${x.id}`)} className={'cursor-pointer'} span={8}>
+                        <Row className={'justify-content-center'}><Image src={x.logo} width={50}  preview={false}></Image></Row>
+                        <Row className={'justify-content-center txt-size-h7'}>
+                            <span className={'mgt10 txt-center'}>{x.name}</span>
+                        </Row>
                     </Col>
                 })}
             </Row>
@@ -110,7 +169,7 @@ function Home() {
     }
     return <MainLayout showProgressBar={showProgressBar} title={'Danh mục sản phẩm'}>
         <div>
-            <Carousel autoplay>
+            <Carousel autoplay arrows={true} prevArrow={<LeftOutlined />} nextArrow={<RightOutlined />}>
                 <div>
                     <img className={'width100'}  src={'https://baohiem.viettelpay.vn/client-assets/images/category/Xe.jpg'}></img>
                 </div>

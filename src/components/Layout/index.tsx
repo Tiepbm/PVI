@@ -115,12 +115,12 @@ function MainLayout(props: MainLayoutProps) {
                             <span style={{height: 30}} onClick={() => clickMenu('')}
                                   className={`${activeKey === '' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
                                 </div>
+                                {/*<div>*/}
+                            {/*<span onClick={() => clickMenu('orders')}*/}
+                            {/*      className={`${activeKey === 'orders' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Đơn hàng</span>*/}
+                            {/*    </div>*/}
                                 <div>
-                            <span onClick={() => clickMenu('orders')}
-                                  className={`${activeKey === 'orders' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Đơn hàng</span>
-                                </div>
-                                <div>
-                            <span onClick={() => clickMenu('about')}
+                            <span onClick={() => window.open('http://www.pvi.com.vn/gioi-thieu-new/gioi-thieu-chung/gioi-thieu-chung.html','_blank')}
                                   className={`${activeKey === 'about' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Giới thiệu</span>
                                 </div>
                             </Row>
