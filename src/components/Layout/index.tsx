@@ -10,6 +10,7 @@ import {useNavigate} from 'react-router-dom';
 import useWindowDimensions from "../../hooks";
 import logo from '../../resources/images/logo.png';
 import MediaQuery, {useMediaQuery} from 'react-responsive';
+import {useSessionStorage} from "../../hooks/useSessionStorage";
 
 const {Header, Sider, Content, Footer} = Layout;
 const PERCENT_COMPLETE = 100;
@@ -31,8 +32,9 @@ function MainLayout(props: MainLayoutProps) {
     const location = useLocation();
     const navigate = useNavigate();
     const {height} = useWindowDimensions();
-    const isDesktopOrLaptop = useMediaQuery({ minWidth: 768 })
-    const isTabletOrMobile = useMediaQuery({ maxWidth: 767 })
+    const isDesktopOrLaptop = useMediaQuery({ minWidth: 768 });
+    const isTabletOrMobile = useMediaQuery({ maxWidth: 767 });
+    const [webCode, setWebCode] = useSessionStorage('web_code', '');
     useEffect(() => {
         if (showProgressBar) {
             startWithAutoIncrement();
@@ -42,13 +44,17 @@ function MainLayout(props: MainLayoutProps) {
     }, [showProgressBar]);
     useEffect(() => {
         window.scrollTo(0, 0);
-        if (location.pathname && location.pathname !== '/') {
-            if (location.pathname.indexOf('categories/detail') > 0) {
-                let code = searchParams.get('code');
-                if (code) setActiveKey(code);
-            }else setActiveKey('other');
-        }
+        // if (location.pathname && location.pathname !== '/') {
+        //     if (location.pathname.indexOf('categories/detail') > 0) {
+        //         let code = searchParams.get('code');
+        //         if (code) setActiveKey(code);
+        //     }else setActiveKey('other');
+        // }
         // this.setState({activeKey: activeKey})
+                let code = searchParams.get('code');
+                if (code){
+                    setWebCode(code);
+                }
     }, []);
     const toggle = () => {
         setCollapsed(!collapsed);

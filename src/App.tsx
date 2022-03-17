@@ -10,6 +10,7 @@ import RegisterInsurance from "./containers/RegisterInsurance";
 import RuleProductDetail from "./containers/RuleProductDetail";
 import viVN from 'antd/lib/locale-provider/vi_VN'
 import moment from "moment";
+import {useSessionStorage} from "./hooks/useSessionStorage";
 moment.locale('vi', {
   months: [
     'Tháng 1',

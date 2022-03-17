@@ -24,6 +24,7 @@ import ConfirmModal from "../../components/Modal/ConfirmModal";
 import M24ErrorUtils from "../../utils/M24ErrorUtils";
 import {categoryRepository} from "../../repositories/CategoryRepository";
 import { Link } from 'react-router-dom';
+import {useSessionStorage} from "../../hooks/useSessionStorage";
 
 const {Step} = Steps;
 const { confirm } = Modal;
@@ -46,6 +47,8 @@ function RegisterInsurance() {
     const [originalDistricts, setOriginalDistricts] = useState<any>([]);
     const [years, setYears] = useState<any>([]);
     const [form] = Form.useForm();
+    const [webCode, setWebCode] = useSessionStorage('web_code', '');
+    console.log('code:',webCode);
     const disabledDate = (current: any) => {
         // Can not select days before today and today
         return current && current > moment().endOf('day');
