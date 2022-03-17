@@ -19,17 +19,20 @@ function Home() {
                 {
                     name: 'TNDS xe máy',
                     id:'tndsxemay',
-                    logo: 'https://baohiem.viettelpay.vn/filepath/files/products/3403ac1e-069d-49bd-859c-879789be7f48.png'
+                    logo: 'https://baohiem.viettelpay.vn/filepath/files/products/3403ac1e-069d-49bd-859c-879789be7f48.png',
+                    status:'pending',
                 },
                 {
                     name: 'TNDS ô tô',
                     id:ENSURE_CAR,
-                    logo: require(isDesktopOrLaptop?'../../resources/images/car.jpg':'../../resources/images/mobile-car.png')
+                    logo: require(isDesktopOrLaptop?'../../resources/images/car.jpg':'../../resources/images/mobile-car.png'),
+                    status:'active',
                 },
                 {
                     name: 'Thân vỏ ô tô',
                     id:'than_oto',
-                    logo: 'https://baohiem.viettelpay.vn/filepath/files/products/77614a36-c2a6-4393-8f18-eab81551204f.png'
+                    logo: 'https://baohiem.viettelpay.vn/filepath/files/products/77614a36-c2a6-4393-8f18-eab81551204f.png',
+                    status:'pending',
                 }
             ]
         },
@@ -39,14 +42,17 @@ function Home() {
                 {
                     name: 'Hỗ trợ nằm viện',
                     id:'hotronamvien',
+                    status:'pending',
                     logo: 'https://baohiem.viettelpay.vn/filepath/files/products/c9cb6614-2207-4a47-a02a-45b87e255f40.jpg'
                 }, {
                     name: 'Ngũ phúc ưu việt',
                     id:'nguphucuuviet',
+                    status:'pending',
                     logo: 'https://baohiem.viettelpay.vn/filepath/files/products/c9cb6614-2207-4a47-a02a-45b87e255f40.jpg'
                 }, {
                     name: 'An phúc ưu việt',
                     id:'anphucuuviet',
+                    status:'pending',
                     logo: 'https://baohiem.viettelpay.vn/filepath/files/products/1913f348-6ab9-41e9-8b1e-57254021ea90.png'
                 }
             ]
@@ -57,11 +63,13 @@ function Home() {
                 {
                     name: 'Tai nạn cá nhân',
                     id:'tainancanhan',
+                    status:'pending',
                     logo: 'https://baohiem.viettelpay.vn/filepath/files/products/fffb2a2a-f87c-4bf3-a62c-3da8f71b9eef.jpg'
                 },
                 {
                     name: 'Tai nạn hộ sử dụng điện',
                     id:ENSURE_ELECTRIC,
+                    status:'active',
                     logo: require(isDesktopOrLaptop?'../../resources/images/electric.jpg':'../../resources/images/mobile-electric.png')
                 }
             ]
@@ -72,11 +80,13 @@ function Home() {
                 {
                     name: 'Nhà ở toàn diện',
                     id:ENSURE_HOUSE,
+                    status:'active',
                     logo: require(isDesktopOrLaptop?'../../resources/images/house.jpg':'../../resources/images/mobile-house.png')
                 },
                 {
                     name: 'Màn hình điện thoại',
                     id:'manhinhdienthoai',
+                    status:'pending',
                     logo: 'https://baohiem.viettelpay.vn/filepath/files/products/f1234db6-cbad-4743-9bde-0df271402a88.png'
                 }
             ]
@@ -87,11 +97,13 @@ function Home() {
                 {
                     name: 'Du lịch trong nước',
                     id:'dulichtrongnuoc',
+                    status:'pending',
                     logo: 'https://baohiem.viettelpay.vn/client-assets/images/category/Du%20l%E1%BB%8Bch.Jpg'
                 },
                 {
                     name: 'Du lịch quốc tế',
                     id:'dulichquocte',
+                    status:'pending',
                     logo: 'https://baohiem.viettelpay.vn/client-assets/images/category/Du%20l%E1%BB%8Bch.Jpg'
                 }
             ]
@@ -99,17 +111,14 @@ function Home() {
     ]
     const banners=[
         {
-            image:'https://baohiem.viettelpay.vn/client-assets/images/category/Xe.jpg',
-            url:'http://www.pvi.com.vn/index.html'
+            id: 'tainansudungdien',
+            banner: require('../../resources/images/banner-electric.jpg'),
         }, {
-            image:'https://baohiem.viettelpay.vn/client-assets/images/category/S%E1%BB%A9c%20kh%E1%BB%8Fe.jpg',
-            url:'http://www.pvi.com.vn/index.html'
+            id: 'tndsoto',
+            banner: require('../../resources/images/banner-car.png'),
         }, {
-            image:'https://baohiem.viettelpay.vn/client-assets/images/category/Tai%20n%E1%BA%A1n.jpg',
-            url:'http://www.pvi.com.vn/index.html'
-        }, {
-            image:'https://baohiem.viettelpay.vn/client-assets/images/category/T%C3%A0i%20s%E1%BA%A3n.jpg',
-            url:'http://www.pvi.com.vn/index.html'
+            id: 'nhaotoandien',
+            banner: require('../../resources/images/banner-house.jpg'),
         }
     ]
     const renderItem = (item: any) => {
@@ -150,20 +159,18 @@ function Home() {
                     //         </div>
                     //     </div>
                     // </div>;
-                    return <Col onClick={()=> navigate(`/products/${x.id}`)} className={'cursor-pointer article'} span={6}>
+                    return <Col onClick={()=> navigate(`/products/${x.id}`)} className={'cursor-pointer article'} span={8}>
 
                                  <div className="article__tag">
-                                     <span>Hot</span>
+                                     <span>{x.status==='active'?'Hot':'Sắp ra mắt'}</span>
                                 </div>
                         <div className={'article__picture'}>
-                            <Image preview={false} src={x.logo} height={200} width={300}></Image>
+                            <Image preview={false} src={x.logo} height={300} width={350}></Image>
                         </div>
-                        <div className={'article__content'}>
-                          <span className={'robotobold txt-color-red txt-size-h4'}>{x.name}</span>
-                          <Row>
+                          <Row className={'article__content justify-content-between'}>
+                              <span className={'robotobold txt-color-red txt-size-h4'}>{x.name}</span>
                               <span className={'robotobold txt-color-black txt-size-h6 mgt5'}>{'Từ 8.000đ'}</span>
                           </Row>
-                        </div>
                     </Col>
                 })}
             </Row>
@@ -173,9 +180,9 @@ function Home() {
             <Row className={'justify-content-center mgt20'}>
                 {item.items.map((x: any) => {
                     return <Col onClick={()=> navigate(`/products/${x.id}`)} className={'cursor-pointer'} span={8}>
-                        <Row className={'justify-content-center'}><Image src={x.logo} width={50}  preview={false}></Image></Row>
+                        <Row className={'justify-content-center'}><Image src={x.logo} width={90} height={90}  preview={false}></Image></Row>
                         <Row className={'justify-content-center txt-size-h7'}>
-                            <span className={'mgt10 txt-center'}>{x.name}</span>
+                            <span style={{maxWidth: 85}} className={'mgt10 txt-center'}>{x.name}</span>
                         </Row>
                     </Col>
                 })}
@@ -187,8 +194,8 @@ function Home() {
             <Carousel autoplay arrows={true} prevArrow={<LeftOutlined size={isDesktopOrLaptop?70:50} />} nextArrow={<RightOutlined size={isDesktopOrLaptop?70:50} />}>
                 {
                     banners.map((x: any, index: number)=>{
-                        return  <div className={'cursor-pointer'} onClick={()=> window.open(x.url,'_blank')} key={index}>
-                            <Image width={'100%'} preview={false} src={x.image}></Image>
+                        return  <div className={'cursor-pointer'}  onClick={()=> navigate(`/products/${x.id}`)} key={index}>
+                            <Image width={'100%'} preview={false} src={x.banner}></Image>
                         </div>
                     })
                 }

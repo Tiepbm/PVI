@@ -25,6 +25,7 @@ import M24ErrorUtils from "../../utils/M24ErrorUtils";
 import {categoryRepository} from "../../repositories/CategoryRepository";
 import { Link } from 'react-router-dom';
 import {useSessionStorage} from "../../hooks/useSessionStorage";
+import {useMediaQuery} from "react-responsive";
 
 const {Step} = Steps;
 const { confirm } = Modal;
@@ -48,7 +49,7 @@ function RegisterInsurance() {
     const [years, setYears] = useState<any>([]);
     const [form] = Form.useForm();
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
-    console.log('code:',webCode);
+    const isDesktopOrLaptop = useMediaQuery({ minWidth: 768 })
     const disabledDate = (current: any) => {
         // Can not select days before today and today
         return current && current > moment().endOf('day');
@@ -168,6 +169,7 @@ function RegisterInsurance() {
                         'list_nguoithamgia': listThamGia,
                         'tong_phi': lodash.get(fee, 'TotalFee', ''),
                         'CpId': CPID,
+                        'sotien_bh':packageCode==='01'?10000000:packageCode==='02'?20000000:40000000,
                         'ngaythanhtoan': datePaid,
                         'thoihan_bh': duration,
                         'ngay_batdau': dateStart,
@@ -399,6 +401,8 @@ function RegisterInsurance() {
     }
     const onSubmit=()=>{
         setLoading(true);
+        if(webCode)
+            bodyRegister.web_code=webCode;
         if(productId===ENSURE_ELECTRIC){
             productRepository.createOrderHSDD(bodyRegister).then(res=>{
                setResult(true);
@@ -487,11 +491,26 @@ function RegisterInsurance() {
                 >
                     <Input/>
                 </Form.Item>
-                <Form.Item valuePropName={'checked'} name="confirm" wrapperCol={{span: 24}}
-                           rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}>
-                    <Checkbox>Tôi xác nhận thông tin là chính xác và đồng ý với</Checkbox>
-                    <Link to={`/rule/${productId}`} target={'_blank'}>quy tắc sản phẩm</Link>
+                <Form.Item
+                    name="agreement"
+                    valuePropName="checked"
+                    rules={[
+                        {
+                            validator: (_, value) =>
+                                value ? Promise.resolve() : Promise.reject(new Error('Vui lòng nhập đầy đủ thông tin')),
+                        },
+                    ]}
+                >
+                    <Checkbox>
+                        Tôi xác nhận thông tin là chính xác và đồng ý với <Link to={`/rule/${productId}`} target={'_blank'}>quy tắc sản phẩm</Link>
+                    </Checkbox>
                 </Form.Item>
+                {/*<Form.Item valuePropName={'checked'} name="agreement" wrapperCol={{span: 24}}*/}
+                {/*           rules={[*/}
+                {/*               {required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}>*/}
+                {/*    <Checkbox>Tôi xác nhận thông tin là chính xác và đồng ý với</Checkbox>*/}
+                {/*    <Link to={`/rule/${productId}`} target={'_blank'}>quy tắc sản phẩm</Link>*/}
+                {/*</Form.Item>*/}
                 {renderFormByProductId()}
             </Form>
         </div>
@@ -761,8 +780,8 @@ function RegisterInsurance() {
         <div className={'main-content mgt30'}>
             {currentStep < 3 ? <div>
                 <Row className={'justify-content-center'}>
-                    <Col span={12}>
-                        <Steps labelPlacement={'vertical'} current={currentStep}>
+                    <Col span={isDesktopOrLaptop?12:24}>
+                        <Steps responsive={false} labelPlacement={'vertical'} current={currentStep}>
                             <Step title="Đăng ký"/>
                             <Step title="Xác nhận"/>
                             <Step title="Thanh toán"/>
@@ -770,7 +789,7 @@ function RegisterInsurance() {
                     </Col>
                 </Row>
                 <Row className={'justify-content-center mgt20'}>
-                    <Col span={12} className={'pdr20'}>
+                    <Col span={isDesktopOrLaptop?12:24} className={'pdr20'}>
                         {renderStep()}
                         <Row className={'justify-content-between mgt20'}>
                             <Button onClick={() => setStep(currentStep - 1)} disabled={currentStep === 0} size={'large'}
@@ -779,7 +798,7 @@ function RegisterInsurance() {
                                     type={'primary'}>{currentStep < 2 ? 'Tiếp tục' : 'Xác nhận thanh toán'}</Button>
                         </Row>
                     </Col>
-                    <Col span={10}>
+                    {isDesktopOrLaptop&&<Col span={10}>
                         <Card title="Thông tin đơn hàng">
                             <RowItem title={'Tên sản phẩm'} value={getProductName()}></RowItem>
                             <RowItem title={'Nhà cung cấp'} value={'Bảo hiểm PVI'}></RowItem>
@@ -789,7 +808,7 @@ function RegisterInsurance() {
                             <RowItem title={'Tổng phí bảo hiểm'}
                                      value={formatMoneyByUnit(lodash.get(fee, 'TotalFee', ''))}></RowItem>
                         </Card>
-                    </Col>
+                    </Col>}
                 </Row>
             </div>:
                 <div>

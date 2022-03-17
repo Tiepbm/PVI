@@ -44,12 +44,9 @@ function MainLayout(props: MainLayoutProps) {
     }, [showProgressBar]);
     useEffect(() => {
         window.scrollTo(0, 0);
-        // if (location.pathname && location.pathname !== '/') {
-        //     if (location.pathname.indexOf('categories/detail') > 0) {
-        //         let code = searchParams.get('code');
-        //         if (code) setActiveKey(code);
-        //     }else setActiveKey('other');
-        // }
+        if (location.pathname && location.pathname !== '/') {
+            setActiveKey('other');
+        }
         // this.setState({activeKey: activeKey})
                 let code = searchParams.get('code');
                 if (code){
@@ -140,7 +137,7 @@ function MainLayout(props: MainLayoutProps) {
                         </Col>
 
                     </Row>}
-                    {isTabletOrMobile&&<Row className={'align-items-center justify-content-between pdl5 pdr5'}>
+                    {isTabletOrMobile&&<Row className={'align-items-center justify-content-center pdl5 pdr5'}>
 
                             <img className={'cursor-pointer'} onClick={()=> navigate('/')}  style={{height: 60, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
 

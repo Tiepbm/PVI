@@ -76,6 +76,17 @@
   z-index: 2;
   color: gray;
 }
+.margin-right-auto{
+  margin-right: auto;
+}
+.margin-left-auto{
+  margin-left: auto;
+}
+.react-pdf__Page__canvas{
+  margin-right: auto;
+  margin-left: auto;
+  width: 100%!important;
+}
 @import "helpers/variables";
 @import "helpers/mixins";
 

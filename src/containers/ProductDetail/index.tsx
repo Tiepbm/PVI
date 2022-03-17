@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import MainLayout from "../../components/Layout";
-import {Button, Carousel, Checkbox, Col, DatePicker, Input, Row, Select, Spin} from "antd";
+import {Button, Carousel, Checkbox, Col, DatePicker, Input, Radio, Row, Select, Spin} from "antd";
 import {UserAddOutlined} from '@ant-design/icons';
 import {useNavigate, useParams} from "react-router-dom";
 import lodash from "lodash";
@@ -26,7 +26,7 @@ import {useMediaQuery} from "react-responsive";
 const data = [
     {
         id: 'tainansudungdien',
-        banner: 'https://baohiem.viettelpay.vn/filepath/files/products/c61b2398-bac6-41f7-9547-537f81840bff.png',
+        banner: require('../../resources/images/banner-electric.jpg'),
         description: 'Theo thống kê, trung bình mỗi năm ở nước ta có khoảng hơn 7.000 vụ tai nạn điện và hơn 250 người chết vì tai nạn điện. Con số này vẫn chưa dừng lại và còn tiếp tục gia tăng vì sự bất cẩn của người sử dụng điện. Với bảo hiểm tai nạn hộ sử dụng điện, chỉ cần 1 người mua, cả hộ gia đình cùng được bảo vệ. Bảo hiểm không chỉ giới hạn trong phạm vi nơi ở mà còn mở rộng ra bất cứ đâu ',
         benefit: {
             categories: [
@@ -468,60 +468,94 @@ function ProductDetail() {
         return false;
     }
     const renderBenefit = () => {
+        if(!detail) return;
+        if(isDesktopOrLaptop){
+            return <div>
+                <Row><span className={'robotobold txt-size-h4 mgt20 mgbt20'}>Thông tin quyền lợi</span></Row>
+                <Row>
+                    <Col span={6}>
+                        <Row style={{height: 50}}>
 
-        return <div>
-            <Row><span className={'robotobold txt-size-h4 mgt20 mgbt20'}>Thông tin quyền lợi</span></Row>
-            <Row>
-                <Col span={6}>
-                    <Row style={{height: 50}}>
-
-                    </Row>
-                    <div className={'bg-color-gray mgr2'}>
-                        {
-                            detail && detail?.benefit?.categories.map((x: any, index: number) => {
-                                return <Row key={index} style={{minHeight: 100}}>
-                                    <span className={'mgt20 txt-size-h7 pdl10 pdr10'}>{x.name}</span>
-                                </Row>
-                            })
-                        }
-                    </div>
-                </Col>
-                <Col span={18}>
-                    <Row className={'bg-color-white justify-content-between'}>
-                        {
-                            detail && detail.benefit.packages.map((x: any, index: number) => {
-                                return <Col key={index} span={8} >
-                                    <Col onClick={() => setCurrentPackage(x.code)}
-                                         className={`${currentPackage === x.code ? 'bd-color-blue bd1px' : ''} bg-color-gray border-top-radius  cursor-pointer ${index%2!=0?'mgr2 mgl2':''}`}>
-                                        <div style={{height: 50}}
-                                             className={`${currentPackage === x.code ? 'bg-color-blue' : 'bg-color-blue3'} border-top-radius dpl-flex align-items-center justify-content-center cursor-pointer`}>
+                        </Row>
+                        <div className={'bg-color-gray mgr2'}>
+                            {
+                                detail && detail?.benefit?.categories.map((x: any, index: number) => {
+                                    return <Row key={index} style={{minHeight: 100}}>
+                                        <span className={'mgt20 txt-size-h7 pdl10 pdr10'}>{x.name}</span>
+                                    </Row>
+                                })
+                            }
+                        </div>
+                    </Col>
+                    <Col span={18}>
+                        <Row className={'bg-color-white justify-content-between'}>
+                            {
+                                detail && detail.benefit.packages.map((x: any, index: number) => {
+                                    return <Col key={index} span={8} >
+                                        <Col onClick={() => setCurrentPackage(x.code)}
+                                             className={`${currentPackage === x.code ? 'bd-color-blue bd1px' : ''} bg-color-gray border-top-radius  cursor-pointer ${index%2!=0?'mgr2 mgl2':''}`}>
+                                            <div style={{height: 50}}
+                                                 className={`${currentPackage === x.code ? 'bg-color-blue' : 'bg-color-blue3'} border-top-radius dpl-flex align-items-center justify-content-center cursor-pointer`}>
                                 <span
                                     className={`${currentPackage === x.code ? 'txt-color-white' : 'txt-color-black'} robotobold txt-size-h6`}>{x.name}</span>
-                                        </div>
-                                        {x.benefits.map((xx: any, index: number) => {
-                                            return <Row key={index} className={'justify-content-center'}
-                                                        style={{minHeight: 100}}><span
-                                                className={'txt-size-h7 pd5 mgt20'}>{xx.value}</span></Row>
-                                        })}
+                                            </div>
+                                            {x.benefits.map((xx: any, index: number) => {
+                                                return <Row key={index} className={'justify-content-center'}
+                                                            style={{minHeight: 100}}><span
+                                                    className={'txt-size-h7 pd5 mgt20'}>{xx.value}</span></Row>
+                                            })}
 
+                                        </Col>
                                     </Col>
+                                })
+                            }
+                        </Row>
+                    </Col>
+                </Row>
+            </div>
+        }else{
+
+            let packageData = detail.benefit.packages.find((x: any)=> x.code===currentPackage);
+            let categories = detail.benefit.categories;
+            return <div>
+                <Row>
+                    <span className={'robotobold txt-size-h4 mgt20 mgbt20'}>Thông tin quyền lợi</span>
+                </Row>
+                <Row className={'justify-content-center align-items-center'}>
+                    <Radio.Group buttonStyle="solid" size={'large'} className={'width100'} value={currentPackage} onChange={(e)=> setCurrentPackage(e.target.value)}>
+                        {detail.benefit.packages.map((x: any)=>{
+                            return  <Radio.Button className={''} value={x.code}>{x.name}</Radio.Button>;
+                        })}
+                    </Radio.Group>
+                </Row>
+                <div>
+                    {
+                        categories.map((category: any,index: number)=>{
+                            let temp = packageData.benefits.find((x: any)=> x.category===category.code);
+                            return <Row gutter={8} key={index} className={'align-items-center'}
+                                        style={{minHeight: 70}}>
+                                <Col span={14}>
+                                    <span className={'txt-size-h7'}>{category?.name}</span>
                                 </Col>
-                            })
-                        }
-                    </Row>
-                </Col>
-            </Row>
-        </div>
+                                <Col span={10} className={'txt-right'}>
+                                    <span  className={'txt-size-h7 robotobold'}>{temp?.value}</span>
+                                </Col>
+                            </Row>
+                        })
+                    }
+                </div>
+            </div>
+        }
     }
     const renderFeeElectric=()=>{
         return <div>
-            <Row>
-                <Col sm={12} lg={6}>
+            <Row gutter={8}>
+                <Col span={isDesktopOrLaptop?6:12}>
                     <Row><span>Ngày hiệu lực</span></Row>
                     <DatePicker defaultValue={moment(new Date(),STANDARD_DATE_FORMAT)} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                                 format={STANDARD_DATE_FORMAT} onChange={handleChange}/>
                 </Col>
-                <Col  sm={12} lg={6} className={'mgl10'}>
+                <Col  span={isDesktopOrLaptop?6:12} className={''}>
                     <Row><span>Chu kỳ thanh toán</span></Row>
                     <Select defaultValue="1" onChange={handleChange} className={'width100'}>
                         <Select.Option value="1">1 năm</Select.Option>
@@ -534,12 +568,12 @@ function ProductDetail() {
         return <div>
 
             <Row gutter={8} className={'justify-content-start'}>
-                <Col  sm={12} lg={8} className={''}>
+                <Col  span={isDesktopOrLaptop?8:12} className={''}>
                     <Row><span>Ngày hiệu lực</span></Row>
                     <DatePicker defaultValue={moment(new Date(),STANDARD_DATE_FORMAT)} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                                 format={STANDARD_DATE_FORMAT} onChange={handleChange}/>
                 </Col>
-                <Col  sm={12} lg={8} className={''}>
+                <Col span={isDesktopOrLaptop?8:12} className={''}>
                     <Row><span>Chu kỳ thanh toán</span></Row>
                     <Select defaultValue="1" onChange={handleChange} className={'width100'}>
                         <Select.Option value="1">1 năm</Select.Option>
@@ -547,7 +581,7 @@ function ProductDetail() {
                 </Col>
             </Row>
             <Row gutter={8} className={'mgt20 justify-content-start'}>
-                <Col sm={12} xl={8} className={''}>
+                <Col span={isDesktopOrLaptop?8:12} className={'mgbt10'}>
                     <Row><span>Mục đích sử dụng</span></Row>
                     <Select value={lodash.get(purpose,'code',undefined)} onChange={handleChange} className={'width100'}>
                         {categoriesCar.map((x: any, index: number)=>{
@@ -555,12 +589,12 @@ function ProductDetail() {
                         })}
                     </Select>
                 </Col>
-                <Col sm={12} xl={8} className={''}>
+                <Col span={isDesktopOrLaptop?8:12} className={''}>
                     <Row><span><span className={'txt-color-red'}>* </span>Số chỗ ngồi</span></Row>
                    <Input onChange={(e)=> changeValueCar('so_cho',e.target.value)} value={bodyOto.so_cho}></Input>
                 </Col>
                 {purpose &&purpose.code === '3' &&
-                <Col sm={12} xl={8} className={''}>
+                <Col span={isDesktopOrLaptop?8:12} className={''}>
                     <Row><span><span className={'txt-color-red'}>* </span>Trọng tải (kg)</span></Row>
                     <Input onChange={(e)=> changeValueCar('ma_trongtai',e.target.value)} value={bodyOto.ma_trongtai}></Input>
                 </Col>
@@ -572,7 +606,7 @@ function ProductDetail() {
                         // let disable=false;
                         // if(bodyOto.XeTapLai&&x.code!=='XePickUp'&&x.code!=='XeTaiVan')
                         //     disable=true;
-                        return <Col lg={8} sm={10} className={''}>
+                        return <Col span={isDesktopOrLaptop?8:12} className={''}>
                             <Checkbox checked={lodash.get(bodyOto, x.code, false)} onChange={(e)=> changeTypeCar(e.target.checked, x.code)}>{x.name}</Checkbox>
                         </Col>
                     })
@@ -595,9 +629,9 @@ function ProductDetail() {
             <img className={'width100'} src={lodash.get(detail, 'banner', '')}></img>
         </div>
         <div className={'main-content'}>
-            <span style={{
-                position:'absolute', top:isDesktopOrLaptop?-120:-55
-            }} className={`${isDesktopOrLaptop?'txt-size-72':'txt-size-h1'} txt-color-white robotobold`}>{getProductName()}</span>
+            <Row>
+                <span className={`${isDesktopOrLaptop?'txt-size-h4':'txt-size-h1'} txt-color-black robotobold`}>{getProductName()}</span>
+            </Row>
             <span className={'txt-size-h5'}>{lodash.get(detail, 'description', '')}</span>
             {renderBenefit()}
             <Spin size={'large'} spinning={loading}>
@@ -619,7 +653,7 @@ function ProductDetail() {
             </Spin>
             <Row><span className={'robotobold txt-size-h4 mgt20 mgbt20'}>Mô tả chi tiết</span></Row>
             <div className={'dpl-flex justify-content-center'}>
-                <img className={'width100'}
+                <img className={isDesktopOrLaptop?'width50':'width100'}
                     src={lodash.get(detail, 'detail', '')}></img>
 
             </div>
