@@ -11,7 +11,8 @@ import useWindowDimensions from "../../hooks";
 import logo from '../../resources/images/logo.png';
 import MediaQuery, {useMediaQuery} from 'react-responsive';
 import {useSessionStorage} from "../../hooks/useSessionStorage";
-
+import { Fab, Action } from 'react-tiny-fab';
+import 'react-tiny-fab/dist/styles.css';
 const {Header, Sider, Content, Footer} = Layout;
 const PERCENT_COMPLETE = 100;
 
@@ -161,12 +162,45 @@ function MainLayout(props: MainLayoutProps) {
                 </Content>
                 <Footer style={{textAlign: 'center'}}>
 
-                    {isTabletOrMobile&&<Row className={'justify-content-center'}>
-                        <Button onClick={()=> navigate('/')} type={'link'}>Trang chủ</Button>
-                        <Button type={'link'}>Đơn hàng</Button>
-                        <Button onClick={()=> window.open('http://www.pvi.com.vn/gioi-thieu-new/gioi-thieu-chung/gioi-thieu-chung.html','_blank')} type={'link'}>Giới thiệu</Button>
-                    </Row>}
-
+                    {/*{isTabletOrMobile&&<Row className={'justify-content-center'}>*/}
+                    {/*    <Button onClick={()=> navigate('/')} type={'link'}>Trang chủ</Button>*/}
+                    {/*    <Button type={'link'}>Đơn hàng</Button>*/}
+                    {/*    <Button onClick={()=> window.open('http://www.pvi.com.vn/gioi-thieu-new/gioi-thieu-chung/gioi-thieu-chung.html','_blank')} type={'link'}>Giới thiệu</Button>*/}
+                    {/*</Row>}*/}
+                    {isTabletOrMobile&&<Fab
+                        mainButtonStyles={{
+                            backgroundColor: '#00b5ad',
+                        }}
+                        style={{
+                            bottom: 10,
+                            right: 10,
+                        }}
+                        icon={<i className="fas fa-bars"></i>}
+                        event="hover"
+                        key={-1}
+                        alwaysShowTitle={true}
+                    >
+                       <Action
+                           style={{
+                               backgroundColor: '#00b5ad',
+                               color: '#ffffff',
+                           }}
+                           onClick={()=> navigate('/')}
+                            text="Trang chủ"
+                        >
+                           <i className="far fa-home-alt"></i>
+                       </Action>
+                        <Action
+                            style={{
+                                backgroundColor: '#00b5ad',
+                                color: '#ffffff',
+                            }}
+                            onClick={()=> window.open('http://www.pvi.com.vn/gioi-thieu-new/gioi-thieu-chung/gioi-thieu-chung.html','_blank')}
+                            text="Giới thiệu"
+                        >
+                            <i className="fas fa-info-circle"></i>
+                        </Action>
+                    </Fab>}
                     <Row className={'justify-content-center'}><span>©2022 Created by PVI</span></Row></Footer>
             </Layout>
         </DocumentTitle>

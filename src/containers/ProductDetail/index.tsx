@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import MainLayout from "../../components/Layout";
-import {Button, Carousel, Checkbox, Col, DatePicker, Input, Radio, Row, Select, Spin} from "antd";
+import {Button, Carousel, Checkbox, Col, DatePicker, Image, Input, Radio, Row, Select, Spin} from "antd";
 import {UserAddOutlined} from '@ant-design/icons';
 import {useNavigate, useParams} from "react-router-dom";
 import lodash from "lodash";
@@ -626,7 +626,8 @@ function ProductDetail() {
 
     return <MainLayout showProgressBar={showProgressBar} title={'Chi Tiết Sản Phẩm'}>
         <div className={'mgbt20 mgt1'}>
-            <img className={'width100'} src={lodash.get(detail, 'banner', '')}></img>
+            {isDesktopOrLaptop?<Image preview={false} width={'100%'} src={lodash.get(detail, 'banner', '')}></Image>:
+                <Image preview={false} height={200} width={'100%'} src={lodash.get(detail, 'banner', '')}></Image>}
         </div>
         <div className={'main-content'}>
             <Row>

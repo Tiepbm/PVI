@@ -505,12 +505,6 @@ function RegisterInsurance() {
                         Tôi xác nhận thông tin là chính xác và đồng ý với <Link to={`/rule/${productId}`} target={'_blank'}>quy tắc sản phẩm</Link>
                     </Checkbox>
                 </Form.Item>
-                {/*<Form.Item valuePropName={'checked'} name="agreement" wrapperCol={{span: 24}}*/}
-                {/*           rules={[*/}
-                {/*               {required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}>*/}
-                {/*    <Checkbox>Tôi xác nhận thông tin là chính xác và đồng ý với</Checkbox>*/}
-                {/*    <Link to={`/rule/${productId}`} target={'_blank'}>quy tắc sản phẩm</Link>*/}
-                {/*</Form.Item>*/}
                 {renderFormByProductId()}
             </Form>
         </div>

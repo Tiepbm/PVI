@@ -195,7 +195,7 @@ function Home() {
                 {
                     banners.map((x: any, index: number)=>{
                         return  <div className={'cursor-pointer'}  onClick={()=> navigate(`/products/${x.id}`)} key={index}>
-                            <Image width={'100%'} preview={false} src={x.banner}></Image>
+                            {isDesktopOrLaptop?<Image width={'100%'} preview={false} src={x.banner}></Image>:<Image height={200} width={'100%'} preview={false} src={x.banner}></Image>}
                         </div>
                     })
                 }
