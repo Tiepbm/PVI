@@ -154,7 +154,7 @@ const data = [
                         },
                         {
                             category: '3',
-                            value: 'Không bao gồm'
+                            value: 'Tối đa 10 triệu đồng/người/vụ'
                         }
                     ]
                 },
@@ -172,7 +172,7 @@ const data = [
                         },
                         {
                             category: '3',
-                            value: 'Không bao gồm'
+                            value: 'Tối đa 100 triệu đồng/người/vụ'
                         }
                     ]
                 }
@@ -522,9 +522,9 @@ function ProductDetail() {
                     <span className={'robotobold txt-size-h4 mgt20 mgbt20'}>Thông tin quyền lợi</span>
                 </Row>
                 <Row className={'justify-content-center align-items-center'}>
-                    <Radio.Group buttonStyle="solid" size={'large'} className={'width100'} value={currentPackage} onChange={(e)=> setCurrentPackage(e.target.value)}>
+                    <Radio.Group buttonStyle="solid" size={'large'} className={'dpl-flex width100'} value={currentPackage} onChange={(e)=> setCurrentPackage(e.target.value)}>
                         {detail.benefit.packages.map((x: any)=>{
-                            return  <Radio.Button className={''} value={x.code}>{x.name}</Radio.Button>;
+                            return  <Radio.Button value={x.code}><span className={'txt-size-h8'}>{x.name}</span></Radio.Button>;
                         })}
                     </Radio.Group>
                 </Row>
