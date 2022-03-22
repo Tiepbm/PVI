@@ -18,7 +18,7 @@ import {
 import {productRepository} from "../../repositories/ProductRepository";
 import {sign} from "../../utils/StringUtils";
 import {formatMoneyByUnit} from "../../core/helpers/string";
-import {categoryRepository} from "../../repositories/CategoryRepository";
+import ShowMoreText from "react-show-more-text";
 import M24ErrorUtils from "../../utils/M24ErrorUtils";
 import {localStorageSave} from "../../utils/LocalStorageUtils";
 import {useMediaQuery} from "react-responsive";
@@ -27,6 +27,7 @@ const data = [
     {
         id: 'tainansudungdien',
         banner: require('../../resources/images/banner-electric.jpg'),
+        bannerMobile: require('../../resources/images/banner-electric-mobile.jpg'),
         description: 'Theo thống kê, trung bình mỗi năm ở nước ta có khoảng hơn 7.000 vụ tai nạn điện và hơn 250 người chết vì tai nạn điện. Con số này vẫn chưa dừng lại và còn tiếp tục gia tăng vì sự bất cẩn của người sử dụng điện. Với bảo hiểm tai nạn hộ sử dụng điện, chỉ cần 1 người mua, cả hộ gia đình cùng được bảo vệ. Bảo hiểm không chỉ giới hạn trong phạm vi nơi ở mà còn mở rộng ra bất cứ đâu ',
         benefit: {
             categories: [
@@ -105,6 +106,7 @@ const data = [
     {
         id: 'tndsoto',
         banner: require('../../resources/images/banner-car.png'),
+        bannerMobile: require('../../resources/images/banner-car-mobile.png'),
         description: 'Bảo hiểm TNDS ô tô là giấy tờ bắt buộc khi đăng kiểm xe và tham gia giao thông với chế tài 400.000 - 600.000 đồng/lần khi vi phạm. Trường hợp chủ xe ô tô gây tai nạn, bảo hiểm sẽ chi trả cho người bị nạn số tiền lên đến 150 triệu đồng/người/vụ cho tổn thất về người và 100 triệu đồng/vụ cho tổn thất về tài sản. Ngoài sản phẩm bắt buộc, Viettel Money cung cấp thêm cho KH các gói bảo hiểm tự nguyện dành cho lái xe, phụ xe và người ngồi trên xe ô tô với mức quyền lợi từ 10 triệu đến 100 triệu đồng/người/vụ với chi phí chỉ từ 20.000 đồng.',
         benefit: {
             categories: [
@@ -183,6 +185,7 @@ const data = [
     {
         id: 'nhaotoandien',
         banner: require('../../resources/images/banner-house.jpg'),
+        bannerMobile: require('../../resources/images/banner-house-mobile.jpg'),
         description: 'Ngôi nhà là tài sản lớn, là thành quả tích lũy trong thời gian dài của bạn và gia đình. Thành quả đó sẽ bền lâu và tiếp tục phát triển nếu bạn luôn có những phương án để bảo vệ nó trước những rủi ro không lường trước được trong cuộc sống. Hãy tham gia Bảo hiểm toàn diện nhà ở chỉ từ 165.000đ/năm để luôn yên tâm với giải pháp bảo hiểm toàn diện cho Ngôi nhà của bạn. Bảo hiểm toàn diện nhà ở sẽ cùng gánh vác những tổn thất khi phát sinh rủi ro cho Ngôi nhà và các tài sản bên trong của bạn lên đến 600 triệu đồng/ năm',
         benefit: {
             categories: [
@@ -550,12 +553,12 @@ function ProductDetail() {
     const renderFeeElectric=()=>{
         return <div>
             <Row gutter={8}>
-                <Col span={isDesktopOrLaptop?6:12}>
+                <Col span={isDesktopOrLaptop?6:24} className={'mgt10'}>
                     <Row><span>Ngày hiệu lực</span></Row>
                     <DatePicker defaultValue={moment(new Date(),STANDARD_DATE_FORMAT)} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                                 format={STANDARD_DATE_FORMAT} onChange={handleChange}/>
                 </Col>
-                <Col  span={isDesktopOrLaptop?6:12} className={''}>
+                <Col  span={isDesktopOrLaptop?6:24} className={'mgt10'}>
                     <Row><span>Chu kỳ thanh toán</span></Row>
                     <Select defaultValue="1" onChange={handleChange} className={'width100'}>
                         <Select.Option value="1">1 năm</Select.Option>
@@ -568,20 +571,20 @@ function ProductDetail() {
         return <div>
 
             <Row gutter={8} className={'justify-content-start'}>
-                <Col  span={isDesktopOrLaptop?8:12} className={''}>
+                <Col  span={isDesktopOrLaptop?8:24} className={'mgt10'}>
                     <Row><span>Ngày hiệu lực</span></Row>
                     <DatePicker defaultValue={moment(new Date(),STANDARD_DATE_FORMAT)} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                                 format={STANDARD_DATE_FORMAT} onChange={handleChange}/>
                 </Col>
-                <Col span={isDesktopOrLaptop?8:12} className={''}>
+                <Col span={isDesktopOrLaptop?8:24} className={'mgt10'}>
                     <Row><span>Chu kỳ thanh toán</span></Row>
                     <Select defaultValue="1" onChange={handleChange} className={'width100'}>
                         <Select.Option value="1">1 năm</Select.Option>
                     </Select>
                 </Col>
             </Row>
-            <Row gutter={8} className={'mgt20 justify-content-start'}>
-                <Col span={isDesktopOrLaptop?8:12} className={'mgbt10'}>
+            <Row gutter={8} className={'justify-content-start'}>
+                <Col span={isDesktopOrLaptop?8:24} className={'mgt10'}>
                     <Row><span>Mục đích sử dụng</span></Row>
                     <Select value={lodash.get(purpose,'code',undefined)} onChange={handleChange} className={'width100'}>
                         {categoriesCar.map((x: any, index: number)=>{
@@ -589,12 +592,12 @@ function ProductDetail() {
                         })}
                     </Select>
                 </Col>
-                <Col span={isDesktopOrLaptop?8:12} className={''}>
+                <Col span={isDesktopOrLaptop?8:24} className={'mgt10'}>
                     <Row><span><span className={'txt-color-red'}>* </span>Số chỗ ngồi</span></Row>
                    <Input onChange={(e)=> changeValueCar('so_cho',e.target.value)} value={bodyOto.so_cho}></Input>
                 </Col>
                 {purpose &&purpose.code === '3' &&
-                <Col span={isDesktopOrLaptop?8:12} className={''}>
+                <Col span={isDesktopOrLaptop?8:24} className={'mgt10'}>
                     <Row><span><span className={'txt-color-red'}>* </span>Trọng tải (kg)</span></Row>
                     <Input onChange={(e)=> changeValueCar('ma_trongtai',e.target.value)} value={bodyOto.ma_trongtai}></Input>
                 </Col>
@@ -625,18 +628,27 @@ function ProductDetail() {
     }
 
     return <MainLayout showProgressBar={showProgressBar} title={'Chi Tiết Sản Phẩm'}>
-        <div className={'mgbt20 mgt1'}>
+        <div className={'mgbt10 mgt1'}>
             {isDesktopOrLaptop?<Image preview={false} width={'100%'} src={lodash.get(detail, 'banner', '')}></Image>:
-                <Image preview={false} height={200} width={'100%'} src={lodash.get(detail, 'banner', '')}></Image>}
+                <Image preview={false} width={'100%'} src={lodash.get(detail, 'bannerMobile', '')}></Image>}
         </div>
         <div className={'main-content'}>
             <Row>
-                <span className={`${isDesktopOrLaptop?'txt-size-h4':'txt-size-h1'} txt-color-black robotobold`}>{getProductName()}</span>
+                <span className={`${isDesktopOrLaptop?'txt-size-h4':'txt-size-h1'} txt-color-black robotobold mgbt20`}>{getProductName()}</span>
             </Row>
+            <ShowMoreText
+                /* Default options */
+                lines={4}
+                more="Xem thêm"
+                less="Rút gọn"
+                expanded={false}
+                truncatedEndingComponent={"... "}
+            >
             <span className={'txt-size-h5'}>{lodash.get(detail, 'description', '')}</span>
+            </ShowMoreText>
             {renderBenefit()}
             <Spin size={'large'} spinning={loading}>
-            <div className={'bg-color-gray mgt20 pd20'}>
+            <div className={`bg-color-gray mgt20 ${isDesktopOrLaptop?'pd20':'pdt5 pdbt20 pdl10 pdr10'}`}>
 
                 {renderFee()}
                 <Row className={'mgt10 justify-content-between align-items-center'}>
@@ -658,6 +670,8 @@ function ProductDetail() {
                     src={lodash.get(detail, 'detail', '')}></img>
 
             </div>
+            <Row className={'mgt20'}><a href={`./pdf/${productId}.pdf`} target={'_blank'}>Quy tắc sản phẩm <i
+                className="mgl5 fal fa-download"></i></a></Row>
         </div>
     </MainLayout>
 };

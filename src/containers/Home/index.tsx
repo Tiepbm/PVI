@@ -113,52 +113,23 @@ function Home() {
         {
             id: 'tainansudungdien',
             banner: require('../../resources/images/banner-electric.jpg'),
+            bannerMobile: require('../../resources/images/banner-electric-mobile.jpg'),
         }, {
             id: 'tndsoto',
             banner: require('../../resources/images/banner-car.png'),
+            bannerMobile: require('../../resources/images/banner-car-mobile.png'),
         }, {
             id: 'nhaotoandien',
             banner: require('../../resources/images/banner-house.jpg'),
+            bannerMobile: require('../../resources/images/banner-house-mobile.jpg'),
         }
     ]
     const renderItem = (item: any) => {
         if(isDesktopOrLaptop)
         return <Card className={'mgt20'}>
             <span className={'robotobold txt-size-h6'}>{item.name}</span>
-            <Row gutter={8} className={'justify-content-center mgt20'}>
+            <Row gutter={16} className={'justify-content-center mgt20'}>
                 {item.items.map((x: any) => {
-                    // return <div className="hot-product__item">
-                    //     <div className="article " data-type="data1">
-                    //         <div className="article__tag">
-                    //             <span>Hot</span>
-                    //         </div>
-                    //         <picture className="article__picture">
-                    //             <a
-                    //             href="/ProductClient?productId=18f08498-987c-4a60-a770-ac0b813b42c8"><img
-                    //             className="article__picture--img lazy loaded"
-                    //             data-src="\filepath\files\products\f1234db6-cbad-4743-9bde-0df271402a88.png"
-                    //             alt="Bảo hiểm màn hình điện thoại Bảo Việt"
-                    //             src={x.logo}
-                    //             data-was-processed="true"/>
-                    //             </a>
-                    //             </picture>
-                    //         <div className="article__content">
-                    //             <h5 className="article__content--title"><a tabIndex={0}
-                    //                                                        href="/ProductClient?productId=18f08498-987c-4a60-a770-ac0b813b42c8">Bảo
-                    //                 hiểm màn hình điện thoại Bảo Việt</a></h5>
-                    //             <div className="article__content--price-picture">
-                    //                 <span className="article__content--price">Từ 8.000 đ</span>
-                    //                 <div className="picture">
-                    //                     <img className="lazy loaded"
-                    //                                               data-src="\filepath\images\Provider\00036b4a-372a-4520-92d8-86731c6540d8.png"
-                    //                                               alt="Bảo hiểm màn hình điện thoại Bảo Việt"
-                    //                                               src="\filepath\images\Provider\00036b4a-372a-4520-92d8-86731c6540d8.png"
-                    //                                               data-was-processed="true"/>
-                    //                     </div>
-                    //             </div>
-                    //         </div>
-                    //     </div>
-                    // </div>;
                     return <Col onClick={()=> navigate(`/products/${x.id}`)} className={'cursor-pointer article'} span={8}>
 
                                  <div className="article__tag">
@@ -168,7 +139,7 @@ function Home() {
                             <Image preview={false} src={x.logo} height={300} width={350}></Image>
                         </div>
                           <Row className={'article__content justify-content-between'}>
-                              <span className={'robotobold txt-color-red txt-size-h4'}>{x.name}</span>
+                              <span className={'robotobold txt-color-blue txt-size-h4'}>{x.name}</span>
                               <span className={'robotobold txt-color-black txt-size-h6 mgt5'}>{'Từ 8.000đ'}</span>
                           </Row>
                     </Col>
@@ -182,7 +153,7 @@ function Home() {
                     return <Col onClick={()=> navigate(`/products/${x.id}`)} className={'cursor-pointer'} span={8}>
                         <Row className={'justify-content-center'}><Image src={x.logo} width={90} height={90}  preview={false}></Image></Row>
                         <Row className={'justify-content-center txt-size-h7'}>
-                            <span style={{maxWidth: 85}} className={'mgt10 txt-center'}>{x.name}</span>
+                            <span style={{maxWidth: 85}} className={'mgt10 txt-center txt-color-blue'}>{x.name}</span>
                         </Row>
                     </Col>
                 })}
@@ -195,7 +166,7 @@ function Home() {
                 {
                     banners.map((x: any, index: number)=>{
                         return  <div className={'cursor-pointer'}  onClick={()=> navigate(`/products/${x.id}`)} key={index}>
-                            {isDesktopOrLaptop?<Image width={'100%'} preview={false} src={x.banner}></Image>:<Image height={200} width={'100%'} preview={false} src={x.banner}></Image>}
+                            {isDesktopOrLaptop?<Image width={'100%'} preview={false} src={x.banner}></Image>:<Image width={'100%'} preview={false} src={x.bannerMobile}></Image>}
                         </div>
                     })
                 }

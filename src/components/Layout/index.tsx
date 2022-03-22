@@ -8,7 +8,7 @@ import DocumentTitle from 'react-document-title';
 import {useLocation, useSearchParams} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import useWindowDimensions from "../../hooks";
-import logo from '../../resources/images/logo.png';
+import logo from '../../resources/images/logo-pvi-view.png';
 import MediaQuery, {useMediaQuery} from 'react-responsive';
 import {useSessionStorage} from "../../hooks/useSessionStorage";
 import { Fab, Action } from 'react-tiny-fab';
@@ -46,7 +46,8 @@ function MainLayout(props: MainLayoutProps) {
     useEffect(() => {
         window.scrollTo(0, 0);
         if (location.pathname && location.pathname !== '/') {
-            setActiveKey('other');
+            let pathname: string[] = location.pathname.split('/');
+            setActiveKey(pathname[pathname.length - 1])
         }
         // this.setState({activeKey: activeKey})
                 let code = searchParams.get('code');
@@ -111,36 +112,36 @@ function MainLayout(props: MainLayoutProps) {
         <DocumentTitle title={`${title ? title : 'M24'}`}>
             <Layout className={'main-layout'}>
                 <Header className="header">
-                    {isDesktopOrLaptop&&<Row className={'align-items-center justify-content-between pdl50 pdr50'}>
+                    {isDesktopOrLaptop&&<Row className={'align-items-center justify-content-between pdl50 pdr50 height100'}>
                         <Col span={18}>
                             <Row className={'align-items-center'}>
-                                <img className={'cursor-pointer'} onClick={()=> navigate('/')} style={{height: 60, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
+                                <img className={'cursor-pointer'} onClick={()=> navigate('/')} style={{height: 40, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
                                 <div>
                             <span style={{height: 30}} onClick={() => clickMenu('')}
-                                  className={`${activeKey === '' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
+                                  className={`${activeKey === '' ? 'txt-color-blue border-bottom-2x-blue pdbt5' : 'txt-color-blue'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
                                 </div>
                                 <div>
                             <span onClick={() => clickMenu('orders')}
-                                  className={`${activeKey === 'orders' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Đơn hàng</span>
+                                  className={`${activeKey === 'orders' ? 'txt-color-blue border-bottom-2x-blue pdbt5' : 'txt-color-blue'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Đơn hàng</span>
                                 </div>
                                 <div>
-                            <span onClick={() => window.open('http://www.pvi.com.vn/gioi-thieu-new/gioi-thieu-chung/gioi-thieu-chung.html','_blank')}
-                                  className={`${activeKey === 'about' ? 'txt-color-yellow border-bottom-2x-yellow pdbt5' : 'txt-color-white'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Giới thiệu</span>
+                            <span onClick={() => clickMenu('about')}
+                                  className={`${activeKey === 'about' ? 'txt-color-blue border-bottom-2x-blue pdbt5' : 'txt-color-blue'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Giới thiệu</span>
                                 </div>
                             </Row>
                         </Col>
-                        <Col>
-                            <Row className={'justify-content-end align-items-center'}>
-                                <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng nhập</span>
-                                <Divider type={'vertical'} className={'bg-color-white'}></Divider>
-                                <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng ký</span>
-                            </Row>
-                        </Col>
+                        {/*<Col>*/}
+                        {/*    <Row className={'justify-content-end align-items-center'}>*/}
+                        {/*        <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng nhập</span>*/}
+                        {/*        <Divider type={'vertical'} className={'bg-color-white'}></Divider>*/}
+                        {/*        <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng ký</span>*/}
+                        {/*    </Row>*/}
+                        {/*</Col>*/}
 
                     </Row>}
-                    {isTabletOrMobile&&<Row className={'align-items-center justify-content-center pdl5 pdr5'}>
+                    {isTabletOrMobile&&<Row className={'align-items-center justify-content-center pdl5 pdr5 height100'}>
 
-                            <img className={'cursor-pointer'} onClick={()=> navigate('/')}  style={{height: 60, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
+                            <img className={'cursor-pointer'} onClick={()=> navigate('/')}  style={{height: 30, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
 
                             {/*<Row className={'justify-content-end align-items-center'}>*/}
                             {/*    <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng nhập</span>*/}
@@ -160,48 +161,22 @@ function MainLayout(props: MainLayoutProps) {
                 >
                     {children}
                 </Content>
-                <Footer style={{textAlign: 'center'}}>
+                {isTabletOrMobile&&<Row className={'footer-mobile justify-content-center pdt10'}>
+                    <Col span={8} onClick={()=> navigate('/')} className={`dpl-flex align-items-center flex-direction-column ${activeKey===''?'txt-color-blue':'txt-color-black'}`}>
+                        <Row><i className="far fa-home-alt"></i></Row>
+                        <Row><span onClick={()=> navigate('/')}>Trang chủ</span></Row>
+                    </Col>
+                    <Col span={8} className={`dpl-flex align-items-center flex-direction-column ${activeKey==='orders'?'txt-color-blue':'txt-color-black'}`}>
 
-                    {/*{isTabletOrMobile&&<Row className={'justify-content-center'}>*/}
-                    {/*    <Button onClick={()=> navigate('/')} type={'link'}>Trang chủ</Button>*/}
-                    {/*    <Button type={'link'}>Đơn hàng</Button>*/}
-                    {/*    <Button onClick={()=> window.open('http://www.pvi.com.vn/gioi-thieu-new/gioi-thieu-chung/gioi-thieu-chung.html','_blank')} type={'link'}>Giới thiệu</Button>*/}
-                    {/*</Row>}*/}
-                    {isTabletOrMobile&&<Fab
-                        mainButtonStyles={{
-                            backgroundColor: '#00b5ad',
-                        }}
-                        style={{
-                            bottom: 10,
-                            right: 10,
-                        }}
-                        icon={<i className="fas fa-bars"></i>}
-                        event="hover"
-                        key={-1}
-                        alwaysShowTitle={true}
-                    >
-                       <Action
-                           style={{
-                               backgroundColor: '#00b5ad',
-                               color: '#ffffff',
-                           }}
-                           onClick={()=> navigate('/')}
-                            text="Trang chủ"
-                        >
-                           <i className="far fa-home-alt"></i>
-                       </Action>
-                        <Action
-                            style={{
-                                backgroundColor: '#00b5ad',
-                                color: '#ffffff',
-                            }}
-                            onClick={()=> window.open('http://www.pvi.com.vn/gioi-thieu-new/gioi-thieu-chung/gioi-thieu-chung.html','_blank')}
-                            text="Giới thiệu"
-                        >
-                            <i className="fas fa-info-circle"></i>
-                        </Action>
-                    </Fab>}
-                    <Row className={'justify-content-center'}><span>©2022 Created by PVI</span></Row></Footer>
+                        <Row><i className="far fa-file-alt"></i></Row>
+                        <Row><span>Đơn hàng</span></Row></Col>
+                   <Col span={8} onClick={()=> navigate('/about')} className={`dpl-flex align-items-center flex-direction-column ${activeKey==='about'?'txt-color-blue':'txt-color-black'}`}>
+                       <Row><i className="far fa-info-circle"></i></Row>
+                       <Row><span>Giới thiệu</span>
+                       </Row> </Col>
+                   </Row>}
+                <Footer style={{textAlign: 'center'}}>
+                    <Row className={'justify-content-center pdbt50'}><span>©2022 Created by PVI</span></Row></Footer>
             </Layout>
         </DocumentTitle>
     );

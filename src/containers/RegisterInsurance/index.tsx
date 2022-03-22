@@ -502,7 +502,7 @@ function RegisterInsurance() {
                     ]}
                 >
                     <Checkbox>
-                        Tôi xác nhận thông tin là chính xác và đồng ý với <Link to={`/rule/${productId}`} target={'_blank'}>quy tắc sản phẩm</Link>
+                        Tôi xác nhận thông tin là chính xác và đồng ý với <a href={`./pdf/${productId}.pdf`} target={'_blank'}>quy tắc sản phẩm</a>
                     </Checkbox>
                 </Form.Item>
                 {renderFormByProductId()}

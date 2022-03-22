@@ -8,6 +8,7 @@ import CategoryDetail from "./containers/CategoryDetail";
 import ProductDetail from "./containers/ProductDetail";
 import RegisterInsurance from "./containers/RegisterInsurance";
 import RuleProductDetail from "./containers/RuleProductDetail";
+import About from "./containers/About";
 import viVN from 'antd/lib/locale-provider/vi_VN'
 import moment from "moment";
 import {useSessionStorage} from "./hooks/useSessionStorage";
@@ -73,6 +74,7 @@ function App() {
             <Route path={'/products/:productId/register'} element={<RegisterInsurance/>}></Route>
             <Route path={'/products/:productId'} element={<ProductDetail/>}></Route>
             <Route path={'/rule/:productId'} element={<RuleProductDetail/>}></Route>
+            <Route path={'/about'} element={<About/>}></Route>
 
           </Routes>
         </HashRouter>
