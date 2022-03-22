@@ -51,8 +51,7 @@ const data = [
                     benefits: [
                         {
                             category: '1',
-                            value: 'Không quá 10 triệu đồng/người\n' +
-                                'Không giới hạn số người'
+                            value: 'Không quá 10 triệu đồng/người. Không giới hạn số người'
                         },
                         {
                             category: '2',
@@ -70,8 +69,7 @@ const data = [
                     benefits: [
                         {
                             category: '1',
-                            value: 'Không quá 20 triệu đồng/người\n' +
-                                'Không giới hạn số người'
+                            value: 'Không quá 20 triệu đồng/người. Không giới hạn số người'
                         },
                         {
                             category: '2',
@@ -531,13 +529,16 @@ function ProductDetail() {
                 <Row>
                     <span className={'robotobold txt-size-h4 mgt20 mgbt20'}>Thông tin quyền lợi</span>
                 </Row>
-                <Row className={'justify-content-center align-items-center'}>
-                    <Radio.Group buttonStyle="solid" size={'large'} className={'dpl-flex width100'} value={currentPackage} onChange={(e)=> setCurrentPackage(e.target.value)}>
-                        {detail.benefit.packages.map((x: any)=>{
-                            return  <Radio.Button value={x.code}><span className={'txt-size-h8'}>{x.name}</span></Radio.Button>;
+                {/*<Row className={'justify-content-center align-items-center'}>*/}
+                    <Radio.Group buttonStyle="solid" size={'large'} className={'width100'} value={currentPackage} onChange={(e)=> setCurrentPackage(e.target.value)}>
+                        <Row>{detail.benefit.packages.map((x: any)=>{
+                            return  <Col span={8}>
+                                <Radio.Button className={'width100 dpl-flex justify-content-center'} value={x.code}><span className={'txt-size-h8'}>{x.name}</span></Radio.Button>
+                            </Col>;
                         })}
+                        </Row>
                     </Radio.Group>
-                </Row>
+                {/*</Row>*/}
                 <div>
                     {
                         categories.map((category: any,index: number)=>{

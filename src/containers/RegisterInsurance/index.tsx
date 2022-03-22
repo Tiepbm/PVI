@@ -180,6 +180,7 @@ function RegisterInsurance() {
                         'ma_tiente': 'VND',
                         'loai_dcap': true,
                         'tyle_bthuong': '0',
+                        "DienThoai": values.customerPhone,
                         'ma_pkt': '',
                         'ma_kh': '',
                         'ma_kh_th': '',
@@ -216,7 +217,7 @@ function RegisterInsurance() {
                         'Email':values.customerEmail,
                         'ngay_batdau':dateStart,
                         'starttime':'00:00',
-                        'dia_chi':values.address,
+                        'dia_chi':'',
                         'ma_nhomkenh':'',
                         'ma_kenhbh':'',
                         'loai_dcap':false,
@@ -462,15 +463,15 @@ function RegisterInsurance() {
                 >
                     <Input/>
                 </Form.Item>
-                {productId === ENSURE_ELECTRIC && <Form.Item
-                    label="Địa chỉ"
-                    name="customerAddress"
-                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
-                >
-                    <Input/>
-                </Form.Item>
-                }
-                {productId === ENSURE_CAR || productId === ENSURE_HOUSE ? <Form.Item
+                {/*{productId === ENSURE_ELECTRIC && <Form.Item*/}
+                {/*    label="Địa chỉ"*/}
+                {/*    name="customerAddress"*/}
+                {/*    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}*/}
+                {/*>*/}
+                {/*    <Input/>*/}
+                {/*</Form.Item>*/}
+                {/*}*/}
+                 <Form.Item
                     label="Số điện thoại"
                     name="customerPhone"
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
@@ -480,7 +481,7 @@ function RegisterInsurance() {
                     }}
                 >
                     <Input/>
-                </Form.Item> : null}
+                </Form.Item>
                 <Form.Item
                     label="Email"
                     name="customerEmail"
@@ -530,17 +531,6 @@ function RegisterInsurance() {
                     }}
                 >
                     <Input placeholder={'CMND/CCCD/Hộ chiếu'}/>
-                </Form.Item>
-                <Form.Item
-                    label="Số điện thoại"
-                    name="ownerPhone"
-                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
-                    normalize={(value, prevValue) => {
-                        let raw = value.replace(/[^\d]/g, "");
-                        return raw;
-                    }}
-                >
-                    <Input/>
                 </Form.Item>
                 <Form.Item
                     label="Ngày sinh"
@@ -630,14 +620,14 @@ function RegisterInsurance() {
                         }
                     </Select>
                 </Form.Item>
-                <Form.Item
-                    label="Địa chỉ"
-                    name="carAddress"
-                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
-                >
-                    <Input.TextArea placeholder={''}
-                                    rows={5}></Input.TextArea>
-                </Form.Item>
+                {/*<Form.Item*/}
+                {/*    label="Địa chỉ"*/}
+                {/*    name="carAddress"*/}
+                {/*    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}*/}
+                {/*>*/}
+                {/*    <Input.TextArea placeholder={''}*/}
+                {/*                    rows={5}></Input.TextArea>*/}
+                {/*</Form.Item>*/}
             </div>
         } else if (productId === ENSURE_HOUSE) {
             return <div>
@@ -786,7 +776,10 @@ function RegisterInsurance() {
                     <Col span={isDesktopOrLaptop?12:24} className={'pdr20'}>
                         {renderStep()}
                         <Row className={'justify-content-between mgt20'}>
-                            <Button onClick={() => setStep(currentStep - 1)} disabled={currentStep === 0} size={'large'}
+                            <Button onClick={() => {
+                                if(currentStep>0) setStep(currentStep - 1);
+                                else navigate(`/products/${productId}`);
+                            }} size={'large'}
                                     shape={'round'}>Quay lại</Button>
                             <Button onClick={nextStep} size={'large'} shape={'round'}
                                     type={'primary'}>{currentStep < 2 ? 'Tiếp tục' : 'Xác nhận thanh toán'}</Button>
