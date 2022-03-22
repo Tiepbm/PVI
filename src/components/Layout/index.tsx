@@ -111,11 +111,11 @@ function MainLayout(props: MainLayoutProps) {
     return (
         <DocumentTitle title={`${title ? title : 'M24'}`}>
             <Layout className={'main-layout'}>
-                <Header className="header">
+                <Header className={`header ${isTabletOrMobile&&'header-mobile'}`}>
                     {isDesktopOrLaptop&&<Row className={'align-items-center justify-content-between pdl50 pdr50 height100'}>
                         <Col span={18}>
                             <Row className={'align-items-center'}>
-                                <img className={'cursor-pointer'} onClick={()=> navigate('/')} style={{height: 40, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
+                                <img className={'cursor-pointer'} onClick={()=> navigate('/')} style={{height: 30, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
                                 <div>
                             <span style={{height: 30}} onClick={() => clickMenu('')}
                                   className={`${activeKey === '' ? 'txt-color-blue border-bottom-2x-blue pdbt5' : 'txt-color-blue'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
@@ -141,7 +141,7 @@ function MainLayout(props: MainLayoutProps) {
                     </Row>}
                     {isTabletOrMobile&&<Row className={'align-items-center justify-content-center pdl5 pdr5 height100'}>
 
-                            <img className={'cursor-pointer'} onClick={()=> navigate('/')}  style={{height: 30, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
+                            <img className={'cursor-pointer'} onClick={()=> navigate('/')}  style={{height: 20, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
 
                             {/*<Row className={'justify-content-end align-items-center'}>*/}
                             {/*    <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng nhập</span>*/}
@@ -156,12 +156,12 @@ function MainLayout(props: MainLayoutProps) {
                     intervalTime={intervalTime}
                     spinner={false}
                 />
-                <Content style={{minHeight: height - 64}}
+                <Content style={{minHeight: height - 50}}
                          className="content"
                 >
                     {children}
                 </Content>
-                {isTabletOrMobile&&<Row className={'footer-mobile justify-content-center pdt10'}>
+                {isTabletOrMobile&&<Row className={'footer-mobile justify-content-center pdt10 border-top-1x'}>
                     <Col span={8} onClick={()=> navigate('/')} className={`dpl-flex align-items-center flex-direction-column ${activeKey===''?'txt-color-blue':'txt-color-black'}`}>
                         <Row><i className="far fa-home-alt"></i></Row>
                         <Row><span onClick={()=> navigate('/')}>Trang chủ</span></Row>

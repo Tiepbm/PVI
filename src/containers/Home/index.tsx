@@ -153,7 +153,7 @@ function Home() {
                     return <Col onClick={()=> navigate(`/products/${x.id}`)} className={'cursor-pointer'} span={8}>
                         <Row className={'justify-content-center'}><Image src={x.logo} width={90} height={90}  preview={false}></Image></Row>
                         <Row className={'justify-content-center txt-size-h7'}>
-                            <span style={{maxWidth: 85}} className={'mgt10 txt-center txt-color-blue'}>{x.name}</span>
+                            <span style={{maxWidth: 85}} className={'mgt10 txt-center txt-color-black'}>{x.name}</span>
                         </Row>
                     </Col>
                 })}

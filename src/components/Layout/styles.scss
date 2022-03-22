@@ -18,8 +18,11 @@
     left:0;
     box-shadow: 0px 2px 2px #E6E6E6;
   }
+  .header-mobile{
+    height: 50px;
+  }
   .content {
-    margin-top: 64px;
+    margin-top: 50px;
     padding-bottom: 20px;
     background-color: #F7FAFC;
   }
@@ -30,6 +33,7 @@
     right: 0;
     left:0;
     bottom: 0;
-    box-shadow: 2px 2px 2px 2px #E6E6E6;
+    border-top-width: 0.3px;
+    border-top-color: #cfcdcd;
   }
 }
