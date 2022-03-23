@@ -167,6 +167,7 @@ function RegisterInsurance() {
                         'khach_hang': values.customerName,
                         'dia_chi': values.customerAddress,
                         'email': values.customerEmail,
+                        'so_dienthoai': values.customerPhone,
                         'list_nguoithamgia': listThamGia,
                         'tong_phi': lodash.get(fee, 'TotalFee', ''),
                         'CpId': CPID,
