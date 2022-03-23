@@ -28,7 +28,7 @@ const data = [
         id: 'tainansudungdien',
         banner: require('../../resources/images/banner-electric.jpg'),
         bannerMobile: require('../../resources/images/banner-electric-mobile.jpg'),
-        description: ' Tai nạn về điện luôn tiềm ẩn xung quanh cuộc sống sinh hoạt, làm việc của con người và đến từ các nguyên nhân chủ quan như bất cẩn trong quá trình sử dụng điện hoặc các nguyên nhân khách quan như thiết bị điện chập cháy, bị dò điện. Tại Việt Nam, mỗi năm có hơn 7.000 vụ tai nạn điện và hơn 250 người thiệt mạng vì tai nạn điện. Bảo hiểm tai nạn hộ sử dụng điện của PVI sẽ mang đến giải pháp cho toàn bộ gia đình của bạn. Chỉ cần 1 người mua, các thành viên gia đình còn lại đều được bảo vệ. Phí chỉ từ 28.000đ/năm, quyền lợi lên tới 40 triệu đồng/người.',
+        description: <span>Tai nạn về điện luôn tiềm ẩn xung quanh cuộc sống sinh hoạt, làm việc của con người và đến từ các nguyên nhân chủ quan như bất cẩn trong quá trình sử dụng điện hoặc các nguyên nhân khách quan như thiết bị điện chập cháy, bị dò điện. Tại Việt Nam, mỗi năm có hơn 7.000 vụ tai nạn điện và hơn 250 người thiệt mạng vì tai nạn điện. Bảo hiểm tai nạn hộ sử dụng điện của PVI sẽ mang đến giải pháp cho toàn bộ gia đình của bạn. Chỉ cần 1 người mua, các thành viên gia đình còn lại đều được bảo vệ. Phí chỉ từ 28.000đ/năm, quyền lợi lên tới 40 triệu đồng/người.</span>,
         benefit: {
             categories: [
                 {
@@ -108,11 +108,11 @@ const data = [
         id: 'tndsoto',
         banner: require('../../resources/images/banner-car.png'),
         bannerMobile: require('../../resources/images/banner-car-mobile.jpg'),
-        description: 'Việc mua Bảo hiểm TNDS bắt buộc ô tô là trách nhiệm và nghĩa vụ phải thực hiện của chủ sở hữu phương tiện trước khi tham gia giao thông trên đường. Nếu không tuân theo quy định này, khi CSGT yêu cầu xuất trình bảo hiểm bắt buộc xe ô tô, chủ xe sẽ bị phạt từ 400.000 - 600.000 đồng/lần. Ngoài ra, khi không may xảy ra tai nạn, chủ xe phải tự chi trả toàn bộ chi phí để khắc phục hậu quả mà không được bảo hiểm hỗ trợ.\n' +
-            '\n' +
-            'Tham gia bảo hiểm bắt buộc ô tô của PVI ngay để đảm bảo tuân thủ quy định của pháp luật. Trường hợp chủ xe ô tô gây tai nạn, bảo hiểm sẽ thay bạn chi trả cho người bị nạn số tiền lên đến 150 triệu đồng/người/vụ đối với tổn thất về người và 100 triệu đồng/vụ đối với tổn thất về tài sản.\n' +
-            '\n' +
-            'Ngoài ra, Bảo hiểm PVI cung cấp thêm các gói bảo hiểm bảo vệ cho lái xe, phụ xe và người ngồi trên xe với quyền lợi là 10 triệu đồng (gói tiêu chuẩn) hoặc 100 triệu đồng (gói nâng cao) cho bạn lựa chọn, mức phí tăng thêm tương ứng chỉ từ 10.000 - 100.000 đồng/người/năm.',
+        description: <Col>
+            <span>{'Việc mua Bảo hiểm TNDS bắt buộc ô tô là trách nhiệm và nghĩa vụ phải thực hiện của chủ sở hữu phương tiện trước khi tham gia giao thông trên đường. Nếu không tuân theo quy định này, khi CSGT yêu cầu xuất trình bảo hiểm bắt buộc xe ô tô, chủ xe sẽ bị phạt từ 400.000 - 600.000 đồng/lần. Ngoài ra, khi không may xảy ra tai nạn, chủ xe phải tự chi trả toàn bộ chi phí để khắc phục hậu quả mà không được bảo hiểm hỗ trợ.'}</span>
+            <Row><span className={'mgt5 mgbt5'}>{'Tham gia bảo hiểm bắt buộc ô tô của PVI ngay để đảm bảo tuân thủ quy định của pháp luật. Trường hợp chủ xe ô tô gây tai nạn, bảo hiểm sẽ thay bạn chi trả cho người bị nạn số tiền lên đến 150 triệu đồng/người/vụ đối với tổn thất về người và 100 triệu đồng/vụ đối với tổn thất về tài sản.'}</span></Row>
+            <span className={''}>{'Ngoài ra, Bảo hiểm PVI cung cấp thêm các gói bảo hiểm bảo vệ cho lái xe, phụ xe và người ngồi trên xe với quyền lợi là 10 triệu đồng (gói tiêu chuẩn) hoặc 100 triệu đồng (gói nâng cao) cho bạn lựa chọn, mức phí tăng thêm tương ứng chỉ từ 10.000 - 100.000 đồng/người/năm.'}</span>
+</Col>,
         benefit: {
             categories: [
                 {
@@ -191,7 +191,7 @@ const data = [
         id: 'nhaotoandien',
         banner: require('../../resources/images/banner-house.jpg'),
         bannerMobile: require('../../resources/images/banner-house-mobile.jpg'),
-        description: 'Để sở hữu một căn nhà, chúng ta đã phải bỏ ra từ hàng trăm triệu đến hàng tỷ đồng, vậy đừng chần chừ khi mua thêm bảo hiểm để bảo vệ khối tài sản đó trước những rủi ro làm thiệt hại đến giá trị ngôi nhà của mình. Chỉ từ 165.000đ/năm, Bảo hiểm nhà ở toàn diện PVI đem đến giải pháp tài chính để bạn luôn yên tâm bảo vệ tổ ấm của mình. Bất cứ khi nào có tổn thất sảy ra với phần khung nhà hay tài sản bên trong ngôi nhà, PVI sẽ đồng hành và chi trả cho bạn với mức quyền lợi lên đến 600 triệu đồng/năm',
+        description: <span>{'Để sở hữu một căn nhà, chúng ta đã phải bỏ ra từ hàng trăm triệu đến hàng tỷ đồng, vậy đừng chần chừ khi mua thêm bảo hiểm để bảo vệ khối tài sản đó trước những rủi ro làm thiệt hại đến giá trị ngôi nhà của mình. Chỉ từ 165.000đ/năm, Bảo hiểm nhà ở toàn diện PVI đem đến giải pháp tài chính để bạn luôn yên tâm bảo vệ tổ ấm của mình. Bất cứ khi nào có tổn thất sảy ra với phần khung nhà hay tài sản bên trong ngôi nhà, PVI sẽ đồng hành và chi trả cho bạn với mức quyền lợi lên đến 600 triệu đồng/năm'}</span>,
         benefit: {
             categories: [
                 {
@@ -479,7 +479,7 @@ function ProductDetail() {
         if(!detail) return;
         if(isDesktopOrLaptop){
             return <div>
-                <Row><span className={'robotobold txt-size-h4 mgt20 mgbt20'}>Thông tin quyền lợi</span></Row>
+                <Row><span className={'robotobold txt-size-h1 mgt10 mgbt10'}>Thông tin quyền lợi</span></Row>
                 <Row>
                     <Col span={6}>
                         <Row style={{height: 50}}>
@@ -527,7 +527,7 @@ function ProductDetail() {
             let categories = detail.benefit.categories;
             return <div>
                 <Row>
-                    <span className={'robotobold txt-size-h4 mgt20 mgbt20'}>Thông tin quyền lợi</span>
+                    <span className={'robotobold txt-size-h4 mgt10 mgbt10'}>Thông tin quyền lợi</span>
                 </Row>
                 {/*<Row className={'justify-content-center align-items-center'}>*/}
                     <Radio.Group buttonStyle="solid" size={'large'} className={'width100'} value={currentPackage} onChange={(e)=> setCurrentPackage(e.target.value)}>
@@ -642,7 +642,7 @@ function ProductDetail() {
         </div>
         <div className={'main-content'}>
             <Row>
-                <span className={`${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'} txt-color-black robotobold mgbt20`}>{getProductName()}</span>
+                <span className={`${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'} txt-color-black robotobold mgbt10`}>{getProductName()}</span>
             </Row>
             <ShowMoreText
                 /* Default options */
@@ -652,7 +652,7 @@ function ProductDetail() {
                 expanded={false}
                 truncatedEndingComponent={"... "}
             >
-            <span className={'txt-size-h5'}>{lodash.get(detail, 'description', '')}</span>
+            {detail?.description}
             </ShowMoreText>
             {renderBenefit()}
             <Spin size={'large'} spinning={loading}>
@@ -672,7 +672,7 @@ function ProductDetail() {
                 </Row>
             </div>
             </Spin>
-            <Row><span className={'robotobold txt-size-h4 mgt20 mgbt20'}>Mô tả chi tiết</span></Row>
+            <Row><span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'} mgt10 mgbt10`}>Mô tả chi tiết</span></Row>
             <div className={'dpl-flex justify-content-center'}>
                 <img className={isDesktopOrLaptop?'width50':'width100'}
                     src={lodash.get(detail, 'detail', '')}></img>

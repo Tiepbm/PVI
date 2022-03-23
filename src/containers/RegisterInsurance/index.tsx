@@ -150,7 +150,7 @@ function RegisterInsurance() {
                     listThamGia.push({
                         ten_khach: values.ownerName,
                         so_cmnd: values.ownerCMND,
-                        ngay_sinh: formatDate(values.ownerBirthday),
+                        ngay_sinh: '',
                         dien_thoai: values.ownerPhone
                     });
                     values.persons?.map((x: any) => {
@@ -461,6 +461,7 @@ function RegisterInsurance() {
                 <Form.Item
                     label="Họ và tên"
                     name="customerName"
+                    className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Input/>
@@ -476,6 +477,7 @@ function RegisterInsurance() {
                  <Form.Item
                     label="Số điện thoại"
                     name="customerPhone"
+                    className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                     normalize={(value, prevValue) => {
                         let raw = value.replace(/[^\d]/g, "");
@@ -487,6 +489,7 @@ function RegisterInsurance() {
                 <Form.Item
                     label="Email"
                     name="customerEmail"
+                    className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}, {
                         type: 'email',
                         message: 'Email không đúng định dạng',
@@ -497,6 +500,7 @@ function RegisterInsurance() {
                 <Form.Item
                     name="agreement"
                     valuePropName="checked"
+                    className={'mgbt5'}
                     rules={[
                         {
                             validator: (_, value) =>
@@ -519,6 +523,7 @@ function RegisterInsurance() {
                 <Form.Item
                     label="Họ và tên"
                     name="ownerName"
+                    className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Input placeholder={'Họ và tên'}/>
@@ -526,6 +531,7 @@ function RegisterInsurance() {
                 <Form.Item
                     label="CMND/CCCD/Hộ chiếu"
                     name="ownerCMND"
+                    className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                     normalize={(value, prevValue) => {
                         let raw = value.replace(/[^\d]/g, "");
@@ -534,15 +540,15 @@ function RegisterInsurance() {
                 >
                     <Input placeholder={'CMND/CCCD/Hộ chiếu'}/>
                 </Form.Item>
-                <Form.Item
-                    label="Ngày sinh"
-                    name="ownerBirthday"
-                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
-                >
-                    <DatePicker placeholder={'Chọn ngày sinh'} disabledDate={disabledDate}
-                                suffixIcon={<i className="fas fa-calendar-alt"></i>}
-                                className={'width100'} format={'DD/MM/YYYY'}/>
-                </Form.Item>
+                {/*<Form.Item*/}
+                {/*    label="Ngày sinh"*/}
+                {/*    name="ownerBirthday"*/}
+                {/*    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}*/}
+                {/*>*/}
+                {/*    <DatePicker placeholder={'Chọn ngày sinh'} disabledDate={disabledDate}*/}
+                {/*                suffixIcon={<i className="fas fa-calendar-alt"></i>}*/}
+                {/*                className={'width100'} format={'DD/MM/YYYY'}/>*/}
+                {/*</Form.Item>*/}
 
                 <span className={'robotobold txt-size-h1'}>Thành viên bổ sung</span>
                 <Row><span>* Thành viên trong gia đình sống cùng chủ hộ nhưng không có tên trong hộ khẩu</span></Row>
@@ -598,6 +604,7 @@ function RegisterInsurance() {
                 <Form.Item
                     label="Họ và tên"
                     name="carName"
+                    className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Input/>
@@ -605,6 +612,7 @@ function RegisterInsurance() {
                 <Form.Item
                     label="Biển số xe"
                     name="carNumber"
+                    className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Input/>
@@ -612,6 +620,7 @@ function RegisterInsurance() {
                 <Form.Item
                     label="Tỉnh/Thành Phố"
                     name="carProvince"
+                    className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Select placeholder="Tỉnh/Thành Phố">
@@ -637,6 +646,7 @@ function RegisterInsurance() {
                 <Form.Item
                     label="Năm xây dựng"
                     name="year"
+                    className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Select placeholder="Năm xây dựng">
@@ -651,6 +661,7 @@ function RegisterInsurance() {
                 <Form.Item
                     label="Tỉnh/Thành Phố"
                     name="province"
+                    className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
                     <Select placeholder="Tỉnh/Thành Phố" >
@@ -698,8 +709,8 @@ function RegisterInsurance() {
                     <RowItem title={'Họ và tên'} value={bodyRegister.list_nguoithamgia[0].ten_khach}></RowItem>
                     <RowItem title={'CMND/CCCD/Hộ chiếu'} value={bodyRegister.list_nguoithamgia[0].so_cmnd}></RowItem>
                     {/*<RowItem title={'Số điện thoại'} value={bodyRegister.list_nguoithamgia[0].dien_thoai}></RowItem>*/}
-                    <RowItem title={'Ngày sinh'} value={bodyRegister.list_nguoithamgia[0].ngay_sinh}></RowItem>
-                    <span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Thành viên bổ sung</span>
+                    {/*<RowItem title={'Ngày sinh'} value={bodyRegister.list_nguoithamgia[0].ngay_sinh}></RowItem>*/}
+                    {bodyRegister.list_nguoithamgia?.length>1&&<span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Thành viên bổ sung</span>}
                     {
                         bodyRegister.list_nguoithamgia.map((x: any, index: number) => {
                             if (index === 0)

@@ -127,10 +127,10 @@ function Home() {
     const renderItem = (item: any) => {
         if(isDesktopOrLaptop)
         return <Card className={'mgt20'}>
-            <span className={'robotobold txt-size-h6'}>{item.name}</span>
-            <Row gutter={16} className={'justify-content-center mgt20'}>
+            <span className={'robotobold txt-size-h1'}>{item.name}</span>
+            <Row className={'justify-content-center mgt20'}>
                 {item.items.map((x: any) => {
-                    return <Col onClick={()=> navigate(`/products/${x.id}`)} className={'cursor-pointer article'} span={8}>
+                    return <Col onClick={()=> navigate(`/products/${x.id}`)} className={'cursor-pointer article mgr20'} span={7}>
 
                                  <div className="article__tag">
                                      <span>{x.status==='active'?'Hot':'Sắp ra mắt'}</span>

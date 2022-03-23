@@ -111,7 +111,7 @@ function MainLayout(props: MainLayoutProps) {
     return (
         <DocumentTitle title={`${title ? title : 'M24'}`}>
             <Layout className={'main-layout'}>
-                <Header className={`header ${isTabletOrMobile&&'header-mobile'}`}>
+                <Header className={`border-bottom-1x bd-color-gray header ${isTabletOrMobile&&'header-mobile'}`}>
                     {isDesktopOrLaptop&&<Row className={'align-items-center justify-content-between pdl50 pdr50 height100'}>
                         <Col span={18}>
                             <Row className={'align-items-center'}>
@@ -175,8 +175,8 @@ function MainLayout(props: MainLayoutProps) {
                        <Row><span>Giới thiệu</span>
                        </Row> </Col>
                    </Row>}
-                <Footer style={{textAlign: 'center'}}>
-                    <Row className={'justify-content-center pdbt50'}><span>©2022 Created by PVI</span></Row></Footer>
+                {isDesktopOrLaptop&&<Footer style={{textAlign: 'center'}}>
+                    <Row className={'justify-content-center pdbt50'}><span>©2022 Created by PVI</span></Row></Footer>}
             </Layout>
         </DocumentTitle>
     );
