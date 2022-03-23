@@ -49,7 +49,8 @@ function RegisterInsurance() {
     const [years, setYears] = useState<any>([]);
     const [form] = Form.useForm();
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
-    const isDesktopOrLaptop = useMediaQuery({ minWidth: 768 })
+    const isDesktopOrLaptop = useMediaQuery({ minWidth: 768 });
+    const isTabletOrMobile = useMediaQuery({ maxWidth: 767 });
     const disabledDate = (current: any) => {
         // Can not select days before today and today
         return current && current > moment().endOf('day');
@@ -268,7 +269,7 @@ function RegisterInsurance() {
                         "TenKH": values.customerName,
                         "DiaChiKH": "",
                         "TenChuXe": values.carName,
-                        "DiaChiChuXe": values.carAddress,
+                        "DiaChiChuXe": '',
                         "KhuyenMai": "",
                         "Ma_Phong": "",
                         "MaKH": "",
@@ -437,7 +438,7 @@ function RegisterInsurance() {
         }
     }
     const renderStep1 = () => {
-        return <div>
+        return <div className={'pd5'}>
             <span className={'robotobold txt-size-h1'}>Người mua bảo hiểm</span>
             <Form
                 form={form}
@@ -445,7 +446,7 @@ function RegisterInsurance() {
                 labelAlign={'left'}
                 labelCol={{span: 8}}
                 wrapperCol={{span: 16}}
-                className={'mgt20'}
+                className={'mg120'}
                 autoComplete="off"
                 onFieldsChange={(changedFields, allFields)=>{
                     let province: any = changedFields.find((x: any)=> x.name.includes('province'));
@@ -685,20 +686,19 @@ function RegisterInsurance() {
     }
     const renderStep2 = () => {
         return <Card>
-            <span className={'robotobold txt-size-h1'}>Thông tin người mua</span>
+            <span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Thông tin người mua</span>
             <RowItem title={'Họ và tên'} value={productId === ENSURE_CAR?bodyRegister.TenKH:bodyRegister.khach_hang}></RowItem>
-            {productId === ENSURE_ELECTRIC && <RowItem title={'Địa chỉ'} value={bodyRegister.dia_chi}></RowItem>}
-            {productId === ENSURE_CAR || productId === ENSURE_HOUSE ?
-                <RowItem title={'Số điện thoại'} value={productId === ENSURE_CAR?bodyRegister.DienThoai:bodyRegister.so_dienthoai}></RowItem> : null}
-            <RowItem title={'Địa chỉ email'} value={productId === ENSURE_CAR?bodyRegister.EmailKH:bodyRegister.Email}></RowItem>
+            {/*{productId === ENSURE_ELECTRIC && <RowItem title={'Địa chỉ'} value={bodyRegister.dia_chi}></RowItem>}*/}
+                <RowItem title={'Số điện thoại'} value={productId === ENSURE_CAR?bodyRegister.DienThoai:bodyRegister.so_dienthoai}></RowItem>
+            <RowItem title={'Địa chỉ email'} value={productId === ENSURE_ELECTRIC?bodyRegister.email:productId === ENSURE_CAR?bodyRegister.EmailKH:bodyRegister.Email}></RowItem>
             {
                 productId === ENSURE_ELECTRIC ? <div>
-                    <span className={'robotobold txt-size-h1'}>Chủ hộ</span>
+                    <span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Chủ hộ</span>
                     <RowItem title={'Họ và tên'} value={bodyRegister.list_nguoithamgia[0].ten_khach}></RowItem>
                     <RowItem title={'CMND/CCCD/Hộ chiếu'} value={bodyRegister.list_nguoithamgia[0].so_cmnd}></RowItem>
-                    <RowItem title={'Số điện thoại'} value={bodyRegister.list_nguoithamgia[0].dien_thoai}></RowItem>
+                    {/*<RowItem title={'Số điện thoại'} value={bodyRegister.list_nguoithamgia[0].dien_thoai}></RowItem>*/}
                     <RowItem title={'Ngày sinh'} value={bodyRegister.list_nguoithamgia[0].ngay_sinh}></RowItem>
-                    <span className={'robotobold txt-size-h1'}>Thành viên bổ sung</span>
+                    <span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Thành viên bổ sung</span>
                     {
                         bodyRegister.list_nguoithamgia.map((x: any, index: number) => {
                             if (index === 0)
@@ -710,14 +710,14 @@ function RegisterInsurance() {
                         })
                     }
                 </div> : productId === ENSURE_CAR ? <div>
-                    <span className={'robotobold txt-size-h1'}>Thông tin đăng ký xe</span>
+                    <span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Thông tin đăng ký xe</span>
                     <RowItem title={'Họ và tên'} value={bodyRegister.TenChuXe}></RowItem>
                     <RowItem title={'Biển số xe'} value={bodyRegister.BienKiemSoat}></RowItem>
                     <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected.Text}></RowItem>
                     <RowItem title={'Mục đích sử dụng'} value={getPurpose()}></RowItem>
                     <RowItem title={'Số chỗ ngồi'} value={bodyRegister.ChoNgoi}></RowItem>
                 </div> : productId === ENSURE_HOUSE ? <div>
-                    <span className={'robotobold txt-size-h1'}>Thông tin căn nhà</span>
+                    <span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Thông tin căn nhà</span>
                     <RowItem title={'Năm xây dựng'} value={bodyRegister.nam_xaydung}></RowItem>
                     <span className={'robotobold txt-size-h1'}>Địa điểm căn nhà</span>
                     <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected.Text}></RowItem>
@@ -729,6 +729,7 @@ function RegisterInsurance() {
     }
     const renderStep3 = () => {
         return <div className={''}>
+            {isTabletOrMobile&&renderOrderInfo()}
             <Alert
                 message={<span className={'robotobold'}>Thanh toán tiền mặt</span>}
                 description="Nhân viên bán hàng thu tiền mặt của khách hàng."
@@ -748,6 +749,17 @@ function RegisterInsurance() {
         //     </Col>
         // </Row>
     }
+    const renderOrderInfo=()=>{
+        return <Card title="Thông tin đơn hàng">
+            <RowItem title={'Tên sản phẩm'} value={getProductName()}></RowItem>
+            <RowItem title={'Nhà cung cấp'} value={'Bảo hiểm PVI'}></RowItem>
+            <RowItem title={'Gói sản phẩm'} value={getPackageName()}></RowItem>
+            <RowItem title={'Ngày hiệu lực'} value={formatDate(moment())}></RowItem>
+            <RowItem title={'Chu kì thanh toán'} value={'1 năm'}></RowItem>
+            <RowItem title={'Tổng phí bảo hiểm'}
+                     value={formatMoneyByUnit(lodash.get(fee, 'TotalFee', ''))}></RowItem>
+        </Card>
+    }
     const renderStep = () => {
         switch (currentStep) {
             case 0:
@@ -765,15 +777,15 @@ function RegisterInsurance() {
             {currentStep < 3 ? <div>
                 <Row className={'justify-content-center'}>
                     <Col span={isDesktopOrLaptop?12:24}>
-                        <Steps responsive={false} labelPlacement={'vertical'} current={currentStep}>
+                        <Steps className={'dpl-flex justify-content-center'} responsive={false} labelPlacement={'vertical'} current={currentStep}>
                             <Step title="Đăng ký"/>
                             <Step title="Xác nhận"/>
                             <Step title="Thanh toán"/>
                         </Steps>
                     </Col>
                 </Row>
-                <Row className={'justify-content-center mgt20'}>
-                    <Col span={isDesktopOrLaptop?12:24} className={'pdr20'}>
+                <Row gutter={24} className={'justify-content-center mgt10'}>
+                    <Col span={isDesktopOrLaptop?12:24} className={''}>
                         {renderStep()}
                         <Row className={'justify-content-between mgt20'}>
                             <Button onClick={() => {
@@ -782,19 +794,11 @@ function RegisterInsurance() {
                             }} size={'large'}
                                     shape={'round'}>Quay lại</Button>
                             <Button onClick={nextStep} size={'large'} shape={'round'}
-                                    type={'primary'}>{currentStep < 2 ? 'Tiếp tục' : 'Xác nhận thanh toán'}</Button>
+                                    type={'primary'}>{currentStep < 2 ? 'Tiếp tục' : 'Xác nhận'}</Button>
                         </Row>
                     </Col>
-                    {isDesktopOrLaptop&&<Col span={10}>
-                        <Card title="Thông tin đơn hàng">
-                            <RowItem title={'Tên sản phẩm'} value={getProductName()}></RowItem>
-                            <RowItem title={'Nhà cung cấp'} value={'Bảo hiểm PVI'}></RowItem>
-                            <RowItem title={'Gói sản phẩm'} value={getPackageName()}></RowItem>
-                            <RowItem title={'Ngày hiệu lực'} value={formatDate(moment())}></RowItem>
-                            <RowItem title={'Chu kì thanh toán'} value={'1 năm'}></RowItem>
-                            <RowItem title={'Tổng phí bảo hiểm'}
-                                     value={formatMoneyByUnit(lodash.get(fee, 'TotalFee', ''))}></RowItem>
-                        </Card>
+                    {isDesktopOrLaptop&&<Col span={10} className={''}>
+                        {renderOrderInfo()}
                     </Col>}
                 </Row>
             </div>:
