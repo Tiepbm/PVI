@@ -52,6 +52,13 @@ export class ProductRepository extends Repository {
                 return response.data;
             });
     };
+    public getOrders = (body: any): Promise<any> => {
+        return this.http
+            .post(`Get_ListService`, body)
+            .then((response: AxiosResponse<any>) => {
+                return response.data;
+            });
+    };
 }
 
 export const productRepository: ProductRepository = new ProductRepository();

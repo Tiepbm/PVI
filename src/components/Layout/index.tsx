@@ -166,7 +166,7 @@ function MainLayout(props: MainLayoutProps) {
                         <Row><i className="far fa-home-alt"></i></Row>
                         <Row><span onClick={()=> navigate('/')}>Trang chủ</span></Row>
                     </Col>
-                    <Col span={8} className={`dpl-flex align-items-center flex-direction-column ${activeKey==='orders'?'txt-color-blue':'txt-color-black'}`}>
+                    <Col span={8} onClick={()=> navigate('/orders')} className={`dpl-flex align-items-center flex-direction-column ${activeKey==='orders'?'txt-color-blue':'txt-color-black'}`}>
 
                         <Row><i className="far fa-file-alt"></i></Row>
                         <Row><span>Đơn hàng</span></Row></Col>
