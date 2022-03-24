@@ -6,6 +6,8 @@
 import lodash from "lodash";
 import md5 from 'md5';
 import {API_KEY} from "../core/config";
+import {formatDate} from "../core/helpers/date-time";
+import moment from "moment";
 
 export const linkOrder = (text: any, config: any) => {
     if (!text) return '';
@@ -87,8 +89,10 @@ export function handleInputChange(key: string, value: any, filter: any){
 export function handleChangeRangeDate(e: any, from:string, to:string, filter: any) {
     let temp = lodash.merge({}, filter);
     if (e && e.length) {
-        temp[from] = e[0].startOf('day').toISOString();
-        temp[to] = e[1].endOf('day').toISOString();
+        // temp[from] = e[0].startOf('day').toISOString();
+        // temp[to] = e[1].endOf('day').toISOString();
+        temp[from] = formatDate(moment(e[0]));
+        temp[to] = formatDate(moment(e[1]));
     } else {
         delete temp[from];
         delete temp[to];
