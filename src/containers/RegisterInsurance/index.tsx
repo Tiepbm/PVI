@@ -501,6 +501,7 @@ function RegisterInsurance() {
                     name="agreement"
                     valuePropName="checked"
                     className={'mgbt5'}
+                    wrapperCol={{span:24}}
                     rules={[
                         {
                             validator: (_, value) =>
@@ -509,7 +510,7 @@ function RegisterInsurance() {
                     ]}
                 >
                     <Checkbox>
-                        Tôi xác nhận thông tin là chính xác và đồng ý với <a href={`./pdf/${productId}.pdf`} target={'_blank'}>quy tắc sản phẩm</a>
+                        <span>Tôi xác nhận thông tin là chính xác và đồng ý với <a href={`./pdf/${productId}.pdf`} target={'_blank'}>quy tắc sản phẩm</a></span>
                     </Checkbox>
                 </Form.Item>
                 {renderFormByProductId()}
@@ -551,14 +552,14 @@ function RegisterInsurance() {
                 {/*</Form.Item>*/}
 
                 <span className={'robotobold txt-size-h1'}>Thành viên bổ sung</span>
-                <Row><span>* Thành viên trong gia đình sống cùng chủ hộ nhưng không có tên trong hộ khẩu</span></Row>
+                <Row className={'mgt5 mgbt5'}><span>* Thành viên trong gia đình sống cùng chủ hộ nhưng không có tên trong hộ khẩu</span></Row>
                 <Form.List name={'persons'}>
                     {(fields, {add, remove}) => (
                         <>
                             {fields.map(({key, name, ...restField}: any) => (
 
-                                <div key={key} className={'mgt20'}>
-                                    <Row className={'justify-content-between align-items-center mgbt15'}>
+                                <div key={key} className={'10'}>
+                                    <Row className={'justify-content-between align-items-center mgbt5'}>
                                         <span className={'robotobold txt-size-h4'}>Thành viên</span>
                                         <span onClick={() => {
                                             remove(name);
@@ -569,6 +570,7 @@ function RegisterInsurance() {
                                     <Form.Item
                                         {...restField}
                                         label="Họ và tên"
+                                        className={'mgbt5'}
                                         name={[name, 'fullname']}
                                         rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                                     >
@@ -579,6 +581,7 @@ function RegisterInsurance() {
                                     <Form.Item
                                         {...restField}
                                         label="Ngày sinh"
+                                        className={'mgbt5'}
                                         name={[name, 'birthday']}
                                         rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                                     >
