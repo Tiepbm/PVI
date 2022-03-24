@@ -120,10 +120,10 @@ function MainLayout(props: MainLayoutProps) {
                             <span style={{height: 30}} onClick={() => clickMenu('')}
                                   className={`${activeKey === '' ? 'txt-color-blue border-bottom-2x-blue pdbt5' : 'txt-color-blue'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
                                 </div>
-                                <div>
-                            <span onClick={() => clickMenu('orders')}
-                                  className={`${activeKey === 'orders' ? 'txt-color-blue border-bottom-2x-blue pdbt5' : 'txt-color-blue'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Đơn hàng</span>
-                                </div>
+                            {/*    <div>*/}
+                            {/*<span onClick={() => clickMenu('orders')}*/}
+                            {/*      className={`${activeKey === 'orders' ? 'txt-color-blue border-bottom-2x-blue pdbt5' : 'txt-color-blue'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Đơn hàng</span>*/}
+                            {/*    </div>*/}
                                 <div>
                             <span onClick={() => clickMenu('about')}
                                   className={`${activeKey === 'about' ? 'txt-color-blue border-bottom-2x-blue pdbt5' : 'txt-color-blue'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Giới thiệu</span>
@@ -166,10 +166,10 @@ function MainLayout(props: MainLayoutProps) {
                         <Row><i className="far fa-home-alt"></i></Row>
                         <Row><span onClick={()=> navigate('/')}>Trang chủ</span></Row>
                     </Col>
-                    <Col span={8} onClick={()=> navigate('/orders')} className={`dpl-flex align-items-center flex-direction-column ${activeKey==='orders'?'txt-color-blue':'txt-color-black'}`}>
+                    {/*<Col span={8} onClick={()=> navigate('/orders')} className={`dpl-flex align-items-center flex-direction-column ${activeKey==='orders'?'txt-color-blue':'txt-color-black'}`}>*/}
 
-                        <Row><i className="far fa-file-alt"></i></Row>
-                        <Row><span>Đơn hàng</span></Row></Col>
+                    {/*    <Row><i className="far fa-file-alt"></i></Row>*/}
+                    {/*    <Row><span>Đơn hàng</span></Row></Col>*/}
                    <Col span={8} onClick={()=> navigate('/about')} className={`dpl-flex align-items-center flex-direction-column ${activeKey==='about'?'txt-color-blue':'txt-color-black'}`}>
                        <Row><i className="far fa-info-circle"></i></Row>
                        <Row><span>Giới thiệu</span>
