@@ -40,7 +40,7 @@ function Filter(props: FilterProps){
                 <Row>
                     <span>Dịch vụ</span>
                 </Row>
-                <Select className={'width80'} value={lodash.get(filter,'loai_dv',undefined)} onChange={(value)=>onChange('loai_dv', value)}>
+                <Select className={'width100'} value={lodash.get(filter,'loai_dv',undefined)} onChange={(value)=>onChange('loai_dv', value)}>
                     {
                         services.map((x: any)=>{
                             return <Select.Option value={x.value}>{x.name}</Select.Option>
