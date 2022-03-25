@@ -37,6 +37,7 @@ function RegisterInsurance() {
     const [packageCode, setPackageCode] = useState<string | null>(searchParams.get('packageCode'));
     const [currentStep, setStep] = useState<number>(0);
     const [fee] = useState(localStorageRead(FEE));
+    const [currentDateString] = useState(localStorageRead('DATE'));
     const [feeRequest] = useState(localStorageRead(FEE_REQUEST));
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -55,7 +56,6 @@ function RegisterInsurance() {
         // Can not select days before today and today
         return current && current > moment().endOf('day');
     }
-    console.log(feeRequest);
     const [bodyRegister, setBodyRegister] = useState<any>();
     useEffect(()=>{
        if(productId===ENSURE_CAR||productId===ENSURE_HOUSE)
@@ -142,9 +142,9 @@ function RegisterInsurance() {
                 // let fiels = form.getFieldsValue();
                 // console.log(values);
                 let body: any = {};
-                let dateStart = formatDate(moment().add(1, 'd'));
+                let dateStart = formatDate(moment(currentDateString,'DD/MM/YYYY').add(1, 'd'));
                 let datePaid = formatDate(moment());
-                let duration = formatDate(moment().set('year', moment().get('year') + 1));
+                let duration = formatDate(moment(currentDateString,'DD/MM/YYYY').set('year', moment().get('year') + 1));
                 if (productId === ENSURE_ELECTRIC) {
                     let listThamGia = [];
                     listThamGia.push({
@@ -466,14 +466,6 @@ function RegisterInsurance() {
                 >
                     <Input/>
                 </Form.Item>
-                {/*{productId === ENSURE_ELECTRIC && <Form.Item*/}
-                {/*    label="Địa chỉ"*/}
-                {/*    name="customerAddress"*/}
-                {/*    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}*/}
-                {/*>*/}
-                {/*    <Input/>*/}
-                {/*</Form.Item>*/}
-                {/*}*/}
                  <Form.Item
                     label="Số điện thoại"
                     name="customerPhone"
@@ -769,7 +761,7 @@ function RegisterInsurance() {
             <RowItem title={'Tên sản phẩm'} value={getProductName()}></RowItem>
             <RowItem title={'Nhà cung cấp'} value={'Bảo hiểm PVI'}></RowItem>
             <RowItem title={'Gói sản phẩm'} value={getPackageName()}></RowItem>
-            <RowItem title={'Ngày hiệu lực'} value={formatDate(moment())}></RowItem>
+            <RowItem title={'Ngày hiệu lực'} value={currentDateString}></RowItem>
             <RowItem title={'Chu kì thanh toán'} value={'1 năm'}></RowItem>
             <RowItem title={'Tổng phí bảo hiểm'}
                      value={formatMoneyByUnit(lodash.get(fee, 'TotalFee', ''))}></RowItem>

@@ -558,13 +558,21 @@ function ProductDetail() {
             </div>
         }
     }
+    const disabledDate=(current: any)=> {
+        // Can not select days before today and today
+        return current && current < moment().endOf('day');
+    }
+    const onChangeDate=(date: any, dateString: string)=>{
+        // console.log(date, dateString);
+        localStorageSave('DATE', dateString);
+    }
     const renderFeeElectric=()=>{
         return <div>
             <Row gutter={8}>
                 <Col span={isDesktopOrLaptop?6:24} className={'mgt10'}>
                     <Row><span>Ngày hiệu lực</span></Row>
-                    <DatePicker defaultValue={moment(new Date(),STANDARD_DATE_FORMAT)} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
-                                format={STANDARD_DATE_FORMAT} onChange={handleChange}/>
+                    <DatePicker disabledDate={disabledDate} defaultValue={moment(new Date(),STANDARD_DATE_FORMAT)} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
+                                format={STANDARD_DATE_FORMAT} onChange={onChangeDate}/>
                 </Col>
                 <Col  span={isDesktopOrLaptop?6:24} className={'mgt10'}>
                     <Row><span>Chu kỳ thanh toán</span></Row>
@@ -581,8 +589,8 @@ function ProductDetail() {
             <Row gutter={8} className={'justify-content-start'}>
                 <Col  span={isDesktopOrLaptop?8:24} className={'mgt10'}>
                     <Row><span>Ngày hiệu lực</span></Row>
-                    <DatePicker defaultValue={moment(new Date(),STANDARD_DATE_FORMAT)} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
-                                format={STANDARD_DATE_FORMAT} onChange={handleChange}/>
+                    <DatePicker disabledDate={disabledDate} defaultValue={moment(new Date(),STANDARD_DATE_FORMAT)} suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
+                                format={STANDARD_DATE_FORMAT} onChange={onChangeDate}/>
                 </Col>
                 <Col span={isDesktopOrLaptop?8:24} className={'mgt10'}>
                     <Row><span>Chu kỳ thanh toán</span></Row>
