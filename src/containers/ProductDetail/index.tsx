@@ -191,7 +191,7 @@ const data = [
         id: 'nhaotoandien',
         banner: require('../../resources/images/banner-house.jpg'),
         bannerMobile: require('../../resources/images/banner-house-mobile.jpg'),
-        description: <span>{'Để sở hữu một căn nhà, chúng ta đã phải bỏ ra từ hàng trăm triệu đến hàng tỷ đồng, vậy đừng chần chừ khi mua thêm bảo hiểm để bảo vệ khối tài sản đó trước những rủi ro làm thiệt hại đến giá trị ngôi nhà của mình. Chỉ từ 165.000đ/năm, Bảo hiểm nhà ở toàn diện PVI đem đến giải pháp tài chính để bạn luôn yên tâm bảo vệ tổ ấm của mình. Bất cứ khi nào có tổn thất sảy ra với phần khung nhà hay tài sản bên trong ngôi nhà, PVI sẽ đồng hành và chi trả cho bạn với mức quyền lợi lên đến 600 triệu đồng/năm'}</span>,
+        description: <span>{'Để sở hữu một căn nhà, chúng ta đã phải bỏ ra từ hàng trăm triệu đến hàng tỷ đồng, vậy đừng chần chừ khi mua thêm bảo hiểm để bảo vệ khối tài sản đó trước những rủi ro làm thiệt hại đến giá trị ngôi nhà của mình. Chỉ từ 165.000đ/năm, Bảo hiểm nhà ở toàn diện PVI đem đến giải pháp tài chính để bạn luôn yên tâm bảo vệ tổ ấm của mình. Bất cứ khi nào có tổn thất xảy ra với phần khung nhà hay tài sản bên trong ngôi nhà, PVI sẽ đồng hành và chi trả cho bạn với mức quyền lợi lên đến 600 triệu đồng/năm.'}</span>,
         benefit: {
             categories: [
                 {
