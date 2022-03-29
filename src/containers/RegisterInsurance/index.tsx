@@ -449,14 +449,16 @@ function RegisterInsurance() {
                 wrapperCol={{span: 16}}
                 className={'mg120'}
                 autoComplete="off"
-                onFieldsChange={(changedFields, allFields)=>{
-                    let province: any = changedFields.find((x: any)=> x.name.includes('province'));
-                    if(province){
-                        form.setFieldsValue({district:undefined});
-                        setDistricts(originalDistricts.filter((x: any)=>x.Value.indexOf(province.value)===0))
-                    }
-                }
-                }
+                // onFieldsChange={(changedFields, allFields)=>{
+                //     let province: any = changedFields.find((x: any)=> x.name.includes('province'));
+                //     console.log(province);
+                //     if(province){
+                //         if(bodyRegister.ma_diadiem)
+                //         form.setFieldsValue({district:undefined});
+                //         setDistricts(originalDistricts.filter((x: any)=>x.Value.indexOf(province.value)===0))
+                //     }
+                // }
+                // }
             >
                 <Form.Item
                     label="Họ và tên"
@@ -647,6 +649,7 @@ function RegisterInsurance() {
                     <Select placeholder="Năm xây dựng">
                         {
                             years.map((x: any,index: number)=>{
+                                if(x<1993) return;
                                 return  <Select.Option key={index} value={x}>{x}</Select.Option>
                             })
                         }
@@ -659,7 +662,11 @@ function RegisterInsurance() {
                     className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
-                    <Select placeholder="Tỉnh/Thành Phố" >
+                    <Select onChange={(value)=>{{
+                        form.setFieldsValue({district:undefined});
+                        setDistricts(originalDistricts.filter((x: any)=>x.Value.indexOf(value)===0))
+                    }
+                    }} placeholder="Tỉnh/Thành Phố" >
                         {
                             provinces.map((x: any,index: number)=>{
                                 return  <Select.Option key={index} value={x.Value}>{x.Text}</Select.Option>
