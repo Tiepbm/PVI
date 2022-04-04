@@ -323,6 +323,9 @@ function ProductDetail() {
         }
     ]
     const [purpose, setPurpose] = useState<any>(categoriesCar[0]);
+    useEffect(()=>{
+       localStorageSave('DATE','');
+    },[]);
     useEffect(() => {
         if (productId) {
             let item = data.find((x: any) => x.id === productId);
@@ -668,7 +671,7 @@ function ProductDetail() {
 
                 {renderFee()}
                 <Row className={'mgt10 justify-content-between align-items-center'}>
-                    <Button disabled={checkDisableRegister()} onClick={() => navigate(`/products/${productId}/register?packageCode=${currentPackage}${productId===ENSURE_CAR?`&purpose=${purpose.code}`:''}`)} size={'large'} className={''}
+                    <Button disabled={loading||checkDisableRegister()||!fee} onClick={() => navigate(`/products/${productId}/register?packageCode=${currentPackage}${productId===ENSURE_CAR?`&purpose=${purpose.code}`:''}`)} size={'large'} className={''}
                             type={'primary'} danger shape={'round'}>
                         <span className={'robotobold txt-size-h4'}>Đăng ký <i
                             className="mgl5 fas fa-angle-right"></i></span>

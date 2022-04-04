@@ -37,7 +37,7 @@ function RegisterInsurance() {
     const [packageCode, setPackageCode] = useState<string | null>(searchParams.get('packageCode'));
     const [currentStep, setStep] = useState<number>(0);
     const [fee] = useState(localStorageRead(FEE));
-    const [currentDateString] = useState(localStorageRead('DATE'));
+    const [currentDateString, setCurrentDateString] = useState(localStorageRead('DATE'));
     const [feeRequest] = useState(localStorageRead(FEE_REQUEST));
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -67,7 +67,9 @@ function RegisterInsurance() {
            setYears(items);
            getDistricts();
        }
-
+        if(!currentDateString){
+            setCurrentDateString(formatDate(moment()));
+        }
     },[]);
     const getPurpose=()=>{
         let purposeCode = searchParams.get('purpose');
