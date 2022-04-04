@@ -265,8 +265,9 @@ function RegisterInsurance() {
                     setProvinceSelected(provinces.find((x: any)=>x.Value===values.province));
                     setDistrictSelected(districts.find((x: any)=>x.Value===values.district));
                 }else if(productId===ENSURE_CAR){
+                    let ma_giaodich=`${CPID}${moment().valueOf()}`;
                     body = {
-                        'ma_giaodich': `${CPID}${moment().valueOf()}`,
+                        'ma_giaodich': ma_giaodich,
                         "TenKH": values.customerName,
                         "DiaChiKH": "",
                         "TenChuXe": values.carName,
@@ -386,7 +387,7 @@ function RegisterInsurance() {
                         "pr_key": "0",
                         "GiaTriPin": "0",
                         "CpId": CPID,
-                        "Sign": sign(`${dateStart}${duration}${values.carNumber}${values.customerEmail}${1}${datePaid}${values.customerPhone}`)
+                        "Sign": sign(ma_giaodich)
                     }
                     setProvinceSelected(provinces.find((x: any)=>x.Value===values.carProvince));
                 }
