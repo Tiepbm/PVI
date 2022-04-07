@@ -1,5 +1,4 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {ConfigProvider} from "antd";
 import {HashRouter, Route, Routes} from "react-router-dom";
@@ -13,6 +12,8 @@ import Orders from "./containers/Orders";
 import viVN from 'antd/lib/locale-provider/vi_VN'
 import moment from "moment";
 import {useSessionStorage} from "./hooks/useSessionStorage";
+import ProtectedRoute from "./components/Route/ProtectedRoute";
+import {userRepository} from "./repositories/UserRepository";
 moment.locale('vi', {
   months: [
     'Tháng 1',
@@ -65,16 +66,48 @@ moment.locale('vi', {
   },
 });
 function App() {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [profile, setProfile] = useSessionStorage('profile', false);
+  const [webCode, setWebCode] = useSessionStorage('web_code', '');
+  useEffect(()=>{
+    const search = window.location.search;
+    if(search){
+      let params = new URLSearchParams(search.substring(search.indexOf('?')));
+      let urlCallback = params.get('urlcallback');
+      let webcode = params.get('webcode');
+      let requestId = params.get('requestid');
+      let cpid = params.get('cpid');
+      let sign = params.get('sign');
+      if (urlCallback && webcode && requestId&&cpid&&sign) {
+        setWebCode(webcode);
+        let body = {
+          URLCallBack: urlCallback,
+          webcode: webcode,
+          RequestId: requestId,
+          CpId: cpid,
+          Sign: sign
+        }
+        userRepository.login(body).then(res=>{
+            setProfile(true);
+          window.location.href='/';
+        }).catch(err=>{
+          if(urlCallback)
+            window.location.href=urlCallback;
+          else  window.location.href='/';
+        });
+      }
+    }
+  },[]);
   return (
     <div id={"app-main"} className={""}>
       <ConfigProvider locale={viVN}>
         <HashRouter>
           <Routes>
             <Route path={'/'} element={<Home/>}></Route>
-            <Route path={'/categories/detail'} element={<CategoryDetail/>}></Route>
-            <Route path={'/products/:productId/register'} element={<RegisterInsurance/>}></Route>
-            <Route path={'/products/:productId'} element={<ProductDetail/>}></Route>
-            <Route path={'/rule/:productId'} element={<RuleProductDetail/>}></Route>
+            <Route path={'/categories/detail'} element={<ProtectedRoute><CategoryDetail/></ProtectedRoute>}></Route>
+            <Route path={'/products/:productId/register'} element={<ProtectedRoute><RegisterInsurance/></ProtectedRoute>}></Route>
+            <Route path={'/products/:productId'} element={<ProtectedRoute><ProductDetail/></ProtectedRoute>}></Route>
+            <Route path={'/rule/:productId'} element={<ProtectedRoute><RuleProductDetail/></ProtectedRoute>}></Route>
             <Route path={'/about'} element={<About/>}></Route>
             <Route path={'/orders'} element={<Orders/>}></Route>
 
