@@ -74,21 +74,20 @@ function App() {
     if(search){
       let params = new URLSearchParams(search.substring(search.indexOf('?')));
       let urlCallback = params.get('urlcallback');
-      let webcode = params.get('webcode');
+      // let webcode = params.get('webcode');
       let requestId = params.get('requestid');
       let cpid = params.get('cpid');
       let sign = params.get('sign');
-      if (urlCallback && webcode && requestId&&cpid&&sign) {
-        setWebCode(webcode);
+      if (urlCallback && requestId&&cpid&&sign) {
         let body = {
           URLCallBack: urlCallback,
-          webcode: webcode,
           RequestId: requestId,
           CpId: cpid,
           Sign: sign
         }
         userRepository.login(body).then(res=>{
             setProfile(true);
+            setWebCode(res.WebCode)
           window.location.href='/';
         }).catch(err=>{
           if(urlCallback)
