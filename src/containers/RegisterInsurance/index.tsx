@@ -50,6 +50,7 @@ function RegisterInsurance() {
     const [years, setYears] = useState<any>([]);
     const [form] = Form.useForm();
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
+    const [cardId, setCardId] = useSessionStorage('cardid', '');
     const isDesktopOrLaptop = useMediaQuery({ minWidth: 768 });
     const isTabletOrMobile = useMediaQuery({ maxWidth: 767 });
     const disabledDate = (current: any) => {
@@ -409,6 +410,8 @@ function RegisterInsurance() {
         setLoading(true);
         if(webCode)
             bodyRegister.web_code=webCode;
+        if(cardId)
+            bodyRegister.CardId = cardId;
         if(productId===ENSURE_ELECTRIC){
             productRepository.createOrderHSDD(bodyRegister).then(res=>{
                setResult(true);

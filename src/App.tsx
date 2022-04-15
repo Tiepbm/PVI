@@ -69,6 +69,7 @@ function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const [profile, setProfile] = useSessionStorage('profile', false);
   const [webCode, setWebCode] = useSessionStorage('web_code', '');
+  const [cardid, setCardId] = useSessionStorage('cardid', '');
   useEffect(()=>{
     const search = window.location.search;
     if(search){
@@ -78,7 +79,8 @@ function App() {
       let requestId = params.get('requestid');
       let cpid = params.get('cpid');
       let sign = params.get('sign');
-      if (urlCallback && requestId&&cpid&&sign) {
+      let cardid = params.get('cardid');
+      if (urlCallback && requestId&&cpid&&sign&&cardid) {
         let body = {
           URLCallBack: urlCallback,
           RequestId: requestId,
@@ -87,7 +89,8 @@ function App() {
         }
         userRepository.login(body).then(res=>{
             setProfile(true);
-            setWebCode(res.WebCode)
+            setWebCode(res.WebCode);
+            setCardId(cardid);
           window.location.href='/';
         }).catch(err=>{
           if(urlCallback)
