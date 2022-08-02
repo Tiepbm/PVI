@@ -145,6 +145,7 @@ input, button {
 	margin-bottom: 27.5px;
 	font-feature-settings: 'salt' on;
 	text-shadow: -4px 0px 0px #022569;
+	color:#fff
 }
 .myslider .item .banner-content p {
 	margin-bottom: 20px;
@@ -367,6 +368,7 @@ footer h2 {
 	font-family: 'Inter';
 	font-weight: 700;
 	margin-bottom: 16px;
+	color:#fff
 }
 footer p {
 	text-align: justify;

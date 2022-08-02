@@ -13,6 +13,7 @@ import MediaQuery, {useMediaQuery} from 'react-responsive';
 import {useSessionStorage} from "../../hooks/useSessionStorage";
 import { Fab, Action } from 'react-tiny-fab';
 import 'react-tiny-fab/dist/styles.css';
+
 const {Header, Sider, Content, Footer} = Layout;
 const PERCENT_COMPLETE = 100;
 
@@ -110,46 +111,27 @@ function MainLayout(props: MainLayoutProps) {
     }
     return (
         <DocumentTitle title={`${title ? title : 'M24'}`}>
-            <Layout className={'main-layout'}>
-                <Header className={`border-bottom-1x bd-color-gray header ${isTabletOrMobile&&'header-mobile'}`}>
-                    {isDesktopOrLaptop&&<Row className={'align-items-center justify-content-between pdl50 pdr50 height100'}>
-                        <Col span={18}>
-                            <Row className={'align-items-center'}>
-                                <img className={'cursor-pointer'} onClick={()=> navigate('/')} style={{height: 30, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
-                                <div>
-                            <span style={{height: 30}} onClick={() => clickMenu('')}
-                                  className={`${activeKey === '' ? 'txt-color-blue border-bottom-2x-blue pdbt5' : 'txt-color-blue'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Trang chủ</span>
+            <div className={''}>
+                <header>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col">
+                                <div className="header-left">
+                                    <div className="header-logo">
+                                        <a href="#"><img src={require('../../resources/images/logo.png')} alt=""/></a>
+                                    </div>
                                 </div>
-                            {/*    <div>*/}
-                            {/*<span onClick={() => clickMenu('orders')}*/}
-                            {/*      className={`${activeKey === 'orders' ? 'txt-color-blue border-bottom-2x-blue pdbt5' : 'txt-color-blue'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Đơn hàng</span>*/}
-                            {/*    </div>*/}
-                                <div>
-                            <span onClick={() => clickMenu('about')}
-                                  className={`${activeKey === 'about' ? 'txt-color-blue border-bottom-2x-blue pdbt5' : 'txt-color-blue'} cursor-pointer robotobold txt-size-h6 mgl50 mgr50`}>Giới thiệu</span>
+                            </div>
+                            <div className="col">
+                                <div className="header-right">
+                                    <div className="header-intro">
+                                        <a href="gioithieu.html"><img src={require('../../resources/images/icon-gt.png')} alt=""/>Giới thiệu</a>
+                                    </div>
                                 </div>
-                            </Row>
-                        </Col>
-                        {/*<Col>*/}
-                        {/*    <Row className={'justify-content-end align-items-center'}>*/}
-                        {/*        <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng nhập</span>*/}
-                        {/*        <Divider type={'vertical'} className={'bg-color-white'}></Divider>*/}
-                        {/*        <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng ký</span>*/}
-                        {/*    </Row>*/}
-                        {/*</Col>*/}
-
-                    </Row>}
-                    {isTabletOrMobile&&<Row className={'align-items-center justify-content-center pdl5 pdr5 height100'}>
-
-                            <img className={'cursor-pointer'} onClick={()=> navigate('/')}  style={{height: 20, backgroundColor: 'white', paddingLeft: 10, paddingRight:10}} src={logo}></img>
-
-                            {/*<Row className={'justify-content-end align-items-center'}>*/}
-                            {/*    <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng nhập</span>*/}
-                            {/*    <Divider type={'vertical'} className={'bg-color-white'}></Divider>*/}
-                            {/*    <span className={'cursor-pointer robotobold txt-size-h6 txt-color-white'}>Đăng ký</span>*/}
-                            {/*</Row>*/}
-                    </Row>}
-                </Header>
+                            </div>
+                        </div>
+                    </div>
+                </header>
                 <ProgressBar
                     percent={percent}
                     autoIncrement={autoIncrement}
@@ -161,23 +143,34 @@ function MainLayout(props: MainLayoutProps) {
                 >
                     {children}
                 </Content>
-                {isTabletOrMobile&&<Row className={'footer-mobile justify-content-center pdt10 border-top-1x'}>
-                    <Col span={8} onClick={()=> navigate('/')} className={`dpl-flex align-items-center flex-direction-column ${activeKey===''?'txt-color-blue':'txt-color-black'}`}>
-                        <Row><i className="far fa-home-alt"></i></Row>
-                        <Row><span onClick={()=> navigate('/')}>Trang chủ</span></Row>
-                    </Col>
-                    {/*<Col span={8} onClick={()=> navigate('/orders')} className={`dpl-flex align-items-center flex-direction-column ${activeKey==='orders'?'txt-color-blue':'txt-color-black'}`}>*/}
-
-                    {/*    <Row><i className="far fa-file-alt"></i></Row>*/}
-                    {/*    <Row><span>Đơn hàng</span></Row></Col>*/}
-                   <Col span={8} onClick={()=> navigate('/about')} className={`dpl-flex align-items-center flex-direction-column ${activeKey==='about'?'txt-color-blue':'txt-color-black'}`}>
-                       <Row><i className="far fa-info-circle"></i></Row>
-                       <Row><span>Giới thiệu</span>
-                       </Row> </Col>
-                   </Row>}
-                {isDesktopOrLaptop&&<Footer style={{textAlign: 'center'}}>
-                    <Row className={'justify-content-center pdbt50'}><span>©2022 Created by PVI</span></Row></Footer>}
-            </Layout>
+                <footer>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-6">
+                                <h2>Tổng Công ty Bảo hiểm PVI</h2>
+                                <p style={{textAlign: 'justify'}}>Tổng công ty Bảo hiểm PVI được thành lập năm 1996, tiền
+                                    thân là công ty bảo hiểm thuộc Tập đoàn Dầu khí Việt Nam (nay là PetroVietnam, PVN).
+                                    Bảo hiểm PVI là nhà bảo hiểm đứng đầu trong lĩnh vực công nghiệp và là đối tác bảo
+                                    hiểm hàng đầu của các tập đoàn, công ty trong và ngoài nước. Hiện nay Bảo hiểm PVI
+                                    là doanh nghiệp dẫn đầu thị trường bảo hiểm phi nhân thọ trên các chỉ tiêu: vốn điều
+                                    lệ, tổng tài sản, tổng doanh thu, lợi nhuận từ hoạt động kinh doanh bảo hiểm, lợi
+                                    nhuận trước thuế và tỉ suất lợi nhuận/vốn chủ sở hữu…, top 50 Doanh nghiệp lợi nhuận
+                                    tốt nhất Việt Nam 2021.
+                                    Xếp hạng năng lực tài chính A.M Best của Bảo hiểm PVI hiện ở mức B++ (Tốt).
+                                </p>
+                            </div>
+                            <div className="col-md-6" style={{paddingLeft: 100}}>
+                                <h2>Contact</h2>
+                                <ul>
+                                    <li>Tầng 24, Tòa nhà PVI tower, Số 1 Phạm Văn Bạch, Cầu Giấy, Hà Nội</li>
+                                    <li><i className="fal fa-phone-alt mgr5"></i>(84-24) 37733 5588 - Fax: (84-24) 3733 6284</li>
+                                    <li><i className="fal fa-envelope mgr5"></i>baohiempvi@pvi.com.vn</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
         </DocumentTitle>
     );
 }
