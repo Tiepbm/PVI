@@ -1482,7 +1482,7 @@ select {
     overflow: hidden;
 }
 .slick-slide a img {
-    margin: 0;
+    margin-top: 1px;
     width: 100%;
 }
 .form-checkbox {

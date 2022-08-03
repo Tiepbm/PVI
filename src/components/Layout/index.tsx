@@ -5,7 +5,7 @@ import ProgressBar from "../Spinner/ProgressBar";
 import {localStorageRead, localStorageSave} from "../../utils/LocalStorageUtils";
 import {PROFILE_KEY, TENANT_KEY, TOKEN_KEY} from "../../core/config";
 import DocumentTitle from 'react-document-title';
-import {useLocation, useSearchParams} from 'react-router-dom';
+import {Link, useLocation, useSearchParams} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import useWindowDimensions from "../../hooks";
 import logo from '../../resources/images/logo-pvi-view.png';
@@ -13,6 +13,11 @@ import MediaQuery, {useMediaQuery} from 'react-responsive';
 import {useSessionStorage} from "../../hooks/useSessionStorage";
 import { Fab, Action } from 'react-tiny-fab';
 import 'react-tiny-fab/dist/styles.css';
+import iconSale1 from '../../resources/images/sale 1.svg';
+import iconInsurance1 from '../../resources/images/insurance-2 1.svg';
+import iconInsurance2 from '../../resources/images/insurance-2 2.svg';
+import iconAsset1 from '../../resources/images/asset 1.svg';
+import iconTralve1 from '../../resources/images/travel 1.svg';
 
 const {Header, Sider, Content, Footer} = Layout;
 const PERCENT_COMPLETE = 100;
@@ -21,10 +26,11 @@ export interface MainLayoutProps {
     children: any;
     showProgressBar?: boolean;
     title?: any;
+    isDetail?:boolean;
 }
 
 function MainLayout(props: MainLayoutProps) {
-    const {children, showProgressBar, title} = props;
+    const {children, showProgressBar, title, isDetail} = props;
     const [collapsed, setCollapsed] = useState(true);
     const [percent, setPercent] = useState<number>(-1);
     const [autoIncrement, setAutoIncrement] = useState<boolean>(false);
@@ -118,14 +124,14 @@ function MainLayout(props: MainLayoutProps) {
                             <div className="col">
                                 <div className="header-left">
                                     <div className="header-logo">
-                                        <a href="#"><img src={require('../../resources/images/logo.png')} alt=""/></a>
+                                        <Link to={'/'}><img src={require('../../resources/images/logo.png')} alt=""/></Link>
                                     </div>
                                 </div>
                             </div>
                             <div className="col">
                                 <div className="header-right">
                                     <div className="header-intro">
-                                        <a href="gioithieu.html"><img src={require('../../resources/images/icon-gt.png')} alt=""/>Giới thiệu</a>
+                                        <Link to={'/about'}><img src={require('../../resources/images/icon-gt.png')} alt=""/>Giới thiệu</Link>
                                     </div>
                                 </div>
                             </div>
@@ -141,6 +147,21 @@ function MainLayout(props: MainLayoutProps) {
                 <Content style={{minHeight: height - 50}}
                          className="content"
                 >
+                    {isDetail&& <div className="nav main-menu">
+                        <div className="container">
+                            <ul>
+                                <li><a href="/categories/transport" className="active"><img src={iconSale1}
+                                                                                     alt=""/>Xe</a></li>
+                                <li><a href="/categories/healthy"><img src={iconInsurance2} alt=""/>Sức khỏe</a>
+                                </li>
+                                <li><a href="/categories/accident"><img src={iconInsurance1} alt=""/>Tai nạn</a>
+                                </li>
+                                <li><a href="/categories/asset"><img src={iconAsset1} alt=""/>Tài sản</a></li>
+                                <li><a href="/categories/tralve"><img src={iconTralve1} alt=""/>Du lịch</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>}
                     {children}
                 </Content>
                 <footer>

@@ -1,14 +1,14 @@
 $(document).ready(function(){
 	/*slider*/
-	$('.myslider').slick({
-		slidesToScroll: 1,
-		autoplay: true,
-  		autoplaySpeed: 2500,
-		arrows: false,
-		dots: true,
-		vertical: true,
-		verticalSwiping: true
-	});
+	// $('.myslider').slick({
+	// 	slidesToScroll: 1,
+	// 	autoplay: true,
+  	// 	autoplaySpeed: 2500,
+	// 	arrows: false,
+	// 	dots: true,
+	// 	vertical: true,
+	// 	verticalSwiping: true
+	// });
 
 	/*Check Validate input*/
 
