@@ -5,7 +5,7 @@ import ProgressBar from "../Spinner/ProgressBar";
 import {localStorageRead, localStorageSave} from "../../utils/LocalStorageUtils";
 import {PROFILE_KEY, TENANT_KEY, TOKEN_KEY} from "../../core/config";
 import DocumentTitle from 'react-document-title';
-import {Link, useLocation, useSearchParams} from 'react-router-dom';
+import {Link, useLocation, useParams, useSearchParams} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import useWindowDimensions from "../../hooks";
 import logo from '../../resources/images/logo-pvi-view.png';
@@ -28,7 +28,33 @@ export interface MainLayoutProps {
     title?: any;
     isDetail?:boolean;
 }
-
+const MENU=[
+    {
+        code:'transport',
+        name:'Xe',
+        icon:iconSale1
+    },
+    {
+        code:'healthy',
+        name:'Sức khỏe',
+        icon:iconInsurance2
+    },
+    {
+        code:'accident',
+        name:'Tai nạn',
+        icon:iconInsurance1
+    },
+    {
+        code:'asset',
+        name:'Tài sản',
+        icon:iconAsset1
+    },
+    {
+        code:'tralve',
+        name:'Du lịch',
+        icon:iconTralve1
+    }
+]
 function MainLayout(props: MainLayoutProps) {
     const {children, showProgressBar, title, isDetail} = props;
     const [collapsed, setCollapsed] = useState(true);
@@ -36,6 +62,7 @@ function MainLayout(props: MainLayoutProps) {
     const [autoIncrement, setAutoIncrement] = useState<boolean>(false);
     const [intervalTime, setIntervalTime] = useState<number>(200);
     const [activeKey, setActiveKey] = useState<string>('');
+    let {categoryId} = useParams();
     let [searchParams, setSearchParams] = useSearchParams();
     const location = useLocation();
     const navigate = useNavigate();
@@ -150,15 +177,13 @@ function MainLayout(props: MainLayoutProps) {
                     {isDetail&& <div className="nav main-menu">
                         <div className="container">
                             <ul>
-                                <li><a href="/categories/transport" className="active"><img src={iconSale1}
-                                                                                     alt=""/>Xe</a></li>
-                                <li><a href="/categories/healthy"><img src={iconInsurance2} alt=""/>Sức khỏe</a>
-                                </li>
-                                <li><a href="/categories/accident"><img src={iconInsurance1} alt=""/>Tai nạn</a>
-                                </li>
-                                <li><a href="/categories/asset"><img src={iconAsset1} alt=""/>Tài sản</a></li>
-                                <li><a href="/categories/tralve"><img src={iconTralve1} alt=""/>Du lịch</a>
-                                </li>
+                                {MENU.map((x: any)=>{
+                                    return  <li onClick={()=>{
+                                        navigate(`/categories/${x.code}`);
+                                        // window.location.reload();
+                                    }
+                                    }><a className={categoryId&&categoryId===x.code?'active':''}><img src={x.icon} alt=""/>{x.name}</a></li>
+                                })}
                             </ul>
                         </div>
                     </div>}

@@ -22,6 +22,7 @@ import iconPlugin1 from '../../resources/images/plugin1.svg';
 
 import iconHome1 from '../../resources/images/home 1.svg';
 import iconSmartphone1 from '../../resources/images/smartphone 1.svg';
+import { Link } from "react-router-dom";
 
 function Home() {
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
@@ -74,31 +75,31 @@ function Home() {
                 <div className="container box_item_content">
                     <div className="banner-content-bt">
                         <div>
-                            <a href="tndsxemay.html" />
+                            <Link to="/categories/transport" />
                             <a href="#"><img src={require('../../resources/images/icon-up.png')} alt="" /></a>
                             <img src={iconSale1} alt="" />
                             <p>Bảo hiểm <br />xe</p>
                         </div>
                         <div>
-                            <a href="hotronamvien.html" />
+                            <Link to="/categories/healthy" />
                             <a href="#"><img src={require('../../resources/images/icon-up.png')} alt="" /></a>
                             <img src={iconInsurance2} alt="" />
                             <p>Bảo hiểm <br />sức khỏe</p>
                         </div>
                         <div>
-                            <a href="tainanhosudungdien.html" />
+                            <Link to="/categories/accident" />
                             <a href="#"><img src={require('../../resources/images/icon-up.png')} alt="" /></a>
                             <img src={iconInsurenace1} alt="" />
                             <p>Bảo hiểm <br />tai nạn</p>
                         </div>
                         <div>
-                            <a href="nhaotoandien.html" />
+                            <Link to="/categories/asset" />
                             <a href="#"><img src={require('../../resources/images/icon-up.png')} alt="" /></a>
                             <img src={iconAsset1} alt="" />
                             <p>Bảo hiểm <br />tài sản</p>
                         </div>
                         <div>
-                            <a href="dulichtrongnuoc.html" />
+                            <Link to="/categories/tralve" />
                             <a href="#"><img src={require('../../resources/images/icon-up.png')} alt="" /></a>
                             <img src={iconTralve1} alt="" />
                             <p>Bảo hiểm <br />du lịch</p>
@@ -114,23 +115,23 @@ function Home() {
                                 <h2>Bảo hiểm xe</h2>
                                 <p>Trách nhiệm dân sự bắt buộc và tự nguyện dành cho xe máy, ô tô.</p>
                                 <div className="list-insurances">
-                                    <a href="tndsxemay.html" className="insurance-item">
+                                    <Link to={'/categories/transport?productId=xemay'} className="insurance-item">
                                         <span><img src={iconScooter} /></span>
-                                        <p><span className="bg-red">Mới</span></p>
+                                        <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Trách nhiệm <br /> dân sự xe máy</p>
-                                    </a>
-                                    <a href="tndsoto.html" className="insurance-item">
+                                    </Link>
+                                    <Link to={'/categories/transport?productId=oto'} className="insurance-item">
                                         <span><img src={iconCar1} /></span>
                                         <p><span className="bg-red">Mới</span></p>
                                         <p>Trách nhiệm <br /> dân sự ô tô</p>
-                                    </a>
-                                    <a href="thanvoto.html" className="insurance-item">
+                                    </Link>
+                                    <Link to={'/categories/transport?productId=thanvo'} className="insurance-item">
                                         <span><img src={iconCar2} /></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Thân vỏ ô tô</p>
-                                    </a>
+                                    </Link>
                                 </div>
-                                <a href="tndsxemay.html"><img src={require('../../resources/images/icon-up-wt.png')} />Xem chi tiết</a>
+                                <Link to={'/categories/transport?productId=oto'}><img src={require('../../resources/images/icon-up-wt.png')} />Xem chi tiết</Link>
                             </div>
                             <div className="col-md-6" />
                         </div>
@@ -143,23 +144,23 @@ function Home() {
                                 <h2>Bảo hiểm sức khỏe</h2>
                                 <p>Bảo vệ sức khỏe khỏi những rủi ro ốm đau, bệnh tật, nằm viện.</p>
                                 <div className="list-insurances">
-                                    <a href="hotronamvien.html" className="insurance-item">
+                                    <Link to={'/categories/healthy?productId=hotronamvien'} className="insurance-item">
                                         <span><img src={iconClinic1} /></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Hỗ trợ nằm viện</p>
-                                    </a>
-                                    <a href="nguphucuuviet.html" className="insurance-item">
+                                    </Link>
+                                    <Link to={'/categories/healthy?productId=nguphucuuviet'} className="insurance-item">
                                         <span><img src={iconFamily} /></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Ngũ phúc ưu việt</p>
-                                    </a>
-                                    <a href="anphucuuviet.html" className="insurance-item">
+                                    </Link>
+                                    <Link to={'/categories/healthy?productId=anphucuuviet'} className="insurance-item">
                                         <span><img src={iconHospitalBed1} /></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>An phúc ưu việt</p>
-                                    </a>
+                                    </Link>
                                 </div>
-                                <a href="hotronamvien.html"><img src="images/icon-up-wt.png" />Xem chi tiết</a>
+                                <Link to={'/categories/healthy'}><img src={require('../../resources/images/icon-up-wt.png')} />Xem chi tiết</Link>
                             </div>
                             <div className="col-md-6" />
                         </div>
@@ -172,18 +173,18 @@ function Home() {
                                 <h2>Bảo hiểm tai nạn</h2>
                                 <p>An tâm trước những rủi ro tai nạn bất ngờ của cuộc sống.</p>
                                 <div className="list-insurances">
-                                    <a href="tainancanhan.html" className="insurance-item">
+                                    <Link to={'/categories/accident?productId=tainancanhan'} className="insurance-item">
                                         <span><img src={iconHealthyCare1} /></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Tai nạn cá nhân</p>
-                                    </a>
-                                    <a href="tainanhosudungdien.html" className="insurance-item">
+                                    </Link>
+                                    <Link to={'/categories/accident?productId=tainanhosudungdien'} className="insurance-item">
                                         <span><img src={iconPlugin1} /></span>
                                         <p><span className="bg-red">Mới</span></p>
                                         <p>Tai nạn hộ sử dụng điện</p>
-                                    </a>
+                                    </Link>
                                 </div>
-                                <a href="tainanhosudungdien.html"><img src="images/icon-up-wt.png" />Xem chi tiết</a>
+                                <Link to={'/categories/accident?productId=tainanhosudungdien'}><img src={require('../../resources/images/icon-up-wt.png')} />Xem chi tiết</Link>
                             </div>
                             <div className="col-md-6" />
                         </div>
@@ -196,18 +197,18 @@ function Home() {
                                 <h2>Bảo hiểm tài sản</h2>
                                 <p>Bảo vệ mọi tài sản từ lớn tới nhỏ như nhà cửa, đồ vật trong nhà,…</p>
                                 <div className="list-insurances">
-                                    <a href="nhaotoandien.html" className="insurance-item">
+                                    <Link to={'/categories/asset?productId=nhaotoandien'} className="insurance-item">
                                         <span><img src={iconHome1}/></span>
                                         <p><span className="bg-red">Mới</span></p>
                                         <p>Nhà ở toàn diện</p>
-                                    </a>
-                                    <a href="manhinhdienthoai.html" className="insurance-item">
+                                    </Link>
+                                    <Link to={'/categories/asset?productId=manhinhdienthoai'} className="insurance-item">
                                         <span><img src={iconSmartphone1} /></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Màn hình điện thoại</p>
-                                    </a>
+                                    </Link>
                                 </div>
-                                <a href="nhaotoandien.html"><img src="images/icon-up-wt.png" />Xem chi tiết</a>
+                                <Link to={'/categories/asset?productId=nhaotoandien'}><img src={require('../../resources/images/icon-up-wt.png')} />Xem chi tiết</Link>
                             </div>
                             <div className="col-md-6" />
                         </div>
@@ -220,18 +221,18 @@ function Home() {
                                 <h2>Bảo hiểm du lịch</h2>
                                 <p>An toàn thỏa sức khám phá dù ở bất cứ đâu.</p>
                                 <div className="list-insurances">
-                                    <a href="dulichtrongnuoc.html" className="insurance-item">
+                                    <Link to={'/categories/tralve?productId=dulichtrongnuoc'} className="insurance-item">
                                         <span><img src="images/plane-ticket 1.svg" /></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Du lịch trong nước</p>
-                                    </a>
-                                    <a href="dulichquocte.html" className="insurance-item">
+                                    </Link>
+                                    <Link to={'/categories/tralve?productId=dulichquocte'} className="insurance-item">
                                         <span><img src="images/passport 1.svg" /></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Du lịch quốc tế</p>
-                                    </a>
+                                    </Link>
                                 </div>
-                                <a href="dulichtrongnuoc.html"><img src="images/icon-up-wt.png" />Xem chi tiết</a>
+                                <Link to={'/categories/tralve'}><img src={require('../../resources/images/icon-up-wt.png')} />Xem chi tiết</Link>
                             </div>
                             <div className="col-md-6" />
                         </div>
