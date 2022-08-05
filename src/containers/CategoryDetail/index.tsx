@@ -656,7 +656,7 @@ function CategoryDetail(){
             code:'asset',
             name:'Tài sản',
             banner:require('../../resources/images/bannernha.png'),
-            tabClassName: 'baohiemtaisan',
+            tabClassName: 'baohiemsuckhoe',
             products:[
                 {
                     isReady: true,
@@ -726,8 +726,8 @@ function CategoryDetail(){
                             }
                         ]
                     },
-                    detail:'',
-                    file:''
+                    detail:require('../../resources/images/baohiemnhao.jpg'),
+                    file:'./files/QTBH/QTBHToandiennhatunhan.pdf'
 
                 },
                 {
@@ -808,6 +808,30 @@ function CategoryDetail(){
                                 ]
                             }
                         ]
+                    },
+                    detail:'',
+                    file:''
+
+                },
+                {
+                    isReady: true,
+                    code:'baohanhmorong',
+                    name:'Bảo hành mở rộng',
+                    banner: require('../../resources/images/baohiemmorong.png'),
+                    tabName:'Bảo hành mở rộng',
+                    description: <div>
+                        <h2><img src={iconHome}/>Bảo hiểm bảo hành mở rộng</h2>
+                        <p>Bảo hiểm bảo hành mở rộng (BHMR) là gói bảo hiểm gia hạn bảo hành cho các thiết bị di động, thiết bị bếp, đồ gia dụng. Tham gia bảo hiểm BHMR, trong trường hợp thiết bị được bảo hiểm xảy ra lỗi do Nhà sản xuất (lỗi kỹ thuật của thiết bị) gây ảnh hưởng đến việc sử dụng của thiết bị, đòi hỏi phải được sửa chữa hoặc thay thế để có thể hoạt động một cách bình thường, PVI sẽ chi trả chi phí sửa chữa, thay thế mới thiết bị với điều kiện thiết bị được gửi đến Trung tâm bảo hành/sửa chữa được ủy quyền.</p>
+                    </div>,
+                    benefit:{
+                        classNameValue: 'baohiemnhao',
+                        content:<div>
+                            <p>Bảo hiểm PVI chịu trách nhiệm bồi thường cho Chủ thiết bị được bảo hiểm các chi phí sửa chữa, thay thế mới thiết bị với điều kiện thiết bị được gửi đến Trung tâm bảo hành/sửa chữa được ủy quyền. Tổng chi phí sửa chữa không vượt quá giá trị thiết bị tại thời điểm Khách hàng tham gia bảo hiểm.</p>
+                            <p><strong>Lưu ý:</strong></p>
+                            <p>- Bảo hiểm áp dụng cho thiết bị mua mới 100% có giá bán lẻ từ 1 triệu đồng trở lên tại siêu thị Viettel Store.</p>
+                            <p>- Thiết bị tham gia bảo hiểm phải có ít nhất 1 năm bảo hành chính hãng từ nhà sản xuất và có hiệu lực bảo hành trong lãnh thổ Việt Nam.</p>
+                            <p>- Tổng thời hạn bảo hiểm chính hãng và bảo hành mở rộng không quá 5 năm.</p>
+                        </div>
                     },
                     detail:'',
                     file:''
@@ -1040,11 +1064,11 @@ function CategoryDetail(){
                             </div>
                             <div className="benefit-insurrance">
                                 <h2><img src={iconH22} />Quyền lợi</h2>
-                                <div className="row">
+                                {currentProduct && currentProduct.code !== 'baohanhmorong' && <div className="row">
                                     <div className="col-md-4">
                                         <div>
                                             {
-                                                currentProduct?.benefit.categories?.map((x: any)=>{
+                                                currentProduct?.benefit?.categories?.map((x: any) => {
                                                     return <p key={x.code}>{x.name}</p>
                                                 })
                                             }
@@ -1053,42 +1077,45 @@ function CategoryDetail(){
                                     <div className="col-md-8">
                                         <div className="row">
                                             {
-                                                currentProduct?.benefit?.packages?.map((x: any, index: number)=> {
-                                                   return <div className="col-md-4" key={index}>
-                                                        <div className={`package-insurrance ${currentProduct?.benefit?.classNameValue} ${index===0?'dong':index===1?'bac':'vang'}`}>
+                                                currentProduct?.benefit?.packages?.map((x: any, index: number) => {
+                                                    return <div className="col-md-4" key={index}>
+                                                        <div
+                                                            className={`package-insurrance ${currentProduct?.benefit?.classNameValue} ${index === 0 ? 'dong' : index === 1 ? 'bac' : 'vang'}`}>
                                                             <h3>{x.name}</h3>
                                                             <div>
                                                                 {
-                                                                    x.benefits.map((xx: any, pos:number)=>{
+                                                                    x?.benefits.map((xx: any, pos: number) => {
                                                                         return <p><img
-                                                                            src={index===0?require('../../resources/images/d-check.png'):index===1?require('../../resources/images/b-check.png'):require('../../resources/images/v-check.png')}/><span>{xx.value}</span>
+                                                                            src={index === 0 ? require('../../resources/images/d-check.png') : index === 1 ? require('../../resources/images/b-check.png') : require('../../resources/images/v-check.png')}/><span>{xx.value}</span>
                                                                         </p>
                                                                     })
                                                                 }
                                                             </div>
                                                         </div>
-                                                    </div>})
+                                                    </div>
+                                                })
 
-                                                }
+                                            }
                                         </div>
 
 
                                     </div>
                                 </div>
+                                }
                             </div>
-                            <div className={`benefit-insurrance-mb ${currentProduct?.benefit.classNameValue}mb`}>
+                            {currentProduct&&currentProduct.code!=='baohanhmorong'&&<div className={`benefit-insurrance-mb ${currentProduct?.benefit?.classNameValue}mb`}>
                                 <h2><img src={iconH22} />Quyền lợi</h2>
                                 <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                                    {currentProduct?.benefit.packages.map((x: any)=>{
+                                    {currentProduct?.benefit?.packages.map((x: any)=>{
                                         return  <li onClick={()=> setCurrentPackage(x.code)} className="nav-item" role="presentation">
                                             <button className={`nav-link ${x.code===currentPackage?'active':''}`} id={x.code} data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected={x.code===currentPackage?"true":"false"}>{x.name}</button>
                                         </li>
                                     })}
                                 </ul>
                                 <div className="tab-content" id="pills-tabContent">
-                                             <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                                    {
-                                            currentProduct?.benefit.categories.map((x: any)=> {
+                                    <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                                        {
+                                            currentProduct?.benefit?.categories.map((x: any)=> {
                                                 let itemPkg = currentProduct?.benefit.packages.find((xx: any) => xx.code === currentPackage);
                                                 let benefit = itemPkg.benefits.find((xx: any)=>xx.category===x.code);
                                                 return <div className="row">
@@ -1100,11 +1127,11 @@ function CategoryDetail(){
                                                     </div>
                                                 </div>
                                             })
-                                    }
-                                            </div>
+                                        }
+                                    </div>
 
                                 </div>
-                            </div>
+                            </div>}
                             <div className="cost-info">
                                 {/*<div className="row">*/}
                                 {/*    <div className="col-md-8">*/}
@@ -1132,7 +1159,7 @@ function CategoryDetail(){
                                 {/*</div>*/}
                             </div>
                             <div className="description-detail">
-                                <h2><img src={iconH23} />Mô tả chi tiết<a href={currentProduct?.file} target="_blank">Quy tắc bảo hiểm <img className="icon-up2" src={iconUp2} alt="" /></a></h2>
+                                <h2><img src={iconH23} />Mô tả chi tiết{currentProduct?.file&&<a href={currentProduct?.file} target="_blank">Quy tắc bảo hiểm <img className="icon-up2" src={iconUp2} alt="" /></a>}</h2>
                             </div>
                         </div>
                     </div>: <div className="tab-content3"><div className="contanier">

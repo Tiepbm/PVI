@@ -75,7 +75,7 @@ function Home() {
                 <div className="container box_item_content">
                     <div className="banner-content-bt">
                         <div>
-                            <Link to="/categories/transport" />
+                            <Link to="/categories/transport?productId=oto" />
                             <a href="#"><img src={require('../../resources/images/icon-up.png')} alt="" /></a>
                             <img src={iconSale1} alt="" />
                             <p>Bảo hiểm <br />xe</p>
