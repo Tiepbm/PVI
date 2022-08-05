@@ -14,6 +14,7 @@ import moment from "moment";
 import {useSessionStorage} from "./hooks/useSessionStorage";
 import ProtectedRoute from "./components/Route/ProtectedRoute";
 import {userRepository} from "./repositories/UserRepository";
+import numeral from "numeral";
 moment.locale('vi', {
   months: [
     'Tháng 1',
@@ -70,6 +71,29 @@ function App() {
   const [profile, setProfile] = useSessionStorage('profile', false);
   const [webCode, setWebCode] = useSessionStorage('web_code', '');
   const [cardid, setCardId] = useSessionStorage('cardid', '');
+  useEffect(() => {
+    if (numeral.locales.vi === undefined) {
+      numeral.register('locale', 'vi', {
+        delimiters: {
+          thousands: '.',
+          decimal: ',',
+        },
+        abbreviations: {
+          thousand: 'k',
+          million: 'm',
+          billion: 'b',
+          trillion: 't',
+        },
+        ordinal: function (number) {
+          return '';
+        },
+        currency: {
+          symbol: '₫',
+        },
+      });
+      numeral.locale('vi');
+    }
+  }, []);
   useEffect(()=>{
     const search = window.location.search;
     if(search){

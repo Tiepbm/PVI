@@ -27,6 +27,7 @@ export interface MainLayoutProps {
     showProgressBar?: boolean;
     title?: any;
     isDetail?:boolean;
+    showLogoViettel?:boolean;
 }
 const MENU=[
     {
@@ -56,7 +57,7 @@ const MENU=[
     }
 ]
 function MainLayout(props: MainLayoutProps) {
-    const {children, showProgressBar, title, isDetail} = props;
+    const {children, showProgressBar, title, isDetail, showLogoViettel} = props;
     const [collapsed, setCollapsed] = useState(true);
     const [percent, setPercent] = useState<number>(-1);
     const [autoIncrement, setAutoIncrement] = useState<boolean>(false);
@@ -156,11 +157,18 @@ function MainLayout(props: MainLayoutProps) {
                                 </div>
                             </div>
                             <div className="col">
-                                <div className="header-right">
+                                {!showLogoViettel ? <div className="header-right">
                                     <div className="header-intro">
-                                        <Link to={'/about'}><img src={require('../../resources/images/icon-gt.png')} alt=""/>Giới thiệu</Link>
+                                        <Link to={'/about'}><img src={require('../../resources/images/icon-gt.png')}
+                                                                 alt=""/>Giới thiệu</Link>
                                     </div>
-                                </div>
+                                </div>:
+                                    <div className="header-right1">
+                                        <div className="header-intro">
+                                            <a href=""><img src={require('../../resources/images/logo_viettel.png')} alt=""/></a>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>

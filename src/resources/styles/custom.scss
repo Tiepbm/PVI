@@ -91,6 +91,12 @@
   margin-left: auto;
   width: 100%!important;
 }
+.ant-select-selector {
+  border-radius: 5px !important;
+}
+.ant-picker{
+  border-radius: 5px !important;
+}
 @import "helpers/variables";
 @import "helpers/mixins";
 

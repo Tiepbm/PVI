@@ -18,6 +18,7 @@ export const FEE_REQUEST = 'FEE_REQUEST';
 export const ENSURE_ELECTRIC='tainansudungdien';
 export const ENSURE_CAR='tndsoto';
 export const ENSURE_HOUSE='nhaotoandien';
+export const ENSURE_EXTEND='baohanhmorong';
 export const CPID='WEB_VIEW';
 export const API_KEY='59d71ab040d45bb54b8e2bab3993667c';
 

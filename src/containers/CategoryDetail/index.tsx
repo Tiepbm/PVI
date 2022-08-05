@@ -1,6 +1,6 @@
-import {Button, Carousel, Col, Image, Row} from "antd";
+import {Button, Carousel, Checkbox, Col, DatePicker, Image, Input, Row, Select} from "antd";
 import MainLayout from "../../components/Layout";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import iconScooter from '../../resources/images/scooter 1.svg';
 import iconHome from '../../resources/images/icon_home.svg';
@@ -11,35 +11,63 @@ import iconH21 from '../../resources/images/icon-h21.svg';
 import iconH22 from '../../resources/images/icon-h22.svg';
 import iconH23 from '../../resources/images/icon-h23.svg';
 import lodash from "lodash";
+import CarFee from "../../components/CategoryDetail/CarFee";
+import {useMediaQuery} from "react-responsive";
+import {formatDate, formatTime} from "../../core/helpers/date-time";
+import moment from "moment";
+import {
+    CPID,
+    ENSURE_CAR,
+    ENSURE_ELECTRIC,
+    ENSURE_EXTEND,
+    ENSURE_HOUSE,
+    FEE, FEE_REQUEST,
+    STANDARD_DATE_FORMAT
+} from "../../core/config";
+import {localStorageSave} from "../../utils/LocalStorageUtils";
+import {sign} from "../../utils/StringUtils";
+import {productRepository} from "../../repositories/ProductRepository";
+import M24ErrorUtils from "../../utils/M24ErrorUtils";
+import {formatMoneyByUnit} from "../../core/helpers/string";
 
-function CategoryDetail(){
+function CategoryDetail() {
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
+    const [loading, setLoading] = useState<boolean>();
     const navigate = useNavigate();
     let {categoryId} = useParams();
     let [searchParams, setSearchParams] = useSearchParams();
     const [detail, setDetail] = useState<any>();
     const [currentProduct, setCurrentProduct] = useState<any>();
-    const [currentPackage, setCurrentPackage] = useState<string>('01');
+    const [currentPackage, setCurrentPackage] = useState<string>('');
     const [products, setProducts] = useState<any>([
         {
-            code:'transport',
-            name:'Bảo hiểm xe',
-            banner:require('../../resources/images/bannerxe.png'),
-            tabClassName:'baohiemxe',
-            products:[
+            code: 'transport',
+            name: 'Bảo hiểm xe',
+            banner: require('../../resources/images/bannerxe.png'),
+            tabClassName: 'baohiemxe',
+            products: [
                 {
                     isReady: false,
-                    code:'xemay',
-                    name:'Bảo hiểm xe máy',
+                    code: 'xemay',
+                    name: 'Bảo hiểm xe máy',
                     banner: require('../../resources/images/imagebaohiem4.png'),
-                    tabName:'TNDS xe máy',
+                    tabName: 'TNDS xe máy',
                     description: <div><h2><img src={iconScooter}/>Bảo hiểm xe máy</h2>
-                        <p>Bảo hiểm xe máy bắt buộc hay bảo hiểm trách nhiệm dân sự (TNDS) xe máy là loại bảo hiểm mà chủ phương tiện phải mua theo quy định của pháp luật. Nếu không tuân thủ sẽ bị cảnh sát giao thông phạt từ 100.000 - 200.000 đồng/lần. Trong trường hợp không may gây tai nạn cho người thứ ba (nạn nhân), người điều khiển xe máy phải tự chi trả toàn bộ chi phí để khắc phục hậu quả.</p>
-                        <p>Tham gia bảo hiểm TNDS xe máy của PVI ngay để đảm bảo tuân thủ quy định của pháp luật. Nếu không may gây tai nạn cho người thứ ba khi điều khiển xe máy thì bảo hiểm sẽ hỗ trợ chi trả bồi thường cho nạn nhân số tiền lên đến 150 triệu đồng/người/vụ với tổn thất về người và 50 triệu đồng/vụ với tổn thất về tài sản.</p>
-                        <p>Để tự tin ra đường mà không bị phạt, bạn phải mua tối thiểu là “Gói bắt buộc”. Ngoài ra, khách hàng có thể lựa chọn thêm Gói tiêu chuẩn/nâng cao để mở rộng quyền lợi cho lái xe và người ngồi trên xe máy của mình với mức phí tăng thêm chỉ từ 20.000 đồng.</p>
+                        <p>Bảo hiểm xe máy bắt buộc hay bảo hiểm trách nhiệm dân sự (TNDS) xe máy là loại bảo hiểm mà
+                            chủ phương tiện phải mua theo quy định của pháp luật. Nếu không tuân thủ sẽ bị cảnh sát giao
+                            thông phạt từ 100.000 - 200.000 đồng/lần. Trong trường hợp không may gây tai nạn cho người
+                            thứ ba (nạn nhân), người điều khiển xe máy phải tự chi trả toàn bộ chi phí để khắc phục hậu
+                            quả.</p>
+                        <p>Tham gia bảo hiểm TNDS xe máy của PVI ngay để đảm bảo tuân thủ quy định của pháp luật. Nếu
+                            không may gây tai nạn cho người thứ ba khi điều khiển xe máy thì bảo hiểm sẽ hỗ trợ chi trả
+                            bồi thường cho nạn nhân số tiền lên đến 150 triệu đồng/người/vụ với tổn thất về người và 50
+                            triệu đồng/vụ với tổn thất về tài sản.</p>
+                        <p>Để tự tin ra đường mà không bị phạt, bạn phải mua tối thiểu là “Gói bắt buộc”. Ngoài ra,
+                            khách hàng có thể lựa chọn thêm Gói tiêu chuẩn/nâng cao để mở rộng quyền lợi cho lái xe và
+                            người ngồi trên xe máy của mình với mức phí tăng thêm chỉ từ 20.000 đồng.</p>
                     </div>,
-                    benefit:{
-                        classNameValue:'baohiemxemay',
+                    benefit: {
+                        classNameValue: 'baohiemxemay',
                         categories: [
                             {
                                 name: 'Người điều khiển xe máy gây tai nạn dẫn đến thiệt hại về sức khỏe, tính mạng cho bên thứ ba (nạn nhân). Công ty bảo hiểm sẽ thay người điều khiển xe bồi thường cho bên thứ 3.',
@@ -111,25 +139,34 @@ function CategoryDetail(){
                             }
                         ]
                     },
-                    detail:require('../../resources/images/baohiemxemay.jpg'),
-                    file:'./files/QTBH/Quy tac BH Moto-Xe may_21.2.2020.pdf'
+                    detail: require('../../resources/images/baohiemxemay.jpg'),
+                    file: './files/QTBH/Quy tac BH Moto-Xe may_21.2.2020.pdf'
 
                 },
                 {
                     isReady: true,
-                    code:'oto',
-                    name:'Bảo hiểm TNSD ô tô',
+                    code: ENSURE_CAR,
+                    name: 'Bảo hiểm TNSD ô tô',
                     banner: require('../../resources/images/imagebaohiem2.png'),
-                    tabName:'TNDS ô tô',
+                    tabName: 'TNDS ô tô',
                     description: <div>
                         <h2><img src={iconCar}/>Bảo hiểm TNDS ô tô</h2>
-                        <p>Bảo hiểm ô tô bắt buộc hay bảo hiểm trách nhiệm dân sự (TNDS) ô tô là loại bảo hiểm mà chủ phương tiện phải mua theo quy định của pháp luật. Nếu không tuân thủ, khi CSGT yêu cầu xuất trình bảo hiểm, chủ xe ô tô sẽ bị phạt từ 400.000 - 600.000 đồng/lần. Trong trường hợp không may gây tai nạn cho người thứ ba (nạn nhân), chủ xe phải tự chi trả toàn bộ chi phí để khắc phục hậu quả.</p>
-                        <p>Tham gia bảo hiểm TNDS ô tô của PVI ngay để đảm bảo tuân thủ quy định của pháp luật. Trường hợp chủ xe ô tô gây tai nạn, bảo hiểm sẽ hỗ trợ chi trả cho nạn nhân số tiền lên đến 150 triệu đồng/người/vụ với tổn thất về người và 100 triệu đồng/vụ với tổn thất về tài sản.</p>
-                        <p>Ngoài ra, Bảo hiểm PVI cung cấp thêm các gói bảo hiểm bảo vệ cho lái xe, phụ xe và người ngồi trên chính xe ô tô của mình với quyền lợi là 10 triệu đồng/người/vụ (gói tiêu chuẩn) hoặc 100 triệu đồng/người/vụ (gói nâng cao), mức phí tăng thêm tương ứng chỉ từ 10.000 - 100.000 đồng.</p>
+                        <p>Bảo hiểm ô tô bắt buộc hay bảo hiểm trách nhiệm dân sự (TNDS) ô tô là loại bảo hiểm mà chủ
+                            phương tiện phải mua theo quy định của pháp luật. Nếu không tuân thủ, khi CSGT yêu cầu xuất
+                            trình bảo hiểm, chủ xe ô tô sẽ bị phạt từ 400.000 - 600.000 đồng/lần. Trong trường hợp không
+                            may gây tai nạn cho người thứ ba (nạn nhân), chủ xe phải tự chi trả toàn bộ chi phí để khắc
+                            phục hậu quả.</p>
+                        <p>Tham gia bảo hiểm TNDS ô tô của PVI ngay để đảm bảo tuân thủ quy định của pháp luật. Trường
+                            hợp chủ xe ô tô gây tai nạn, bảo hiểm sẽ hỗ trợ chi trả cho nạn nhân số tiền lên đến 150
+                            triệu đồng/người/vụ với tổn thất về người và 100 triệu đồng/vụ với tổn thất về tài sản.</p>
+                        <p>Ngoài ra, Bảo hiểm PVI cung cấp thêm các gói bảo hiểm bảo vệ cho lái xe, phụ xe và người ngồi
+                            trên chính xe ô tô của mình với quyền lợi là 10 triệu đồng/người/vụ (gói tiêu chuẩn) hoặc
+                            100 triệu đồng/người/vụ (gói nâng cao), mức phí tăng thêm tương ứng chỉ từ 10.000 - 100.000
+                            đồng.</p>
 
                     </div>,
-                    benefit:{
-                        classNameValue:'baohiemoto',
+                    benefit: {
+                        classNameValue: 'baohiemoto',
                         categories: [
                             {
                                 name: 'Người điều khiển xe ô tô gây tai nạn dẫn đến thiệt hại về sức khỏe, tính mạng cho bên thứ ba (nạn nhân). Công ty bảo hiểm sẽ hỗ trợ bồi thường cho bên thứ 3.',
@@ -201,8 +238,8 @@ function CategoryDetail(){
                             }
                         ]
                     },
-                    detail:require('../../resources/images/baohiemoto.jpg'),
-                    file:'./files/QTBH/Tom tat TNDS BB oto & Tai nan LPX.pdf'
+                    detail: require('../../resources/images/baohiemoto.jpg'),
+                    file: './files/QTBH/Tom tat TNDS BB oto & Tai nan LPX.pdf'
 
                 },
                 {
@@ -215,19 +252,19 @@ function CategoryDetail(){
             ]
         },
         {
-            code:'healthy',
-            name:'Sức khỏe',
-            banner:require('../../resources/images/bannersk.png'),
-            tabClassName:'baohiemsuckhoe',
-            products:[
+            code: 'healthy',
+            name: 'Sức khỏe',
+            banner: require('../../resources/images/bannersk.png'),
+            tabClassName: 'baohiemsuckhoe',
+            products: [
                 {
                     isReady: false,
-                    code:'nguphucuuviet',
-                    name:'Ngũ phúc ưu việt',
+                    code: 'nguphucuuviet',
+                    name: 'Ngũ phúc ưu việt',
                     banner: '',
-                    tabName:'Ngũ phúc ưu việt',
+                    tabName: 'Ngũ phúc ưu việt',
                     description: <div></div>,
-                    benefit:{
+                    benefit: {
                         categories: [
                             {
                                 name: '',
@@ -299,18 +336,18 @@ function CategoryDetail(){
                             }
                         ]
                     },
-                    detail:'',
-                    file:''
+                    detail: '',
+                    file: ''
 
                 },
                 {
                     isReady: false,
-                    code:'hotronamvien',
-                    name:'Hỗ trợ nằm viện',
+                    code: 'hotronamvien',
+                    name: 'Hỗ trợ nằm viện',
                     banner: '',
-                    tabName:'Hỗ trợ nằm viện',
+                    tabName: 'Hỗ trợ nằm viện',
                     description: <div></div>,
-                    benefit:{
+                    benefit: {
                         categories: [
                             {
                                 name: '',
@@ -382,18 +419,18 @@ function CategoryDetail(){
                             }
                         ]
                     },
-                    detail:'',
-                    file:''
+                    detail: '',
+                    file: ''
 
                 },
                 {
                     isReady: false,
-                    code:'anphucuuviet',
-                    name:'An phúc ưu việt',
+                    code: 'anphucuuviet',
+                    name: 'An phúc ưu việt',
                     banner: '',
-                    tabName:'An phúc ưu việt',
+                    tabName: 'An phúc ưu việt',
                     description: <div></div>,
-                    benefit:{
+                    benefit: {
                         categories: [
                             {
                                 name: '',
@@ -465,32 +502,37 @@ function CategoryDetail(){
                             }
                         ]
                     },
-                    detail:'',
-                    file:''
+                    detail: '',
+                    file: ''
 
                 }
             ]
         },
         {
-            code:'accident',
-            name:'Tai nạn',
-            banner:require('../../resources/images/banner-sp.png'),
-            tabClassName:'baohiemtainan',
-            products:[
+            code: 'accident',
+            name: 'Tai nạn',
+            banner: require('../../resources/images/banner-sp.png'),
+            tabClassName: 'baohiemtainan',
+            products: [
                 {
                     isReady: true,
-                    code:'tainanhosudungdien',
-                    name:'Bảo hiểm tai nạn hộ sử dụng điện',
+                    code: ENSURE_ELECTRIC,
+                    name: 'Bảo hiểm tai nạn hộ sử dụng điện',
                     banner: require('../../resources/images/imagebaohiem1.png'),
-                    tabName:'Tai nạn hộ sử dụng điện',
+                    tabName: 'Tai nạn hộ sử dụng điện',
                     description: <div>
                         <h2><img src={iconH21}/>Bảo hiểm tại nạn hộ sử dụng điện</h2>
-                        <p>Tai nạn về điện luôn tiềm ẩn xung quanh cuộc sống sinh hoạt, làm việc của con người. Nguyên nhân gây tai nạn điện có thể đến từ những bất cẩn trong quá trình sử dụng điện hoặc do thiết bị điện chập cháy, dò điện. Tại Việt Nam, mỗi năm có hơn 7.000 vụ tai nạn điện và hơn 250 người thiệt mạng vì tai nạn điện.</p>
-                        <p>Bảo hiểm tai nạn hộ sử dụng điện của PVI sẽ mang đến giải pháp cho toàn bộ gia đình của bạn. Chỉ cần 1 người mua, các thành viên gia đình còn lại đều được bảo vệ. Phí chỉ từ 28.000đ/năm, quyền lợi lên tới 40 triệu đồng/người. </p>
+                        <p>Tai nạn về điện luôn tiềm ẩn xung quanh cuộc sống sinh hoạt, làm việc của con người. Nguyên
+                            nhân gây tai nạn điện có thể đến từ những bất cẩn trong quá trình sử dụng điện hoặc do thiết
+                            bị điện chập cháy, dò điện. Tại Việt Nam, mỗi năm có hơn 7.000 vụ tai nạn điện và hơn 250
+                            người thiệt mạng vì tai nạn điện.</p>
+                        <p>Bảo hiểm tai nạn hộ sử dụng điện của PVI sẽ mang đến giải pháp cho toàn bộ gia đình của bạn.
+                            Chỉ cần 1 người mua, các thành viên gia đình còn lại đều được bảo vệ. Phí chỉ từ
+                            28.000đ/năm, quyền lợi lên tới 40 triệu đồng/người. </p>
 
                     </div>,
-                    benefit:{
-                        classNameValue:'tainandien',
+                    benefit: {
+                        classNameValue: 'tainandien',
                         categories: [
                             {
                                 name: 'Thương tật thân thể tạm thời do dòng điện gây ra. Chi trả theo chi phí điều trị thực tế của từng thành viên trong hộ.',
@@ -563,18 +605,18 @@ function CategoryDetail(){
 
                         ]
                     },
-                    detail:require('../../resources/images/product-detail.png'),
-                    file:'./files/QTBH/Quy tac BH Tai nan Ho su dung dien.pdf'
+                    detail: require('../../resources/images/product-detail.png'),
+                    file: './files/QTBH/Quy tac BH Tai nan Ho su dung dien.pdf'
 
                 },
                 {
                     isReady: false,
-                    code:'tainancanhan',
-                    name:'Tai nạn cá nhân',
+                    code: 'tainancanhan',
+                    name: 'Tai nạn cá nhân',
                     banner: '',
-                    tabName:'Tai nạn cá nhân',
+                    tabName: 'Tai nạn cá nhân',
                     description: <div></div>,
-                    benefit:{
+                    benefit: {
                         categories: [
                             {
                                 name: '',
@@ -646,30 +688,34 @@ function CategoryDetail(){
                             }
                         ]
                     },
-                    detail:'',
-                    file:''
+                    detail: '',
+                    file: ''
 
                 }
             ]
         },
         {
-            code:'asset',
-            name:'Tài sản',
-            banner:require('../../resources/images/bannernha.png'),
+            code: 'asset',
+            name: 'Tài sản',
+            banner: require('../../resources/images/bannernha.png'),
             tabClassName: 'baohiemsuckhoe',
-            products:[
+            products: [
                 {
                     isReady: true,
-                    code:'nhaotoandien',
-                    name:'Bảo hiểm nhà ở toàn diện',
+                    code: ENSURE_HOUSE,
+                    name: 'Bảo hiểm nhà ở toàn diện',
                     banner: require('../../resources/images/imagebaohiem3.png'),
-                    tabName:'Nhà ở toàn diện',
+                    tabName: 'Nhà ở toàn diện',
                     description: <div>
                         <h2><img src={iconHome}/>Bảo hiểm nhà ở toàn diện</h2>
-                        <p>Để sở hữu một căn nhà, chúng ta đã phải bỏ ra hàng trăm triệu đến hàng tỷ đồng, vậy đừng chần chừ khi mua thêm bảo hiểm để bảo vệ khối tài sản đó trước các rủi ro. Chỉ từ 165.000đ/năm, Bảo hiểm nhà ở toàn diện PVI đem đến giải pháp tài chính để bạn luôn yên tâm bảo vệ tổ ấm của mình. Bất cứ khi nào có tổn thất sảy ra với phần khung nhà hay tài sản bên trong ngôi nhà, PVI sẽ đồng hành và chi trả cho bạn với mức quyền lợi lên đến 600 triệu đồng/năm.</p>
+                        <p>Để sở hữu một căn nhà, chúng ta đã phải bỏ ra hàng trăm triệu đến hàng tỷ đồng, vậy đừng chần
+                            chừ khi mua thêm bảo hiểm để bảo vệ khối tài sản đó trước các rủi ro. Chỉ từ 165.000đ/năm,
+                            Bảo hiểm nhà ở toàn diện PVI đem đến giải pháp tài chính để bạn luôn yên tâm bảo vệ tổ ấm
+                            của mình. Bất cứ khi nào có tổn thất sảy ra với phần khung nhà hay tài sản bên trong ngôi
+                            nhà, PVI sẽ đồng hành và chi trả cho bạn với mức quyền lợi lên đến 600 triệu đồng/năm.</p>
 
                     </div>,
-                    benefit:{
+                    benefit: {
                         classNameValue: 'baohiemnhao',
                         categories: [
                             {
@@ -683,12 +729,12 @@ function CategoryDetail(){
                         ],
                         packages: [
                             {
-                                name: 'Gói Vàng',
+                                name: 'Gói Đồng',
                                 code: '01',
                                 benefits: [
                                     {
                                         category: '1',
-                                        value: '450 triệu đồng/năm'
+                                        value: '150 triệu đồng/năm'
                                     },
                                     {
                                         category: '2',
@@ -711,33 +757,33 @@ function CategoryDetail(){
                                 ]
                             },
                             {
-                                name: 'Gói Đồng',
+                                name: 'Gói Vàng',
                                 code: '03',
                                 benefits: [
                                     {
                                         category: '1',
-                                        value: '150 triệu đồng/năm'
+                                        value: '450 triệu đồng/năm'
                                     },
                                     {
                                         category: '2',
                                         value: '150 triệu đồng/năm'
                                     },
                                 ]
-                            }
+                            },
                         ]
                     },
-                    detail:require('../../resources/images/baohiemnhao.jpg'),
-                    file:'./files/QTBH/QTBHToandiennhatunhan.pdf'
+                    detail: require('../../resources/images/baohiemnhao.jpg'),
+                    file: './files/QTBH/QTBHToandiennhatunhan.pdf'
 
                 },
                 {
                     isReady: false,
-                    code:'manhinhdienthoai',
-                    name:'Màn hình điện thoại',
+                    code: 'manhinhdienthoai',
+                    name: 'Màn hình điện thoại',
                     banner: '',
-                    tabName:'Màn hình điện thoại',
+                    tabName: 'Màn hình điện thoại',
                     description: <div></div>,
-                    benefit:{
+                    benefit: {
                         categories: [
                             {
                                 name: '',
@@ -809,50 +855,60 @@ function CategoryDetail(){
                             }
                         ]
                     },
-                    detail:'',
-                    file:''
+                    detail: '',
+                    file: ''
 
                 },
                 {
                     isReady: true,
-                    code:'baohanhmorong',
-                    name:'Bảo hành mở rộng',
+                    code: ENSURE_EXTEND,
+                    name: 'Bảo hành mở rộng',
                     banner: require('../../resources/images/baohiemmorong.png'),
-                    tabName:'Bảo hành mở rộng',
+                    tabName: 'Bảo hành mở rộng',
                     description: <div>
                         <h2><img src={iconHome}/>Bảo hiểm bảo hành mở rộng</h2>
-                        <p>Bảo hiểm bảo hành mở rộng (BHMR) là gói bảo hiểm gia hạn bảo hành cho các thiết bị di động, thiết bị bếp, đồ gia dụng. Tham gia bảo hiểm BHMR, trong trường hợp thiết bị được bảo hiểm xảy ra lỗi do Nhà sản xuất (lỗi kỹ thuật của thiết bị) gây ảnh hưởng đến việc sử dụng của thiết bị, đòi hỏi phải được sửa chữa hoặc thay thế để có thể hoạt động một cách bình thường, PVI sẽ chi trả chi phí sửa chữa, thay thế mới thiết bị với điều kiện thiết bị được gửi đến Trung tâm bảo hành/sửa chữa được ủy quyền.</p>
+                        <p>Bảo hiểm bảo hành mở rộng (BHMR) là gói bảo hiểm gia hạn bảo hành cho các thiết bị di động,
+                            thiết bị bếp, đồ gia dụng. Tham gia bảo hiểm BHMR, trong trường hợp thiết bị được bảo hiểm
+                            xảy ra lỗi do Nhà sản xuất (lỗi kỹ thuật của thiết bị) gây ảnh hưởng đến việc sử dụng của
+                            thiết bị, đòi hỏi phải được sửa chữa hoặc thay thế để có thể hoạt động một cách bình thường,
+                            PVI sẽ chi trả chi phí sửa chữa, thay thế mới thiết bị với điều kiện thiết bị được gửi đến
+                            Trung tâm bảo hành/sửa chữa được ủy quyền.</p>
                     </div>,
-                    benefit:{
+                    benefit: {
                         classNameValue: 'baohiemnhao',
-                        content:<div>
-                            <p>Bảo hiểm PVI chịu trách nhiệm bồi thường cho Chủ thiết bị được bảo hiểm các chi phí sửa chữa, thay thế mới thiết bị với điều kiện thiết bị được gửi đến Trung tâm bảo hành/sửa chữa được ủy quyền. Tổng chi phí sửa chữa không vượt quá giá trị thiết bị tại thời điểm Khách hàng tham gia bảo hiểm.</p>
+                        content: <div>
+                            <p>Bảo hiểm PVI chịu trách nhiệm bồi thường cho Chủ thiết bị được bảo hiểm các chi phí sửa
+                                chữa, thay thế mới thiết bị với điều kiện thiết bị được gửi đến Trung tâm bảo hành/sửa
+                                chữa được ủy quyền. Tổng chi phí sửa chữa không vượt quá giá trị thiết bị tại thời điểm
+                                Khách hàng tham gia bảo hiểm.</p>
                             <p><strong>Lưu ý:</strong></p>
-                            <p>- Bảo hiểm áp dụng cho thiết bị mua mới 100% có giá bán lẻ từ 1 triệu đồng trở lên tại siêu thị Viettel Store.</p>
-                            <p>- Thiết bị tham gia bảo hiểm phải có ít nhất 1 năm bảo hành chính hãng từ nhà sản xuất và có hiệu lực bảo hành trong lãnh thổ Việt Nam.</p>
+                            <p>- Bảo hiểm áp dụng cho thiết bị mua mới 100% có giá bán lẻ từ 1 triệu đồng trở lên tại
+                                siêu thị Viettel Store.</p>
+                            <p>- Thiết bị tham gia bảo hiểm phải có ít nhất 1 năm bảo hành chính hãng từ nhà sản xuất và
+                                có hiệu lực bảo hành trong lãnh thổ Việt Nam.</p>
                             <p>- Tổng thời hạn bảo hiểm chính hãng và bảo hành mở rộng không quá 5 năm.</p>
                         </div>
                     },
-                    detail:'',
-                    file:''
+                    detail: '',
+                    file: ''
 
                 }
             ]
         },
         {
-            code:'tralve',
-            name:'Du lịch',
-            banner:require('../../resources/images/bannerdl.png'),
+            code: 'tralve',
+            name: 'Du lịch',
+            banner: require('../../resources/images/bannerdl.png'),
             tabClassName: 'baohiemdulich',
-            products:[
+            products: [
                 {
                     isReady: false,
-                    code:'dulichtrongnuoc',
-                    name:'Du lịch trong nước',
+                    code: 'dulichtrongnuoc',
+                    name: 'Du lịch trong nước',
                     banner: '',
-                    tabName:'Du lịch trong nước',
+                    tabName: 'Du lịch trong nước',
                     description: <div></div>,
-                    benefit:{
+                    benefit: {
                         categories: [
                             {
                                 name: '',
@@ -924,17 +980,17 @@ function CategoryDetail(){
                             }
                         ]
                     },
-                    detail:'',
-                    file:''
+                    detail: '',
+                    file: ''
 
-                },{
+                }, {
                     isReady: false,
-                    code:'dulichquocte',
-                    name:'Du lịch quốc tế',
+                    code: 'dulichquocte',
+                    name: 'Du lịch quốc tế',
                     banner: '',
-                    tabName:'Du lịch quốc tế',
+                    tabName: 'Du lịch quốc tế',
                     description: <div></div>,
-                    benefit:{
+                    benefit: {
                         categories: [
                             {
                                 name: '',
@@ -1006,48 +1062,391 @@ function CategoryDetail(){
                             }
                         ]
                     },
-                    detail:'',
-                    file:''
+                    detail: '',
+                    file: ''
 
                 },
             ]
         }
-        ]);
+    ]);
+    const [fee, setFee] = useState<any>();
+    const keyCars = ['MayKeo', 'XeChuyenDung', 'XeChoTien', 'XePickUp', 'XeTaiVan', 'XeTapLai', 'XeBus', 'XeCuuThuong', 'Xetaxi', 'XeDauKeo'];
+    const [bodyOto, setBodyOto] = useState({
+        "ma_trongtai": "",
+        "so_cho": "",
+        "ma_mdsd": "1",
+        "MayKeo": false,
+        "XeChuyenDung": false,
+        "XeChoTien": false,
+        "XePickUp": false,
+        "XeTaiVan": false,
+        "XeTapLai": false,
+        "XeBus": false,
+        "XeCuuThuong": false,
+        "Xetaxi": false,
+        "XeDauKeo": false,
+        "giodau": '',
+        "giocuoi": '',
+        "ngaydau": formatDate(moment()),
+        "ngaycuoi": formatDate(moment().set('year', moment().get('year') + 1)),
+        "mtn_laiphu": 0,
+        "so_nguoi": "0",
+        "tyle_gp_laiphu": "0",
+        "philpx_nhap": "0",
+        "thamgia_laiphu": false,
+        "CpId": CPID,
+        "Sign": ''
+    });
+    const categoriesCar = [
+        {
+            name: 'Xe chở người không KDVT',
+            code: '1',
+            items: [
+                {name: 'Xe chở tiền', code: 'XeChoTien'},
+                {name: 'Xe bán tải (pickup)', code: 'XePickUp', dependencies: ['XeTapLai']},
+                {name: 'Xe tải VAN', code: 'XeTaiVan', dependencies: ['XeTapLai']},
+                {name: 'Xe tập lái', code: 'XeTapLai', dependencies: ['XePickUp', 'XeTaiVan']},
+            ],
+        },
+        {
+            name: 'Xe chở người KDVT',
+            code: '2',
+            items: [
+                {name: 'Xe bán tải (pickup)', code: 'XePickUp', dependencies: ['Xetaxi']},
+                {name: 'Xe tải VAN', code: 'XeTaiVan', dependencies: ['Xetaxi']},
+                {name: 'Xe bus', code: 'XeBus'},
+                {name: 'Xe cứu thương', code: 'XeCuuThuong'},
+                {name: 'Xe taxi', code: 'Xetaxi', dependencies: ['XePickUp', 'XeTaiVan']},
+            ]
+        },
+        {
+            name: 'Xe chở hàng',
+            code: '3',
+            items: [
+                {name: 'Xe tập lái', code: 'XeTapLai', dependencies: ['XeDauKeo']},
+                {name: 'Xe chuyên dụng khác', code: 'XeChuyenDung'},
+                {name: 'Xe đầu kéo rơ mooc', code: 'XeDauKeo', dependencies: ['XeTapLai']},
+                {name: 'Máy kéo, xe máy chuyên dùng', code: 'MayKeo'},
+            ]
+        }
+    ]
+    const [purpose, setPurpose] = useState<any>(categoriesCar[0]);
     useEffect(()=>{
-        let category = products.find((x: any)=> x.code===categoryId);
-        if(category){
+        localStorageSave('DATE','');
+    },[]);
+    useEffect(()=>{
+        if(currentPackage)
+            getFee();
+    },[currentPackage]);
+    useEffect(()=>{
+        if(currentProduct)
+            getFee();
+    },[currentProduct]);
+    useEffect(()=>{
+        if(currentProduct?.code===ENSURE_CAR){
+            setTimeout(()=>{
+                getFeeTNDSOTO();
+            },1000);
+        }
+    },[bodyOto]);
+    useEffect(()=>{
+        localStorageSave(FEE, fee);
+    },[fee]);
+    const getFee=()=>{
+        setLoading(true);
+        switch (currentProduct?.code){
+            case ENSURE_ELECTRIC:
+                getFeeHSDD();
+                break;
+            case ENSURE_CAR:
+                getFeeTNDSOTO();
+                break;
+            case ENSURE_HOUSE:
+                getFeeHouse();
+                break;
+        }
+    }
+    const getFeeHSDD=()=>{
+
+        let body = {
+            "cpid":CPID,
+            "sign":sign(currentPackage),
+            "package":currentPackage
+        };
+        productRepository.getFeeHSDD(body).then(res=>{
+            console.log(res);
+            setFee(res);
+        }).catch(err=>{
+            M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
+        }).finally(()=> setLoading(false));
+    }
+    const getFeeHouse=()=>{
+        let body = {
+            "cpid":CPID,
+            "sign":sign(currentPackage),
+            "package":currentPackage
+        };
+        productRepository.getFeeHouse(body).then(res=>{
+            setFee(res);
+        }).catch(err=>{
+            M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
+        }).finally(()=> setLoading(false));
+    }
+    const checkDisableRegister=()=>{
+        if(currentProduct?.code===ENSURE_CAR){
+            if(!bodyOto.so_cho)
+                return true;
+            else if(purpose.code==='3'&&!bodyOto.ma_trongtai)
+                return true;
+        }
+        return false;
+    }
+    const getFeeTNDSOTO=()=>{
+        let body = lodash.cloneDeep(bodyOto);
+        if(currentPackage!='01'){
+            body.thamgia_laiphu=true;
+            if(currentPackage==='02')
+                body.mtn_laiphu=10000000;
+            else  body.mtn_laiphu=100000000;
+        }else {
+            body.thamgia_laiphu=false;
+            body.mtn_laiphu=0;
+        }
+        body.giodau=formatTime(moment());
+        body.giocuoi=formatTime(moment());
+        body.Sign = sign(`${body.ma_trongtai}${body.so_cho}`);
+        if(checkDisableRegister()) {
+            setLoading(false);
+            return;
+        }
+        setLoading(true);
+        localStorageSave(FEE_REQUEST,body);
+        productRepository.getFeeTNDSOTO(body).then(res=>{
+            setFee(res);
+        }).catch(err=>{
+            M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
+        }).finally(()=> setLoading(false));
+    }
+
+    useEffect(() => {
+        let category = products.find((x: any) => x.code === categoryId);
+        if (category) {
             setDetail(category);
             let productId = searchParams.get('productId');
             let product: any;
-            if(productId){
-                 product = category.products.find((x: any)=> x.code===productId);
+            if (productId) {
+                product = category.products.find((x: any) => x.code === productId);
             }
-            if(!product) product = category.products[0];
+            if (!product) product = category.products[0];
             setCurrentProduct(product);
-
+            setCurrentPackage(product.benefit.packages[0].code);
         }
 
-    },[categoryId]);
-    const tabClick=(data: any)=>{
+    }, [categoryId]);
+    const tabClick = (data: any) => {
+        setFee(null);
         setCurrentProduct(data);
         setSearchParams({productId: data.code});
     }
-    return <MainLayout isDetail={true} showProgressBar={showProgressBar} title={lodash.get(currentProduct,'name','Chi tiết sản phẩm')}>
+    const handleChangePackage = (value: any) => {
+        setCurrentPackage(value);
+        setFee(null);
+    }
+    const handleChange = (value: any) => {
+        let item = categoriesCar.find((x: any) => x.code === value);
+        setPurpose(item);
+        let body = lodash.cloneDeep(bodyOto);
+        body.ma_mdsd = value;
+        keyCars.map((x: string) => {
+            // @ts-ignore
+            body[x] = false;
+        });
+        setBodyOto(body);
+        setFee(null);
+    }
+    const getProductName = () => {
+        switch (currentProduct?.code) {
+            case ENSURE_ELECTRIC:
+                return 'Bảo hiểm tại nạn hộ sử dụng điện';
+            case ENSURE_CAR:
+                return 'Bảo hiểm ô tô PVI';
+            case ENSURE_HOUSE:
+                return 'Bảo hiểm nhà ở toàn diện';
+        }
+    }
+    const changeTypeCar = (checked: boolean, code: string) => {
+        let body = lodash.cloneDeep(bodyOto);
+        // @ts-ignore
+        body[code] = checked;
+        let item = purpose.items.find((x: any) => x.code === code);
+        if (!item.dependencies) {
+            keyCars.map((x: string) => {
+                if (x !== code) {
+                    // @ts-ignore
+                    body[x] = false;
+                }
+            });
+        } else {
+            keyCars.map((x: string) => {
+                if (!item.dependencies.includes(x) && x !== code) {
+                    // @ts-ignore
+                    body[x] = false;
+                }
+            });
+        }
+        setBodyOto(body);
+    }
+    const changeValueCar = (key: string, value: any) => {
+        let body = lodash.cloneDeep(bodyOto);
+        value = value.replace(/[^\d]/g, '');
+        // @ts-ignore
+        body[key] = value;
+        setBodyOto(body);
+    }
+    const disabledDate = (current: any) => {
+        // Can not select days before today and today
+        return current && current < moment().endOf('day');
+    }
+    const onChangeDate = (date: any, dateString: string) => {
+        // console.log(date, dateString);
+        localStorageSave('DATE', dateString);
+    }
+    const renderFeeCar = () => {
+        return <div className={'txt-left'}>
+            <label>Gói bảo hiểm</label>
+            <Select value={currentPackage} onChange={handleChangePackage} className={'width100'}>
+                {currentProduct?.benefit.packages.map((x: any) => <Select.Option
+                    value={x.code}>{x.name}</Select.Option>)}
+            </Select>
+            <label>Ngày hiệu lực</label>
+            <DatePicker disabledDate={disabledDate} defaultValue={moment(new Date(), STANDARD_DATE_FORMAT)}
+                        suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
+                        format={STANDARD_DATE_FORMAT} onChange={onChangeDate}/>
+            <label>Thời hạn bảo hiểm</label>
+            <Select defaultValue="1" onChange={handleChange} className={'width100'}>
+                <Select.Option value="1">1 năm</Select.Option>
+            </Select>
+            <label>Mục đích sử dụng</label>
+            <Select value={lodash.get(purpose, 'code', undefined)} onChange={handleChange} className={'width100'}>
+                {categoriesCar.map((x: any, index: number) => {
+                    return <Select.Option value={x.code}>{x.name}</Select.Option>
+                })}
+            </Select>
+
+            <label><span className={'txt-color-red'}>* </span>Số chỗ ngồi</label>
+            <Input onChange={(e) => changeValueCar('so_cho', e.target.value)} value={bodyOto.so_cho}></Input>
+
+            {purpose && purpose.code === '3' &&
+                <Col span={24} className={'mgt10'}>
+                    <label><span className={'txt-color-red'}>* </span>Trọng tải (kg)</label>
+                    <Input onChange={(e) => changeValueCar('ma_trongtai', e.target.value)}
+                           value={bodyOto.ma_trongtai}></Input>
+                </Col>
+            }
+            <Row gutter={8} className={'mgt20 justify-content-start'}>
+                {
+                    purpose && purpose.items.map((x: any, index: number) => {
+                        // let disable=false;
+                        // if(bodyOto.XeTapLai&&x.code!=='XePickUp'&&x.code!=='XeTaiVan')
+                        //     disable=true;
+                        return <Col span={12} className={''}>
+                        </Col>
+                    })
+                }
+            </Row>
+        </div>
+    }
+    const renderFeeElectric = () => {
+        return <div className={'txt-left'}>
+            <label>Gói bảo hiểm</label>
+            <Select value={currentPackage} onChange={handleChangePackage} className={'width100'}>
+                {currentProduct?.benefit.packages.map((x: any) => <Select.Option
+                    value={x.code}>{x.name}</Select.Option>)}
+            </Select>
+            <label>Ngày hiệu lực</label>
+            <DatePicker disabledDate={disabledDate} defaultValue={moment(new Date(), STANDARD_DATE_FORMAT)}
+                        suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
+                        format={STANDARD_DATE_FORMAT} onChange={onChangeDate}/>
+            <label>Chu kỳ thanh toán</label>
+            <Select defaultValue="1" onChange={handleChange} className={'width100'}>
+                <Select.Option value="1">1 năm</Select.Option>
+            </Select>
+
+        </div>
+    }
+    const renderExtend=()=>{
+        return <div className={'txt-left'}>
+            <label>Loại thiết bị</label>
+            <Select className={'width100'}>
+                <Select.Option value="sp1">Điện thoại</Select.Option>
+                <Select.Option value="sp1">Laptop</Select.Option>
+                <Select.Option value="sp1">Máy tính bảng</Select.Option>
+                <Select.Option value="sp1">Đồng hồ thông minh</Select.Option>
+                <Select.Option value="sp1">Máy lọc không khí</Select.Option>
+                <Select.Option value="sp2">Tivi</Select.Option>
+                <Select.Option value="sp2">Tủ lạnh, tủ mát, tủ đông</Select.Option>
+                <Select.Option value="sp2">Máy điều hòa</Select.Option>
+                <Select.Option value="sp2">Máy giặt, máy sấy</Select.Option>
+            </Select>
+            <label>Hãng</label>
+            <Input placeholder="Ví dụ: Apple" />
+            <label>Model</label>
+            <Input placeholder="Ví dụ: Iphone 13" />
+            <label>Số Serial/IMEI</label>
+            <Input/>
+            <label>Thời hạn bảo hành gốc của nhà sản xuất</label>
+            <div className="row">
+                <div className="col-md-6">
+                    <label>Ngày bắt đầu</label>
+                    <DatePicker disabledDate={disabledDate} defaultValue={moment(new Date(), STANDARD_DATE_FORMAT)}
+                                suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
+                                format={STANDARD_DATE_FORMAT} onChange={onChangeDate}/>
+                </div>
+                <div className="col-md-6">
+                    <label>Ngày hết hạn</label>
+                    <DatePicker disabledDate={disabledDate} defaultValue={moment(new Date(), STANDARD_DATE_FORMAT)}
+                                suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
+                                format={STANDARD_DATE_FORMAT} onChange={onChangeDate}/>
+                </div>
+            </div>
+            <label>Thời hạn bảo hiểm bảo hành mở rộng</label>
+            <Select className={'width100'}>
+                <Select.Option value={6}>6 tháng</Select.Option>
+                <Select.Option value={12}>12 tháng</Select.Option>
+            </Select>
+            <label>Giá trị thiết bị tại thời điểm tham gia bảo hiểm (VNĐ)</label>
+            <Input placeholder="Ví dụ: 2100000" />
+        </div>
+    }
+    const renderFee = () => {
+        switch (currentProduct.code) {
+            case ENSURE_CAR:
+                return renderFeeCar();
+            case ENSURE_ELECTRIC:
+            case ENSURE_HOUSE:
+                return renderFeeElectric();
+            case ENSURE_EXTEND:
+                return renderExtend();
+        }
+    }
+    return <MainLayout showLogoViettel={currentProduct?.code===ENSURE_EXTEND?true:false} isDetail={true} showProgressBar={showProgressBar}
+                       title={lodash.get(currentProduct, 'name', 'Chi tiết sản phẩm')}>
         <div className="banner">
-            <img src={detail?.banner} style={{width: '100%'}} />
+            <img src={detail?.banner} style={{width: '100%'}}/>
             <h1>{detail?.name}</h1>
         </div>
         <div>
             <div className="content">
                 <div className={`menu-tab ${detail?.tabClassName}`}>
                     <ul>
-                        {detail?.products?.map((x: any)=>{
-                            return <li onClick={()=> tabClick(x)} key={x.code}><a className={x.code===currentProduct?.code?'active':''}>{x.tabName}</a></li>
+                        {detail?.products?.map((x: any) => {
+                            return <li onClick={() => tabClick(x)} key={x.code}><a
+                                className={x.code === currentProduct?.code ? 'active' : ''}>{x.tabName}</a></li>
                         })}
                     </ul>
                 </div>
                 <div className="tab-content">
-                    {currentProduct?.isReady? <div className="tab-content1">
+                    {currentProduct?.isReady ? <div className="tab-content1">
                         <div className="container">
                             <div className="type-insurrance">
                                 <div className="row">
@@ -1057,14 +1456,14 @@ function CategoryDetail(){
                                     <button className="btn-tx extra-tx">...Xem chi tiết</button>
                                     <button className="btn-tx short-tx">Rút gọn</button>
                                     <div className="col-md-5">
-                                        <img src={currentProduct?.banner} className="pc-show" />
-                                        <img src={currentProduct?.banner} className="mb-show" />
+                                        <img src={currentProduct?.banner} className="pc-show"/>
+                                        <img src={currentProduct?.banner} className="mb-show"/>
                                     </div>
                                 </div>
                             </div>
                             <div className="benefit-insurrance">
-                                <h2><img src={iconH22} />Quyền lợi</h2>
-                                {currentProduct && currentProduct.code !== 'baohanhmorong' && <div className="row">
+                                <h2><img src={iconH22}/>Quyền lợi</h2>
+                                {currentProduct && currentProduct.code !== 'baohanhmorong' ? <div className="row">
                                     <div className="col-md-4">
                                         <div>
                                             {
@@ -1100,77 +1499,82 @@ function CategoryDetail(){
 
 
                                     </div>
-                                </div>
+                                </div>:<div className={'baohiembaohanhmorong'}>{currentProduct?.benefit?.content}</div>
                                 }
                             </div>
-                            {currentProduct&&currentProduct.code!=='baohanhmorong'&&<div className={`benefit-insurrance-mb ${currentProduct?.benefit?.classNameValue}mb`}>
-                                <h2><img src={iconH22} />Quyền lợi</h2>
-                                <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                                    {currentProduct?.benefit?.packages.map((x: any)=>{
-                                        return  <li onClick={()=> setCurrentPackage(x.code)} className="nav-item" role="presentation">
-                                            <button className={`nav-link ${x.code===currentPackage?'active':''}`} id={x.code} data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected={x.code===currentPackage?"true":"false"}>{x.name}</button>
-                                        </li>
-                                    })}
-                                </ul>
-                                <div className="tab-content" id="pills-tabContent">
-                                    <div className="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                                        {
-                                            currentProduct?.benefit?.categories.map((x: any)=> {
-                                                let itemPkg = currentProduct?.benefit.packages.find((xx: any) => xx.code === currentPackage);
-                                                let benefit = itemPkg.benefits.find((xx: any)=>xx.category===x.code);
-                                                return <div className="row">
-                                                    <div className="col-6">
-                                                        <p>{x.name}</p>
+                            {currentProduct && currentProduct.code !== 'baohanhmorong' &&
+                                <div className={`benefit-insurrance-mb ${currentProduct?.benefit?.classNameValue}mb`}>
+                                    <h2><img src={iconH22}/>Quyền lợi</h2>
+                                    <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                        {currentProduct?.benefit?.packages.map((x: any) => {
+                                            return <li onClick={() => setCurrentPackage(x.code)} className="nav-item"
+                                                       role="presentation">
+                                                <button
+                                                    className={`nav-link ${x.code === currentPackage ? 'active' : ''}`}
+                                                    id={x.code} data-bs-toggle="pill" data-bs-target="#pills-home"
+                                                    type="button" role="tab" aria-controls="pills-home"
+                                                    aria-selected={x.code === currentPackage ? "true" : "false"}>{x.name}</button>
+                                            </li>
+                                        })}
+                                    </ul>
+                                    <div className="tab-content" id="pills-tabContent">
+                                        <div className="tab-pane fade show active" id="pills-home" role="tabpanel"
+                                             aria-labelledby="pills-home-tab">
+                                            {
+                                                currentProduct?.benefit?.categories.map((x: any) => {
+                                                    let itemPkg = currentProduct?.benefit.packages.find((xx: any) => xx.code === currentPackage);
+                                                    let benefit = itemPkg.benefits.find((xx: any) => xx.category === x.code);
+                                                    return <div className="row">
+                                                        <div className="col-6">
+                                                            <p>{x.name}</p>
+                                                        </div>
+                                                        <div className="col-6">
+                                                            <p><span>{benefit?.value}</span></p>
+                                                        </div>
                                                     </div>
-                                                    <div className="col-6">
-                                                        <p><span>{benefit?.value}</span></p>
-                                                    </div>
-                                                </div>
-                                            })
-                                        }
-                                    </div>
+                                                })
+                                            }
+                                        </div>
 
-                                </div>
-                            </div>}
+                                    </div>
+                                </div>}
                             <div className="cost-info">
-                                {/*<div className="row">*/}
-                                {/*    <div className="col-md-8">*/}
-                                {/*        <h2>Thông tin tính phí</h2>*/}
-                                {/*        <label>Gói bảo hiểm</label>*/}
-                                {/*        <select id="choose-insurrance">*/}
-                                {/*            /!* <option value="hide">Chọn gói bảo hiểm</option> *!/*/}
-                                {/*            <option value="Đồng">Đồng</option>*/}
-                                {/*            <option value="Bạc">Bạc</option>*/}
-                                {/*            <option value="Vàng">Vàng</option>*/}
-                                {/*        </select>*/}
-                                {/*        <label>Ngày hiệu lực</label>*/}
-                                {/*        <input type="text" name id="effective-date" className="datepicker" defaultValue />*/}
-                                {/*        <label>Thời hạn bảo hiểm</label>*/}
-                                {/*        <select id="choose-insurrance">*/}
-                                {/*            <option value="1 năm">1 năm</option>*/}
-                                {/*        </select>*/}
-                                {/*    </div>*/}
-                                {/*    <div className="col-md-4">*/}
-                                {/*        <h3 className="pc-show">Phí bảo hiểm</h3>*/}
-                                {/*        <p className="pc-show" style={{fontWeight: 700, fontSize: '24px', color: '#B12121', margin: '24px 0'}}>165.000 vnđ</p>*/}
-                                {/*        <h3 className="mb-show">Phí bảo hiểm <span>165.000 đồng/năm </span></h3>*/}
-                                {/*        <a href="dangkynha.html"><img src="images/Checkmark.svg" alt="" />Đăng ký</a>*/}
-                                {/*    </div>*/}
-                                {/*</div>*/}
+                                <div className="row">
+                                    <div className="col-md-8">
+                                        <h2>Thông tin tính phí</h2>
+                                        {renderFee()}
+                                    </div>
+                                    <div className="col-md-4">
+                                        <h3 className="pc-show">Phí bảo hiểm</h3>
+                                        <p className="pc-show" style={{
+                                            fontWeight: 700,
+                                            fontSize: '24px',
+                                            color: '#B12121',
+                                            margin: '24px 0'
+                                        }}>{formatMoneyByUnit(lodash.get(fee,'TotalFee',''))}</p>
+                                        <h3 className="mb-show">Phí bảo hiểm <span>{formatMoneyByUnit(lodash.get(fee,'TotalFee',''))}</span></h3>
+                                        <a href="dangkyxeoto.html"><img src="images/Checkmark.svg" alt=""/>Đăng ký</a>
+                                    </div>
+                                </div>
                             </div>
                             <div className="description-detail">
-                                <h2><img src={iconH23} />Mô tả chi tiết{currentProduct?.file&&<a href={currentProduct?.file} target="_blank">Quy tắc bảo hiểm <img className="icon-up2" src={iconUp2} alt="" /></a>}</h2>
+                                <h2><img src={iconH23}/>Mô tả chi tiết{currentProduct?.file &&
+                                    <a href={currentProduct?.file} target="_blank">Quy tắc bảo hiểm <img
+                                        className="icon-up2" src={iconUp2} alt=""/></a>}</h2>
                             </div>
                         </div>
-                    </div>: <div className="tab-content3"><div className="contanier">
-                        <img src={require('../../resources/images/calendar-big.png')} alt="" className="img_srm"/>
+                    </div> : <div className="tab-content3">
+                        <div className="contanier">
+                            <img src={require('../../resources/images/calendar-big.png')} alt="" className="img_srm"/>
                             <p>Sản phẩm sắp ra mắt</p>
                             <br/>
-                    </div></div>}
+                        </div>
+                    </div>}
                 </div>
             </div>
-            {currentProduct?.isReady&&<div className="img_content"><img src={currentProduct?.detail} /></div>}
+            {currentProduct?.isReady && <div className="img_content"><img src={currentProduct?.detail}/></div>}
         </div>
     </MainLayout>
 }
+
 export default CategoryDetail;
