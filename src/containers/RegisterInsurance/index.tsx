@@ -23,12 +23,16 @@ import {formatMoneyByUnit} from "../../core/helpers/string";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import M24ErrorUtils from "../../utils/M24ErrorUtils";
 import {categoryRepository} from "../../repositories/CategoryRepository";
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {useSessionStorage} from "../../hooks/useSessionStorage";
 import {useMediaQuery} from "react-responsive";
+import iconStep1 from "../../resources/images/li-cancuoc.svg";
+import iconStep2 from "../../resources/images/li-list.svg";
+import iconStep3 from "../../resources/images/icon-payment.svg";
 
 const {Step} = Steps;
-const { confirm } = Modal;
+const {confirm} = Modal;
+
 function RegisterInsurance() {
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
     let [searchParams, setSearchParams] = useSearchParams();
@@ -51,30 +55,30 @@ function RegisterInsurance() {
     const [form] = Form.useForm();
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
     const [cardId, setCardId] = useSessionStorage('cardid', '');
-    const isDesktopOrLaptop = useMediaQuery({ minWidth: 768 });
-    const isTabletOrMobile = useMediaQuery({ maxWidth: 767 });
+    const isDesktopOrLaptop = useMediaQuery({minWidth: 768});
+    const isTabletOrMobile = useMediaQuery({maxWidth: 767});
     const disabledDate = (current: any) => {
         // Can not select days before today and today
         return current && current > moment().endOf('day');
     }
     const [bodyRegister, setBodyRegister] = useState<any>();
-    useEffect(()=>{
-       if(productId===ENSURE_CAR||productId===ENSURE_HOUSE)
-           getProvinces();
-       if(productId===ENSURE_HOUSE) {
-           let items: any=[];
-           for(let i=0; i<=50;i++)
-               items.push(moment().add('year',-i).get('year'));
-           setYears(items);
-           getDistricts();
-       }
-        if(!currentDateString){
+    useEffect(() => {
+        if (productId === ENSURE_CAR || productId === ENSURE_HOUSE)
+            getProvinces();
+        if (productId === ENSURE_HOUSE) {
+            let items: any = [];
+            for (let i = 0; i <= 50; i++)
+                items.push(moment().add('year', -i).get('year'));
+            setYears(items);
+            getDistricts();
+        }
+        if (!currentDateString) {
             setCurrentDateString(formatDate(moment()));
         }
-    },[]);
-    const getPurpose=()=>{
+    }, []);
+    const getPurpose = () => {
         let purposeCode = searchParams.get('purpose');
-        switch (purposeCode){
+        switch (purposeCode) {
             case '1':
                 return 'Xe chở người không KDVT';
             case '2':
@@ -125,17 +129,17 @@ function RegisterInsurance() {
             }
         }
     }
-    const getProvinces=()=>{
-        categoryRepository.getCategories('DMTINH').then(res=>{
+    const getProvinces = () => {
+        categoryRepository.getCategories('DMTINH').then(res => {
             setProvinces(res.Data);
-        }).catch(err=>{
+        }).catch(err => {
 
         });
     }
-    const getDistricts=()=>{
-        categoryRepository.getCategories('DIADIEM_BH').then(res=>{
+    const getDistricts = () => {
+        categoryRepository.getCategories('DIADIEM_BH').then(res => {
             setOriginalDistricts(res.Data);
-        }).catch(err=>{
+        }).catch(err => {
 
         });
     }
@@ -145,9 +149,9 @@ function RegisterInsurance() {
                 // let fiels = form.getFieldsValue();
                 // console.log(values);
                 let body: any = {};
-                let dateStart = formatDate(moment(currentDateString,'DD/MM/YYYY').add(1, 'd'));
+                let dateStart = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd'));
                 let datePaid = formatDate(moment());
-                let duration = formatDate(moment(currentDateString,'DD/MM/YYYY').set('year', moment().get('year') + 1));
+                let duration = formatDate(moment(currentDateString, 'DD/MM/YYYY').set('year', moment().get('year') + 1));
                 if (productId === ENSURE_ELECTRIC) {
                     let listThamGia = [];
                     listThamGia.push({
@@ -174,7 +178,7 @@ function RegisterInsurance() {
                         'list_nguoithamgia': listThamGia,
                         'tong_phi': lodash.get(fee, 'TotalFee', ''),
                         'CpId': CPID,
-                        'sotien_bh':packageCode==='01'?10000000:packageCode==='02'?20000000:40000000,
+                        'sotien_bh': packageCode === '01' ? 10000000 : packageCode === '02' ? 20000000 : 40000000,
                         'ngaythanhtoan': datePaid,
                         'thoihan_bh': duration,
                         'ngay_batdau': dateStart,
@@ -192,83 +196,82 @@ function RegisterInsurance() {
                         'dia_chi_th': '',
                         'Sign': sign(`${values.customerEmail}${datePaid}${duration}${dateStart}${fee.TotalFee}${totalAmount}`)
                     }
-                }
-                else if(productId===ENSURE_HOUSE){
+                } else if (productId === ENSURE_HOUSE) {
                     let totalAmount = packageCode === '01' ? 100000000 : packageCode === '02' ? 200000000 : 400000000;
-                    body={
+                    body = {
                         'ma_giaodich': `${CPID}${moment().valueOf()}`,
                         'package': packageCode,
                         'goi_dichvu': '',
                         'ma_tinh': values.province,
-                        'ma_user':'',
-                        'ma_pkt':'',
-                        'ma_donvi':'',
-                        'file_GYC':'',
-                        'MaKhach':'',
-                        'ma_phuongthuc_thanhtoan':'0',
-                        'ma_daiLy':'',
+                        'ma_user': '',
+                        'ma_pkt': '',
+                        'ma_donvi': '',
+                        'file_GYC': '',
+                        'MaKhach': '',
+                        'ma_phuongthuc_thanhtoan': '0',
+                        'ma_daiLy': '',
                         'ma_diadiem': values.district,
-                        'select_mahieu_ruiro':'0',
-                        'select_danhsach_cautruc_xd':'',
-                        'ngaythanhtoan':datePaid,
-                        'nguoimua_bh':'',
-                        'ma_canbo_kt':'',
-                        'so_donbh':'',
-                        'khach_hang':values.customerName,
-                        'thoihan_bh':duration,
-                        'endtime':'23:59',
-                        'phi_giamphi':'0',
-                        'pr_key':'0',
-                        'Email':values.customerEmail,
-                        'ngay_batdau':dateStart,
-                        'starttime':'00:00',
-                        'dia_chi':'',
-                        'ma_nhomkenh':'',
-                        'ma_kenhbh':'',
-                        'loai_dcap':false,
-                        'ma_moigioi':'',
-                        'phi_moi_gioi':'',
-                        'ma_phuongthuc_kt':'',
-                        'tyle_bt':'0',
-                        'giatri_taisan':'0',
-                        'ma_danhsach_msudung':'',
-                        'pvbh_dkbs_01':false,
-                        'pvbh_dkbs_02':false,
-                        'link_filehd':'',
-                        'ma_tt':'',
-                        'makhach_th':'',
-                        'diachi_th':'',
-                        'so_ctu':'',
-                        'select_loai_dichvu':'',
-                        'ttin_bosung':'',
-                        'muc_khautru':'',
-                        'nam_xaydung':values.year,
-                        'so_tangnoi':'0',
-                        'so_tangham':'0',
-                        'dk_bs_bh_khac':false,
-                        'diengiai_dk_bs_bh_khac':'',
-                        'ma_sp_dichvu':'',
-                        'ma_sovat':'',
-                        'is_hdon_dt':false,
-                        'ttin_hd_dientu':'',
-                        'so_dienthoai':values.customerPhone,
-                        'so_cmt_hochieu':'',
-                        'nmua_hang':'',
-                        'dchi_xhoadon':'',
-                        'nnghe_kd':'',
-                        'dk_thanhtoan':'',
-                        'tyle_cnbb':'0',
-                        'diachi_nguoibh':'',
-                        'sotien_bh_bentrong':'',
+                        'select_mahieu_ruiro': '0',
+                        'select_danhsach_cautruc_xd': '',
+                        'ngaythanhtoan': datePaid,
+                        'nguoimua_bh': '',
+                        'ma_canbo_kt': '',
+                        'so_donbh': '',
+                        'khach_hang': values.customerName,
+                        'thoihan_bh': duration,
+                        'endtime': '23:59',
+                        'phi_giamphi': '0',
+                        'pr_key': '0',
+                        'Email': values.customerEmail,
+                        'ngay_batdau': dateStart,
+                        'starttime': '00:00',
+                        'dia_chi': '',
+                        'ma_nhomkenh': '',
+                        'ma_kenhbh': '',
+                        'loai_dcap': false,
+                        'ma_moigioi': '',
+                        'phi_moi_gioi': '',
+                        'ma_phuongthuc_kt': '',
+                        'tyle_bt': '0',
+                        'giatri_taisan': '0',
+                        'ma_danhsach_msudung': '',
+                        'pvbh_dkbs_01': false,
+                        'pvbh_dkbs_02': false,
+                        'link_filehd': '',
+                        'ma_tt': '',
+                        'makhach_th': '',
+                        'diachi_th': '',
+                        'so_ctu': '',
+                        'select_loai_dichvu': '',
+                        'ttin_bosung': '',
+                        'muc_khautru': '',
+                        'nam_xaydung': values.year,
+                        'so_tangnoi': '0',
+                        'so_tangham': '0',
+                        'dk_bs_bh_khac': false,
+                        'diengiai_dk_bs_bh_khac': '',
+                        'ma_sp_dichvu': '',
+                        'ma_sovat': '',
+                        'is_hdon_dt': false,
+                        'ttin_hd_dientu': '',
+                        'so_dienthoai': values.customerPhone,
+                        'so_cmt_hochieu': '',
+                        'nmua_hang': '',
+                        'dchi_xhoadon': '',
+                        'nnghe_kd': '',
+                        'dk_thanhtoan': '',
+                        'tyle_cnbb': '0',
+                        'diachi_nguoibh': '',
+                        'sotien_bh_bentrong': '',
                         'tong_phi': lodash.get(fee, 'TotalFee', ''),
                         'CpId': CPID,
                         'tong_tienbh': totalAmount,
                         'Sign': sign(`${values.customerEmail}${datePaid}${duration}${dateStart}${fee.TotalFee}${totalAmount}`)
                     }
-                    setProvinceSelected(provinces.find((x: any)=>x.Value===values.province));
-                    setDistrictSelected(districts.find((x: any)=>x.Value===values.district));
-                }else if(productId===ENSURE_CAR){
-                    let ma_giaodich=`${CPID}${moment().valueOf()}`;
+                    setProvinceSelected(provinces.find((x: any) => x.Value === values.province));
+                    setDistrictSelected(districts.find((x: any) => x.Value === values.district));
+                } else if (productId === ENSURE_CAR) {
+                    let ma_giaodich = `${CPID}${moment().valueOf()}`;
                     body = {
                         'ma_giaodich': ma_giaodich,
                         "TenKH": values.customerName,
@@ -305,7 +308,7 @@ function RegisterInsurance() {
                         "ThamGiaTNDSBB": true,
                         "ThamGiaTNDSTN": false,
                         "ThamGiaVCX": false,
-                        "ThamGiaLaiPhu": lodash.get(feeRequest,'thamgia_laiphu',false),
+                        "ThamGiaLaiPhu": lodash.get(feeRequest, 'thamgia_laiphu', false),
                         "ThamGiaHang": false,
                         "Zalo": false,
                         "Viber": false,
@@ -324,8 +327,8 @@ function RegisterInsurance() {
                         "EmailKH": values.customerEmail,
                         "SoCtu": "",
                         "LoaiXe": "",
-                        "ChoNgoi": lodash.get(feeRequest,'so_cho','0'),
-                        "TrongTai": lodash.get(feeRequest,'ma_trongtai',''),
+                        "ChoNgoi": lodash.get(feeRequest, 'so_cho', '0'),
+                        "TrongTai": lodash.get(feeRequest, 'ma_trongtai', ''),
                         "MTNHangHoa": "0",
                         "SoTan": "0",
                         "TyLeGPHang": "0",
@@ -347,16 +350,16 @@ function RegisterInsurance() {
                         "PhiBHTNDS": "0",
                         "ThamGiaVatChat": false,
                         "MaMucDichSD": "1",
-                        "MayKeo": lodash.get(feeRequest,'MayKeo',false),
-                        "XeChuyenDung":  lodash.get(feeRequest,'XeChuyenDung',false),
-                        "XeChoTien":  lodash.get(feeRequest,'XeChoTien',false),
-                        "XePickUp":  lodash.get(feeRequest,'XePickUp',false),
-                        "XeTaiVan":  lodash.get(feeRequest,'XeTaiVan',false),
-                        "XeTapLai":  lodash.get(feeRequest,'XeTapLai',false),
-                        "XeBus":  lodash.get(feeRequest,'XeBus',false),
-                        "XeCuuThuong":  lodash.get(feeRequest,'XeCuuThuong',false),
-                        "Xetaxi":  lodash.get(feeRequest,'Xetaxi',false),
-                        "XeDauKeo":  lodash.get(feeRequest,'XeDauKeo',false),
+                        "MayKeo": lodash.get(feeRequest, 'MayKeo', false),
+                        "XeChuyenDung": lodash.get(feeRequest, 'XeChuyenDung', false),
+                        "XeChoTien": lodash.get(feeRequest, 'XeChoTien', false),
+                        "XePickUp": lodash.get(feeRequest, 'XePickUp', false),
+                        "XeTaiVan": lodash.get(feeRequest, 'XeTaiVan', false),
+                        "XeTapLai": lodash.get(feeRequest, 'XeTapLai', false),
+                        "XeBus": lodash.get(feeRequest, 'XeBus', false),
+                        "XeCuuThuong": lodash.get(feeRequest, 'XeCuuThuong', false),
+                        "Xetaxi": lodash.get(feeRequest, 'Xetaxi', false),
+                        "XeDauKeo": lodash.get(feeRequest, 'XeDauKeo', false),
                         "NamSD": moment().get('year'),
                         "DongBH": "0",
                         "PhanBoDT": false,
@@ -392,52 +395,52 @@ function RegisterInsurance() {
                         "CpId": CPID,
                         "Sign": sign(ma_giaodich)
                     }
-                    setProvinceSelected(provinces.find((x: any)=>x.Value===values.carProvince));
+                    setProvinceSelected(provinces.find((x: any) => x.Value === values.carProvince));
                 }
                 setBodyRegister(body);
                 setStep(currentStep + 1);
             }).catch(err => {
                 console.log(err);
             });
-        } else if(currentStep<2){
+        } else if (currentStep < 2) {
             setStep(currentStep + 1);
-        }else{
+        } else {
             setShowConfirm(true);
         }
 
     }
-    const onSubmit=()=>{
+    const onSubmit = () => {
         setLoading(true);
-        if(webCode)
-            bodyRegister.web_code=webCode;
-        if(cardId)
+        if (webCode)
+            bodyRegister.web_code = webCode;
+        if (cardId)
             bodyRegister.CardId = cardId;
-        if(productId===ENSURE_ELECTRIC){
-            productRepository.createOrderHSDD(bodyRegister).then(res=>{
-               setResult(true);
-            }).catch(err=>{
+        if (productId === ENSURE_ELECTRIC) {
+            productRepository.createOrderHSDD(bodyRegister).then(res => {
+                setResult(true);
+            }).catch(err => {
                 setResult(false);
-            }).finally(()=>{
+            }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
                 setStep(3);
             });
-        }else if(productId===ENSURE_HOUSE){
-            productRepository.createOrderHouse(bodyRegister).then(res=>{
+        } else if (productId === ENSURE_HOUSE) {
+            productRepository.createOrderHouse(bodyRegister).then(res => {
                 setResult(true);
-            }).catch(err=>{
+            }).catch(err => {
                 setResult(false);
-            }).finally(()=>{
+            }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
                 setStep(3);
             });
-        }else if(productId===ENSURE_CAR){
-            productRepository.createOrderCar(bodyRegister).then(res=>{
+        } else if (productId === ENSURE_CAR) {
+            productRepository.createOrderCar(bodyRegister).then(res => {
                 setResult(true);
-            }).catch(err=>{
+            }).catch(err => {
                 setResult(false);
-            }).finally(()=>{
+            }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
                 setStep(3);
@@ -445,76 +448,85 @@ function RegisterInsurance() {
         }
     }
     const renderStep1 = () => {
-        return <div className={'pd5'}>
-            <span className={'robotobold txt-size-h1'}>Người mua bảo hiểm</span>
-            <Form
-                form={form}
-                name="basic"
-                labelAlign={'left'}
-                labelCol={{span: 8}}
-                wrapperCol={{span: 16}}
-                className={'mg120'}
-                autoComplete="off"
-                // onFieldsChange={(changedFields, allFields)=>{
-                //     let province: any = changedFields.find((x: any)=> x.name.includes('province'));
-                //     console.log(province);
-                //     if(province){
-                //         if(bodyRegister.ma_diadiem)
-                //         form.setFieldsValue({district:undefined});
-                //         setDistricts(originalDistricts.filter((x: any)=>x.Value.indexOf(province.value)===0))
-                //     }
-                // }
-                // }
-            >
-                <Form.Item
-                    label="Họ và tên"
-                    name="customerName"
-                    className={'mgbt5'}
-                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
-                >
-                    <Input/>
-                </Form.Item>
-                 <Form.Item
-                    label="Số điện thoại"
-                    name="customerPhone"
-                    className={'mgbt5'}
-                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
-                    normalize={(value, prevValue) => {
-                        let raw = value.replace(/[^\d]/g, "");
-                        return raw;
-                    }}
-                >
-                    <Input/>
-                </Form.Item>
-                <Form.Item
-                    label="Email"
-                    name="customerEmail"
-                    className={'mgbt5'}
-                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}, {
-                        type: 'email',
-                        message: 'Email không đúng định dạng',
-                    }]}
-                >
-                    <Input/>
-                </Form.Item>
-                <Form.Item
-                    name="agreement"
-                    valuePropName="checked"
-                    className={'mgbt5'}
-                    wrapperCol={{span:24}}
-                    rules={[
-                        {
-                            validator: (_, value) =>
-                                value ? Promise.resolve() : Promise.reject(new Error('Vui lòng nhập đầy đủ thông tin')),
-                        },
-                    ]}
-                >
-                    <Checkbox>
-                        <span>Tôi xác nhận thông tin là chính xác và đồng ý với <a href={`./pdf/${productId}.pdf`} target={'_blank'}>quy tắc sản phẩm</a></span>
-                    </Checkbox>
-                </Form.Item>
-                {renderFormByProductId()}
-            </Form>
+        return <div className="confirm-info">
+            <div className="row">
+                <div className="col-md-7">
+                    <div className="info-customer">
+                        <h3>Người mua bảo hiểm</h3>
+                        <Form
+                            form={form}
+                            name="basic"
+                            layout="vertical"
+                            className={'mg120'}
+                            autoComplete="off"
+                        >
+                            <Form.Item
+                                label="Họ và tên"
+                                name="customerName"
+                                className={'mgbt5'}
+                                rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
+                            >
+                                <Input/>
+                            </Form.Item>
+                            <Form.Item
+                                label="Số điện thoại"
+                                name="customerPhone"
+                                className={'mgbt5'}
+                                rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
+                                normalize={(value, prevValue) => {
+                                    let raw = value.replace(/[^\d]/g, "");
+                                    return raw;
+                                }}
+                            >
+                                <Input/>
+                            </Form.Item>
+                            <Form.Item
+                                label="Email"
+                                name="customerEmail"
+                                className={'mgbt5'}
+                                rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}, {
+                                    type: 'email',
+                                    message: 'Email không đúng định dạng',
+                                }]}
+                            >
+                                <Input/>
+                            </Form.Item>
+                            <Form.Item
+                                name="agreement"
+                                valuePropName="checked"
+                                className={'mgbt5'}
+                                wrapperCol={{span: 24}}
+                                rules={[
+                                    {
+                                        validator: (_, value) =>
+                                            value ? Promise.resolve() : Promise.reject(new Error('Vui lòng nhập đầy đủ thông tin')),
+                                    },
+                                ]}
+                            >
+                                <Checkbox>
+                                <span>Tôi xác nhận thông tin là chính xác và đồng ý với <a
+                                    href={`./pdf/${productId}.pdf`} target={'_blank'}>quy tắc sản phẩm</a></span>
+                                </Checkbox>
+                            </Form.Item>
+                            {renderFormByProductId()}
+                        </Form>
+                    </div>
+                </div>
+                <div className="col-md-5">
+                    <div className="info-order">
+                        <h3>Thông tin đơn hàng</h3>
+                        <p>Tên sản phẩm</p>
+                        <p>Bảo hiểm tai nạn hộ sử dụng điện</p>
+                        <div className="text-small">
+                            <p>Nhà cung cấp: Bảo hiểm PVI</p>
+                            <p>Gói sản phẩm: Gói Đồng</p>
+                            <p>Ngày hiệu lực: 24/04/2022</p>
+                            <p>Ngày hết hạn: 23/04/2023</p>
+                            <p>Tổng phí bảo hiểm: 28.000đ/năm</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     }
     const renderFormByProductId = () => {
@@ -628,8 +640,8 @@ function RegisterInsurance() {
                 >
                     <Select placeholder="Tỉnh/Thành Phố">
                         {
-                            provinces.map((x: any,index: number)=>{
-                                return  <Select.Option key={index} value={x.Value}>{x.Text}</Select.Option>
+                            provinces.map((x: any, index: number) => {
+                                return <Select.Option key={index} value={x.Value}>{x.Text}</Select.Option>
                             })
                         }
                     </Select>
@@ -654,9 +666,9 @@ function RegisterInsurance() {
                 >
                     <Select placeholder="Năm xây dựng">
                         {
-                            years.map((x: any,index: number)=>{
-                                if(x<1993) return;
-                                return  <Select.Option key={index} value={x}>{x}</Select.Option>
+                            years.map((x: any, index: number) => {
+                                if (x < 1993) return;
+                                return <Select.Option key={index} value={x}>{x}</Select.Option>
                             })
                         }
                     </Select>
@@ -668,14 +680,15 @@ function RegisterInsurance() {
                     className={'mgbt5'}
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                 >
-                    <Select onChange={(value)=>{{
-                        form.setFieldsValue({district:undefined});
-                        setDistricts(originalDistricts.filter((x: any)=>x.Value.indexOf(value)===0))
-                    }
-                    }} placeholder="Tỉnh/Thành Phố" >
+                    <Select onChange={(value) => {
                         {
-                            provinces.map((x: any,index: number)=>{
-                                return  <Select.Option key={index} value={x.Value}>{x.Text}</Select.Option>
+                            form.setFieldsValue({district: undefined});
+                            setDistricts(originalDistricts.filter((x: any) => x.Value.indexOf(value) === 0))
+                        }
+                    }} placeholder="Tỉnh/Thành Phố">
+                        {
+                            provinces.map((x: any, index: number) => {
+                                return <Select.Option key={index} value={x.Value}>{x.Text}</Select.Option>
                             })
                         }
                     </Select>
@@ -687,8 +700,8 @@ function RegisterInsurance() {
                 >
                     <Select placeholder="Quận/ Huyện">
                         {
-                            districts.map((x: any,index: number)=>{
-                                return  <Select.Option key={index} value={x.Value}>{x.Text}</Select.Option>
+                            districts.map((x: any, index: number) => {
+                                return <Select.Option key={index} value={x.Value}>{x.Text}</Select.Option>
                             })
                         }
                     </Select>
@@ -706,19 +719,24 @@ function RegisterInsurance() {
     }
     const renderStep2 = () => {
         return <Card>
-            <span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Thông tin người mua</span>
-            <RowItem title={'Họ và tên'} value={productId === ENSURE_CAR?bodyRegister.TenKH:bodyRegister.khach_hang}></RowItem>
+            <span
+                className={`robotobold ${isDesktopOrLaptop ? 'txt-size-h1' : 'txt-size-h4'}`}>Thông tin người mua</span>
+            <RowItem title={'Họ và tên'}
+                     value={productId === ENSURE_CAR ? bodyRegister.TenKH : bodyRegister.khach_hang}></RowItem>
             {/*{productId === ENSURE_ELECTRIC && <RowItem title={'Địa chỉ'} value={bodyRegister.dia_chi}></RowItem>}*/}
-                <RowItem title={'Số điện thoại'} value={productId === ENSURE_CAR?bodyRegister.DienThoai:bodyRegister.so_dienthoai}></RowItem>
-            <RowItem title={'Địa chỉ email'} value={productId === ENSURE_ELECTRIC?bodyRegister.email:productId === ENSURE_CAR?bodyRegister.EmailKH:bodyRegister.Email}></RowItem>
+            <RowItem title={'Số điện thoại'}
+                     value={productId === ENSURE_CAR ? bodyRegister.DienThoai : bodyRegister.so_dienthoai}></RowItem>
+            <RowItem title={'Địa chỉ email'}
+                     value={productId === ENSURE_ELECTRIC ? bodyRegister.email : productId === ENSURE_CAR ? bodyRegister.EmailKH : bodyRegister.Email}></RowItem>
             {
                 productId === ENSURE_ELECTRIC ? <div>
-                    <span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Chủ hộ</span>
+                    <span className={`robotobold ${isDesktopOrLaptop ? 'txt-size-h1' : 'txt-size-h4'}`}>Chủ hộ</span>
                     <RowItem title={'Họ và tên'} value={bodyRegister.list_nguoithamgia[0].ten_khach}></RowItem>
                     <RowItem title={'CMND/CCCD/Hộ chiếu'} value={bodyRegister.list_nguoithamgia[0].so_cmnd}></RowItem>
                     {/*<RowItem title={'Số điện thoại'} value={bodyRegister.list_nguoithamgia[0].dien_thoai}></RowItem>*/}
                     {/*<RowItem title={'Ngày sinh'} value={bodyRegister.list_nguoithamgia[0].ngay_sinh}></RowItem>*/}
-                    {bodyRegister.list_nguoithamgia?.length>1&&<span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Thành viên bổ sung</span>}
+                    {bodyRegister.list_nguoithamgia?.length > 1 &&
+                        <span className={`robotobold ${isDesktopOrLaptop ? 'txt-size-h1' : 'txt-size-h4'}`}>Thành viên bổ sung</span>}
                     {
                         bodyRegister.list_nguoithamgia.map((x: any, index: number) => {
                             if (index === 0)
@@ -730,14 +748,14 @@ function RegisterInsurance() {
                         })
                     }
                 </div> : productId === ENSURE_CAR ? <div>
-                    <span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Thông tin đăng ký xe</span>
+                    <span className={`robotobold ${isDesktopOrLaptop ? 'txt-size-h1' : 'txt-size-h4'}`}>Thông tin đăng ký xe</span>
                     <RowItem title={'Họ và tên'} value={bodyRegister.TenChuXe}></RowItem>
                     <RowItem title={'Biển số xe'} value={bodyRegister.BienKiemSoat}></RowItem>
                     <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected.Text}></RowItem>
                     <RowItem title={'Mục đích sử dụng'} value={getPurpose()}></RowItem>
                     <RowItem title={'Số chỗ ngồi'} value={bodyRegister.ChoNgoi}></RowItem>
                 </div> : productId === ENSURE_HOUSE ? <div>
-                    <span className={`robotobold ${isDesktopOrLaptop?'txt-size-h1':'txt-size-h4'}`}>Thông tin căn nhà</span>
+                    <span className={`robotobold ${isDesktopOrLaptop ? 'txt-size-h1' : 'txt-size-h4'}`}>Thông tin căn nhà</span>
                     <RowItem title={'Năm xây dựng'} value={bodyRegister.nam_xaydung}></RowItem>
                     <span className={'robotobold txt-size-h1'}>Địa điểm căn nhà</span>
                     <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected.Text}></RowItem>
@@ -749,7 +767,7 @@ function RegisterInsurance() {
     }
     const renderStep3 = () => {
         return <div className={''}>
-            {isTabletOrMobile&&renderOrderInfo()}
+            {isTabletOrMobile && renderOrderInfo()}
             <Alert
                 message={<span className={'robotobold'}>Thanh toán tiền mặt</span>}
                 description="Nhân viên bán hàng thu tiền mặt của khách hàng."
@@ -769,7 +787,7 @@ function RegisterInsurance() {
         //     </Col>
         // </Row>
     }
-    const renderOrderInfo=()=>{
+    const renderOrderInfo = () => {
         return <Card title="Thông tin đơn hàng">
             <RowItem title={'Tên sản phẩm'} value={getProductName()}></RowItem>
             <RowItem title={'Nhà cung cấp'} value={'Bảo hiểm PVI'}></RowItem>
@@ -793,63 +811,81 @@ function RegisterInsurance() {
     }
 
     return <MainLayout showProgressBar={showProgressBar} title={'Đăng ký'}>
-        <div className={'main-content mgt30'}>
-            {currentStep < 3 ? <div>
-                <Row className={'justify-content-center'}>
-                    <Col span={isDesktopOrLaptop?12:24}>
-                        <Steps className={'dpl-flex justify-content-center'} responsive={false} labelPlacement={'vertical'} current={currentStep}>
-                            <Step title="Đăng ký"/>
-                            <Step title="Xác nhận"/>
-                            <Step title="Thanh toán"/>
-                        </Steps>
-                    </Col>
-                </Row>
-                <Row gutter={24} className={'justify-content-center mgt10'}>
-                    <Col span={isDesktopOrLaptop?12:24} className={''}>
-                        {renderStep()}
-                        <Row className={'justify-content-between mgt20'}>
-                            <Button onClick={() => {
-                                if(currentStep>0) setStep(currentStep - 1);
-                                else navigate(`/products/${productId}`);
-                            }} size={'large'}
-                                    shape={'round'}>Quay lại</Button>
-                            <Button onClick={nextStep} size={'large'} shape={'round'}
-                                    type={'primary'}>{currentStep < 2 ? 'Tiếp tục' : 'Xác nhận'}</Button>
-                        </Row>
-                    </Col>
-                    {isDesktopOrLaptop&&<Col span={10} className={''}>
-                        {renderOrderInfo()}
-                    </Col>}
-                </Row>
-            </div>:
-                <div>
-                    {result?<Result
-                        status="success"
-                        title="Đăng ký bảo hiểm thành công"
-                        subTitle="Giấy chứng nhận bảo hiểm sẽ được gửi về email khách hàng đăng ký"
-                        extra={[
-                            <Button onClick={()=> window.location.reload()} type="primary" key="console">
-                                Đăng ký tiếp
-                            </Button>,
-                            <Button onClick={()=>navigate('/')} key="buy">Trang chủ</Button>,
-                        ]}
-                    />:
-                        <Result
-                            status="error"
-                            title="Tạo hợp đồng bảo hiểm thất bại"
-                            subTitle="Vui lòng thực hiện đăng ký lại"
-                            extra={[
-                                <Button onClick={()=> window.location.reload()} type="primary" key="console">
-                                    Đăng ký lại
-                                </Button>,
-                                <Button onClick={()=>navigate('/')} key="buy">Trang chủ</Button>,
-                            ]}
-                        >
-                        </Result>}
+        <div className="confirm-page content register">
+            <div className="container">
+                <div className="head-title">
+                    <h1>Đăng ký mua</h1>
+                    <p>Vui lòng thực hiện theo các bước</p>
+                    <ul>
+                        <li className="active"><a href="#"><img src={iconStep1} alt=""/>Đăng ký</a></li>
+                        <li className="#"><a href="#"><img src={iconStep2} alt=""/>Xác nhận</a></li>
+                        <li><a href="#"><img src={iconStep3} alt=""/>Thanh toán</a></li>
+                    </ul>
                 </div>
-            }
-            <ConfirmModal loading={loading} onSubmit={onSubmit} onCancel={()=> setShowConfirm(false)} visible={showConfirm} title={'Xác nhận thanh toán'} content={'Bạn xác nhận đã thu đủ tiền mặt của khách hàng. Hệ thống sẽ tạo hợp đồng bảo hiểm, Bạn không thể thay đổi thông tin đăng ký này'}></ConfirmModal>
+                {renderStep()}
+                <div className="button-group">
+                    <button type="button" className="cancel">Quay lại</button>
+                    <button type="button" className="continue">Tiếp tục</button>
+                </div>
+            </div>
         </div>
+        {/*<div className={'main-content mgt30'}>*/}
+        {/*    {currentStep < 3 ? <div>*/}
+        {/*        <Row className={'justify-content-center'}>*/}
+        {/*            <Col span={isDesktopOrLaptop?12:24}>*/}
+        {/*                <Steps className={'dpl-flex justify-content-center'} responsive={false} labelPlacement={'vertical'} current={currentStep}>*/}
+        {/*                    <Step title="Đăng ký"/>*/}
+        {/*                    <Step title="Xác nhận"/>*/}
+        {/*                    <Step title="Thanh toán"/>*/}
+        {/*                </Steps>*/}
+        {/*            </Col>*/}
+        {/*        </Row>*/}
+        {/*        <Row gutter={24} className={'justify-content-center mgt10'}>*/}
+        {/*            <Col span={isDesktopOrLaptop?12:24} className={''}>*/}
+        {/*                {renderStep()}*/}
+        {/*                <Row className={'justify-content-between mgt20'}>*/}
+        {/*                    <Button onClick={() => {*/}
+        {/*                        if(currentStep>0) setStep(currentStep - 1);*/}
+        {/*                        else navigate(`/products/${productId}`);*/}
+        {/*                    }} size={'large'}*/}
+        {/*                            shape={'round'}>Quay lại</Button>*/}
+        {/*                    <Button onClick={nextStep} size={'large'} shape={'round'}*/}
+        {/*                            type={'primary'}>{currentStep < 2 ? 'Tiếp tục' : 'Xác nhận'}</Button>*/}
+        {/*                </Row>*/}
+        {/*            </Col>*/}
+        {/*            {isDesktopOrLaptop&&<Col span={10} className={''}>*/}
+        {/*                {renderOrderInfo()}*/}
+        {/*            </Col>}*/}
+        {/*        </Row>*/}
+        {/*    </div>:*/}
+        {/*        <div>*/}
+        {/*            {result?<Result*/}
+        {/*                status="success"*/}
+        {/*                title="Đăng ký bảo hiểm thành công"*/}
+        {/*                subTitle="Giấy chứng nhận bảo hiểm sẽ được gửi về email khách hàng đăng ký"*/}
+        {/*                extra={[*/}
+        {/*                    <Button onClick={()=> window.location.reload()} type="primary" key="console">*/}
+        {/*                        Đăng ký tiếp*/}
+        {/*                    </Button>,*/}
+        {/*                    <Button onClick={()=>navigate('/')} key="buy">Trang chủ</Button>,*/}
+        {/*                ]}*/}
+        {/*            />:*/}
+        {/*                <Result*/}
+        {/*                    status="error"*/}
+        {/*                    title="Tạo hợp đồng bảo hiểm thất bại"*/}
+        {/*                    subTitle="Vui lòng thực hiện đăng ký lại"*/}
+        {/*                    extra={[*/}
+        {/*                        <Button onClick={()=> window.location.reload()} type="primary" key="console">*/}
+        {/*                            Đăng ký lại*/}
+        {/*                        </Button>,*/}
+        {/*                        <Button onClick={()=>navigate('/')} key="buy">Trang chủ</Button>,*/}
+        {/*                    ]}*/}
+        {/*                >*/}
+        {/*                </Result>}*/}
+        {/*        </div>*/}
+        {/*    }*/}
+        {/*    <ConfirmModal loading={loading} onSubmit={onSubmit} onCancel={()=> setShowConfirm(false)} visible={showConfirm} title={'Xác nhận thanh toán'} content={'Bạn xác nhận đã thu đủ tiền mặt của khách hàng. Hệ thống sẽ tạo hợp đồng bảo hiểm, Bạn không thể thay đổi thông tin đăng ký này'}></ConfirmModal>*/}
+        {/*</div>*/}
     </MainLayout>
 }
 

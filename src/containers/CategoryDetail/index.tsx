@@ -10,6 +10,7 @@ import iconUp2 from '../../resources/images/icon-up2.svg';
 import iconH21 from '../../resources/images/icon-h21.svg';
 import iconH22 from '../../resources/images/icon-h22.svg';
 import iconH23 from '../../resources/images/icon-h23.svg';
+import iconCheckmark from '../../resources/images/Checkmark.png';
 import lodash from "lodash";
 import CarFee from "../../components/CategoryDetail/CarFee";
 import {useMediaQuery} from "react-responsive";
@@ -1180,6 +1181,10 @@ function CategoryDetail() {
             M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
         }).finally(()=> setLoading(false));
     }
+    const canRegister=()=>{
+        if(loading||checkDisableRegister()||!fee) return false;
+        return true;
+    }
     const getFeeHouse=()=>{
         let body = {
             "cpid":CPID,
@@ -1239,7 +1244,8 @@ function CategoryDetail() {
             }
             if (!product) product = category.products[0];
             setCurrentProduct(product);
-            setCurrentPackage(product.benefit.packages[0].code);
+            if(product.code!==ENSURE_EXTEND)
+                setCurrentPackage(product?.benefit?.packages[0]?.code);
         }
 
     }, [categoryId]);
@@ -1350,6 +1356,7 @@ function CategoryDetail() {
                         // if(bodyOto.XeTapLai&&x.code!=='XePickUp'&&x.code!=='XeTaiVan')
                         //     disable=true;
                         return <Col span={12} className={''}>
+                            <Checkbox checked={lodash.get(bodyOto, x.code, false)} onChange={(e)=> changeTypeCar(e.target.checked, x.code)}>{x.name}</Checkbox>
                         </Col>
                     })
                 }
@@ -1411,8 +1418,8 @@ function CategoryDetail() {
             </div>
             <label>Thời hạn bảo hiểm bảo hành mở rộng</label>
             <Select className={'width100'}>
-                <Select.Option value={6}>6 tháng</Select.Option>
-                <Select.Option value={12}>12 tháng</Select.Option>
+                <Select.Option value={'0101'}>6 tháng</Select.Option>
+                <Select.Option value={'0102'}>12 tháng</Select.Option>
             </Select>
             <label>Giá trị thiết bị tại thời điểm tham gia bảo hiểm (VNĐ)</label>
             <Input placeholder="Ví dụ: 2100000" />
@@ -1521,9 +1528,9 @@ function CategoryDetail() {
                                         <div className="tab-pane fade show active" id="pills-home" role="tabpanel"
                                              aria-labelledby="pills-home-tab">
                                             {
-                                                currentProduct?.benefit?.categories.map((x: any) => {
-                                                    let itemPkg = currentProduct?.benefit.packages.find((xx: any) => xx.code === currentPackage);
-                                                    let benefit = itemPkg.benefits.find((xx: any) => xx.category === x.code);
+                                                currentProduct?.benefit?.categories?.map((x: any) => {
+                                                    let itemPkg = currentProduct?.benefit?.packages?.find((xx: any) => xx.code === currentPackage);
+                                                    let benefit = itemPkg?.benefits?.find((xx: any) => xx.category === x.code);
                                                     return <div className="row">
                                                         <div className="col-6">
                                                             <p>{x.name}</p>
@@ -1553,7 +1560,7 @@ function CategoryDetail() {
                                             margin: '24px 0'
                                         }}>{formatMoneyByUnit(lodash.get(fee,'TotalFee',''))}</p>
                                         <h3 className="mb-show">Phí bảo hiểm <span>{formatMoneyByUnit(lodash.get(fee,'TotalFee',''))}</span></h3>
-                                        <a href="dangkyxeoto.html"><img src="images/Checkmark.svg" alt=""/>Đăng ký</a>
+                                        <a onClick={() => navigate(`/products/${currentProduct?.code}/register?packageCode=${currentPackage}${currentProduct?.code===ENSURE_CAR?`&purpose=${purpose.code}`:''}`)}>{canRegister()&&<img src={iconCheckmark} alt=""/>}Đăng ký</a>
                                     </div>
                                 </div>
                             </div>

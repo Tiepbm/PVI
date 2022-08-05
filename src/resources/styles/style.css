@@ -655,7 +655,7 @@ select {
     padding-left: 0;
 }
 .tab-content .tab-content1 .cost-info label {
-	display: block;
+	/*display: block;*/
 	margin: 8px 0;
 	font-size: 16px;
 	line-height: 19px;
