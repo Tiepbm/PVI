@@ -46,3 +46,14 @@ span.ant-radio + *{
 .ant-row .ant-form-item{
   margin-bottom: 5px;
 }
+.ant-form{
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    height: 56px;
+    line-height: 56px;
+    border: 1px solid #D3D5D8;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 16px;
+    color: #172B4D;
+  }
+}

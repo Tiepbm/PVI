@@ -3,11 +3,11 @@ import React from "react";
 interface RowItemProps{
     title:string;
     value: any;
-    className?: string
+    className?: string,
 }
 function RowItem (props: RowItemProps){
     const{title, value, className} = props;
-    return <li>{`${title}: ${value}`}</li>
+    return <p>{`${title}: ${value}`}</p>
     // return <Row className={`${className} mgbt5`}>
     //     <Col span={12}>
     //         <span>{title}</span>

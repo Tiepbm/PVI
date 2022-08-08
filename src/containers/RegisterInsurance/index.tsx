@@ -177,7 +177,7 @@ function RegisterInsurance() {
                     values.persons?.map((x: any) => {
                         listThamGia.push({
                             ten_khach: x.fullname,
-                            ngay_sinh: formatDate(x.birthday),
+                            so_cmnd: x.so_cmnd
                         });
                     });
                     let totalAmount = packageCode === '01' ? 10000000 : packageCode === '02' ? 20000000 : 40000000;
@@ -239,7 +239,7 @@ function RegisterInsurance() {
                         'Email': values.customerEmail,
                         'ngay_batdau': dateStart,
                         'starttime': '00:00',
-                        'dia_chi': '',
+                        'dia_chi': values.address,
                         'ma_nhomkenh': '',
                         'ma_kenhbh': '',
                         'loai_dcap': false,
@@ -418,7 +418,7 @@ function RegisterInsurance() {
                         "Sign": sign(`${dataExtendRegister.ngay_batdau}${dataExtendRegister.thoihan_bh}${ma_giaodich}${values.customerEmail}`),
                         ma_chuongtrinh:chuong_trinh,
                         ng_gdich_th:values.customerName,
-                        dia_chi_th:values.address,
+                        dia_chi_th:values.customerAddress,
                         ma_gdich_doitac:ma_giaodich,
                         ma_user:'',
                         EndTime:'23:59',
@@ -429,7 +429,7 @@ function RegisterInsurance() {
                         pr_key:0,
                         Email:values.customerEmail,
                         ngay_batdau:dataExtendRegister.ngay_batdau,
-                        dia_chi:values.address,
+                        dia_chi:values.customerAddress,
                         web_code:'d8b0498edf11489fb8d5eebc1171012d',
                         ThietBiDinhKem:[
                             {
@@ -551,7 +551,7 @@ function RegisterInsurance() {
                             form={form}
                             name="basic"
                             layout="vertical"
-                            className={'mg120'}
+                            className={'form-registe mg120'}
                             autoComplete="off"
                         >
                             <Form.Item
@@ -564,7 +564,7 @@ function RegisterInsurance() {
                             </Form.Item>
                             {productId===ENSURE_EXTEND&& <Form.Item
                                 label="Địa chỉ"
-                                name="address"
+                                name="customerAddress"
                                 rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                             >
                                 <Input placeholder={'Nhập địa chỉ'}></Input>
@@ -609,7 +609,7 @@ function RegisterInsurance() {
     const renderFormByProductId = () => {
         if (productId === ENSURE_ELECTRIC) {
             return <div>
-                <span className={'robotobold txt-size-h1'}>Chủ hộ</span>
+                <h3>Chủ hộ</h3>
                 <Form.Item
                     label="Họ và tên"
                     name="ownerName"
@@ -630,32 +630,19 @@ function RegisterInsurance() {
                 >
                     <Input placeholder={'CMND/CCCD/Hộ chiếu'}/>
                 </Form.Item>
-                {/*<Form.Item*/}
-                {/*    label="Ngày sinh"*/}
-                {/*    name="ownerBirthday"*/}
-                {/*    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}*/}
-                {/*>*/}
-                {/*    <DatePicker placeholder={'Chọn ngày sinh'} disabledDate={disabledDate}*/}
-                {/*                suffixIcon={<i className="fas fa-calendar-alt"></i>}*/}
-                {/*                className={'width100'} format={'DD/MM/YYYY'}/>*/}
-                {/*</Form.Item>*/}
-
-                <span className={'robotobold txt-size-h1'}>Thành viên bổ sung</span>
-                <Row className={'mgt5 mgbt5'}><span>* Thành viên trong gia đình sống cùng chủ hộ nhưng không có tên trong hộ khẩu</span></Row>
+                <h3>Thành viên bổ sung</h3>
+                <Row className={'mgt5 mgbt5'}><p>* Thành viên trong gia đình sống cùng chủ hộ nhưng không có tên trong hộ khẩu</p></Row>
                 <Form.List name={'persons'}>
                     {(fields, {add, remove}) => (
                         <>
                             {fields.map(({key, name, ...restField}: any) => (
 
-                                <div key={key} className={'10'}>
-                                    <Row className={'justify-content-between align-items-center mgbt5'}>
-                                        <span className={'robotobold txt-size-h4'}>Thành viên</span>
-                                        <span onClick={() => {
-                                            remove(name);
-                                        }
-                                        } className={'txt-size-h4 txt-color-red'}><i
-                                            className="fas fa-trash-alt"></i></span>
-                                    </Row>
+                                <div className="new-member">
+                                   <span onClick={() => {
+                                       remove(name);
+                                   }
+                                   } className={'txt-size-h4 txt-color-red delete-member'}><i
+                                       className="fas fa-trash-alt"></i></span>
                                     <Form.Item
                                         {...restField}
                                         label="Họ và tên"
@@ -663,29 +650,26 @@ function RegisterInsurance() {
                                         name={[name, 'fullname']}
                                         rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                                     >
-                                        <Input onChange={(e) => {
-                                        }
-                                        } placeholder={'Họ và tên'}/>
+                                        <Input placeholder={'Nhập họ và tên'}/>
                                     </Form.Item>
                                     <Form.Item
                                         {...restField}
-                                        label="Ngày sinh"
+                                        label="Số CMND/CCCD/Hộ chiếu"
                                         className={'mgbt5'}
-                                        name={[name, 'birthday']}
+                                        name={[name, 'so_cmnd']}
                                         rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                                     >
-                                        <DatePicker placeholder={'Chọn ngày sinh'} disabledDate={disabledDate}
-                                                    suffixIcon={<i className="fas fa-calendar-alt"></i>}
-                                                    className={'width100'} format={'DD/MM/YYYY'}/>
+                                        <Input placeholder={'Nhập CMND/CCCD/Hộ chiếu'}/>
                                     </Form.Item>
                                 </div>
                             ))}
                             <Form.Item>
-                                <Button onClick={() => {
+                                <button className="add-member" onClick={() => {
                                     add();
-                                }} icon={<PlusCircleOutlined/>} type={'link'}>Thêm thành viên</Button>
+                                }}><img className={'mgr15'} src={require('../../resources/images/icon-add.png')} alt=""/>Thêm thành viên</button>
+
                             </Form.Item>
-                        </>
+                             </>
                     )}
                 </Form.List>
 
@@ -816,9 +800,12 @@ function RegisterInsurance() {
                         bodyRegister.list_nguoithamgia.map((x: any, index: number) => {
                             if (index === 0)
                                 return null
-                            return <div className={'mgt15'}>
-                                <RowItem title={'Họ và tên'} value={x.ten_khach}></RowItem>
-                                <RowItem title={'Ngày sinh'} value={x.ngay_sinh}></RowItem>
+                            return <div className={'row-person'}>
+                                <p>{index}</p>
+                                <p>
+                                    <span>{`Họ và tên: ${x.ten_khach}`}</span>
+                                    <span>{`Số CMT/CCCD/Hộ chiếu: ${x.so_cmnd}`}</span>
+                                </p>
                             </div>
                         })
                     }

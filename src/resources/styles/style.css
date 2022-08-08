@@ -1011,18 +1011,18 @@ select {
 	color: #000000;
 	margin-bottom: 0;
 }
-.confirm-page .confirm-register .confirm-info .info-customer > div {
+.row-person {
     display: flex;
     margin-bottom: 20px;
     padding-bottom: 20px;
     border-bottom: 1px solid #ccc;
 }
-.confirm-page .confirm-info .info-customer > div:last-child {
+.row-person:last-child {
 	margin-bottom: 0;
 	border-bottom: none;
 	padding-bottom: 0;
 }
-.confirm-page .confirm-info .info-customer > div > p:first-child {
+.row-person > p:first-child {
 	font-size: 16px;
 	text-align: center;
 	color: #F4FAFD;
@@ -1034,7 +1034,7 @@ select {
 	margin-top: 4px;
 	margin-right: 8px;
 }
-.confirm-page .confirm-info .info-customer > div > p span {
+.row-person > p span {
 	display: block;
 }
 .confirm-page .confirm-info .info-order h3 + p {
@@ -1094,14 +1094,14 @@ select {
 	color: #353535;
 	margin-bottom: 4px;
 }
-.confirm-page .register .info-customer .new-member {
+.new-member {
 	position: relative;
 	background: rgba(196, 196, 196, 0.3);
 	border-radius: 8px;
 	margin: 0px -8px 21px -8px;
     padding: 8px 10px;
 }
-.confirm-page .register .info-customer .new-member .delete-member {
+.new-member .delete-member {
     position: absolute;
     content: url(../images/rycicle.png);
     top: -12px;
@@ -1120,7 +1120,7 @@ select {
     right: 16px;
     cursor: pointer;
 }
-.confirm-page .register .info-customer button:last-child {
+.add-member {
 	font-size: 16px;
 	color: #022569;
 	text-align: left;
