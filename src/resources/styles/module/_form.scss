@@ -31,7 +31,7 @@ span.ant-radio + *{
   font-size: 16px;
 }
 .ant-form-item-control-input input{
-  margin: 10px 0;
+  //margin: 10px 0;
   height: 56px;
   line-height: 56px;
   border: 1px solid #D3D5D8;
@@ -39,4 +39,10 @@ span.ant-radio + *{
   padding: 8px 12px;
   font-size: 16px;
   color: #172B4D;
+}
+.ant-form-vertical .ant-form-item{
+  margin-bottom: 10px;
+}
+.ant-row .ant-form-item{
+  margin-bottom: 5px;
 }

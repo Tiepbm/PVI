@@ -6,9 +6,9 @@ import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import RowItem from '../../components/RowItem';
 import {CheckCircleOutlined, PlusCircleOutlined} from "@ant-design/icons";
 import {
-    CPID,
+    CPID, DATA_REGISTER,
     ENSURE_CAR,
-    ENSURE_ELECTRIC,
+    ENSURE_ELECTRIC, ENSURE_EXTEND,
     ENSURE_HOUSE,
     FEE,
     FEE_REQUEST,
@@ -29,6 +29,10 @@ import {useMediaQuery} from "react-responsive";
 import iconStep1 from "../../resources/images/li-cancuoc.svg";
 import iconStep2 from "../../resources/images/li-list.svg";
 import iconStep3 from "../../resources/images/icon-payment.svg";
+import iconTien from "../../resources/images/tt-tien.svg";
+import iconPayment from "../../resources/images/payment.svg";
+import iconSuccess from "../../resources/images/tt-thanhcong.svg";
+import SuccessModal from "../../components/Modal/SuccessModal";
 
 const {Step} = Steps;
 const {confirm} = Modal;
@@ -40,23 +44,27 @@ function RegisterInsurance() {
     const navigate = useNavigate();
     const [packageCode, setPackageCode] = useState<string | null>(searchParams.get('packageCode'));
     const [currentStep, setStep] = useState<number>(0);
-    const [fee] = useState(localStorageRead(FEE));
+    const [fee] = useState<any>(localStorageRead(FEE));
     const [currentDateString, setCurrentDateString] = useState(localStorageRead('DATE'));
     const [feeRequest] = useState(localStorageRead(FEE_REQUEST));
+    const [dataExtendRegister] = useState(localStorageRead(DATA_REGISTER));
     const [showConfirm, setShowConfirm] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [result, setResult] = useState<boolean>(false);
+    const [showResult, setShowResult] = useState<boolean>(false);
     const [provinces, setProvinces] = useState<any>([]);
     const [districts, setDistricts] = useState<any>([]);
     const [provinceSelected, setProvinceSelected] = useState<any>();
     const [districtSelected, setDistrictSelected] = useState<any>();
     const [originalDistricts, setOriginalDistricts] = useState<any>([]);
     const [years, setYears] = useState<any>([]);
+    const [agree, setAgree] = useState<boolean>(false);
     const [form] = Form.useForm();
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
     const [cardId, setCardId] = useSessionStorage('cardid', '');
     const isDesktopOrLaptop = useMediaQuery({minWidth: 768});
     const isTabletOrMobile = useMediaQuery({maxWidth: 767});
+    console.log(dataExtendRegister);
     const disabledDate = (current: any) => {
         // Can not select days before today and today
         return current && current > moment().endOf('day');
@@ -97,17 +105,19 @@ function RegisterInsurance() {
                 return 'Bảo hiểm ô tô PVI';
             case ENSURE_HOUSE:
                 return 'Bảo hiểm nhà ở toàn diện';
+            case ENSURE_EXTEND:
+                return 'Bảo hiểm bảo hành mở rộng';
         }
     }
     const getPackageName = () => {
         if (productId === ENSURE_ELECTRIC) {
             switch (packageCode) {
                 case '01':
-                    return 'Gói cơ bản';
+                    return 'Gói Đồng';
                 case '02':
-                    return 'Gói tiêu chuẩn';
+                    return 'Gói Bạc';
                 case '03':
-                    return 'Gói nâng cao';
+                    return 'Gói Vàng';
             }
         } else if (productId === ENSURE_CAR) {
             switch (packageCode) {
@@ -121,11 +131,11 @@ function RegisterInsurance() {
         } else if (productId === ENSURE_HOUSE) {
             switch (packageCode) {
                 case '01':
-                    return 'Gói cơ bản';
+                    return 'Gói Đồng';
                 case '02':
-                    return 'Gói tiêu chuẩn';
+                    return 'Gói Bạc';
                 case '03':
-                    return 'Gói nâng cao';
+                    return 'Gói Vàng';
             }
         }
     }
@@ -136,6 +146,9 @@ function RegisterInsurance() {
 
         });
     }
+    const onContinue=()=>{
+      window.location.reload();
+    }
     const getDistricts = () => {
         categoryRepository.getCategories('DIADIEM_BH').then(res => {
             setOriginalDistricts(res.Data);
@@ -145,6 +158,7 @@ function RegisterInsurance() {
     }
     const nextStep = () => {
         if (currentStep === 0) {
+            if(!agree) return;
             form.validateFields().then(values => {
                 // let fiels = form.getFieldsValue();
                 // console.log(values);
@@ -396,6 +410,45 @@ function RegisterInsurance() {
                         "Sign": sign(ma_giaodich)
                     }
                     setProvinceSelected(provinces.find((x: any) => x.Value === values.carProvince));
+                }else if(productId===ENSURE_EXTEND){
+                    let ma_giaodich = `${CPID}${moment().valueOf()}`;
+                    let chuong_trinh = lodash.get(dataExtendRegister,'chuong_trinh','');
+                     body={
+                        "CpId": CPID,
+                        "Sign": sign(`${dataExtendRegister.ngay_batdau}${dataExtendRegister.thoihan_bh}${ma_giaodich}${values.customerEmail}`),
+                        ma_chuongtrinh:chuong_trinh,
+                        ng_gdich_th:values.customerName,
+                        dia_chi_th:values.address,
+                        ma_gdich_doitac:ma_giaodich,
+                        ma_user:'',
+                        EndTime:'23:59',
+                        StartTime:'00:00',
+                        dien_thoai:'',
+                        khach_hang:values.customerName,
+                        thoihan_bh:dataExtendRegister.thoihan_bh,
+                        pr_key:0,
+                        Email:values.customerEmail,
+                        ngay_batdau:dataExtendRegister.ngay_batdau,
+                        dia_chi:values.address,
+                        web_code:'d8b0498edf11489fb8d5eebc1171012d',
+                        ThietBiDinhKem:[
+                            {
+                                loai_thietbi:lodash.get(dataExtendRegister,'loai_thietbi',''),
+                                hang:lodash.get(dataExtendRegister,'hang',''),
+                                model:lodash.get(dataExtendRegister,'model',''),
+                                so_serial:lodash.get(dataExtendRegister,'so_serial',''),
+                                so_IMEI:lodash.get(dataExtendRegister,'so_IMEI',''),
+                                thoihan_batdau_baohanh_nsx:lodash.get(dataExtendRegister,'thoihan_batdau_baohanh_nsx',''),
+                                thoihan_ketthuc_baohanh_nsx:lodash.get(dataExtendRegister,'thoihan_ketthuc_baohanh_nsx',''),
+                                giatri_thietbi:lodash.get(dataExtendRegister,'giatri_thietbi',''),
+                                phi_baohiem_thietbi:lodash.get(fee,'TotalFee',''),
+                                sotien_baohiem:lodash.get(dataExtendRegister,'giatri_thietbi',''),
+                                goi_khuyenmai:lodash.get(dataExtendRegister,'khuyen_mai',0),
+
+                            }
+                        ]
+
+                }
                 }
                 setBodyRegister(body);
                 setStep(currentStep + 1);
@@ -405,6 +458,7 @@ function RegisterInsurance() {
         } else if (currentStep < 2) {
             setStep(currentStep + 1);
         } else {
+            console.log('vao day');
             setShowConfirm(true);
         }
 
@@ -423,7 +477,7 @@ function RegisterInsurance() {
             }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
-                setStep(3);
+                setShowResult(true);
             });
         } else if (productId === ENSURE_HOUSE) {
             productRepository.createOrderHouse(bodyRegister).then(res => {
@@ -433,7 +487,7 @@ function RegisterInsurance() {
             }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
-                setStep(3);
+                setShowResult(true);
             });
         } else if (productId === ENSURE_CAR) {
             productRepository.createOrderCar(bodyRegister).then(res => {
@@ -443,9 +497,49 @@ function RegisterInsurance() {
             }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
-                setStep(3);
+                setShowResult(true);
+            });
+        }else if(productId===ENSURE_EXTEND){
+            productRepository.createOrderExtend(bodyRegister).then(res => {
+                setResult(true);
+            }).catch(err => {
+                setResult(false);
+            }).finally(() => {
+                setShowConfirm(false);
+                setLoading(false);
+                setShowResult(true);
             });
         }
+    }
+    const renderOrderInfo=()=>{
+        return <div className="col-md-5">
+            <div className="info-order">
+                <h3>Thông tin đơn hàng</h3>
+                <p>Tên sản phẩm</p>
+                <p>{getProductName()}</p>
+                <div className="text-small">
+                    <p>Nhà cung cấp: Bảo hiểm PVI</p>
+                    {packageCode&&<p>{`Gói sản phẩm: ${getPackageName()}`}</p>}
+                    {productId===ENSURE_EXTEND?
+                        <div>
+                            <RowItem title={'Loại thiết bị'} value={dataExtendRegister?.loai_thietbi}></RowItem>
+                            <RowItem title={'Hãng'} value={dataExtendRegister?.hang}></RowItem>
+                            <RowItem title={'Model'} value={dataExtendRegister?.model}></RowItem>
+                            <RowItem title={'Số Serial'} value={dataExtendRegister?.so_serial}></RowItem>
+                            <RowItem title={'Số IMEI'} value={dataExtendRegister?.so_IMEI}></RowItem>
+                            <RowItem title={'Thời hạn bảo hành gốc của nhà sản xuất'} value={`Từ ${dataExtendRegister?.thoihan_batdau_baohanh_nsx} đến ${dataExtendRegister?.thoihan_ketthuc_baohanh_nsx}`}></RowItem>
+                            <RowItem title={'Thời hạn bảo hiểm bảo hành mở rộng'} value={`Từ ${dataExtendRegister.ngay_batdau} đến ${dataExtendRegister.thoihan_bh}`}></RowItem>
+                            <RowItem title={'Giá trị thiết bị tại thời điểm tham gia bảo hiểm'} value={formatMoneyByUnit(dataExtendRegister?.giatri_thietbi)}></RowItem>
+                            <p><strong>{`PHÍ BẢO HIỂM (bao gồm VAT): ${formatMoneyByUnit(fee.TotalFee)}`}</strong></p>
+                        </div>:
+                        <div>
+                            <p>Ngày hiệu lực: 24/04/2022</p>
+                            <p>Ngày hết hạn: 23/04/2023</p>
+                            <p>{`Tổng phí bảo hiểm: ${formatMoneyByUnit(fee?.TotalFee)}/năm`}</p>
+                        </div>}
+                </div>
+            </div>
+        </div>
     }
     const renderStep1 = () => {
         return <div className="confirm-info">
@@ -466,66 +560,49 @@ function RegisterInsurance() {
                                 className={'mgbt5'}
                                 rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                             >
-                                <Input/>
+                                <Input placeholder={'Nhập họ tên'}/>
                             </Form.Item>
-                            <Form.Item
-                                label="Số điện thoại"
-                                name="customerPhone"
-                                className={'mgbt5'}
+                            {productId===ENSURE_EXTEND&& <Form.Item
+                                label="Địa chỉ"
+                                name="address"
                                 rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
-                                normalize={(value, prevValue) => {
-                                    let raw = value.replace(/[^\d]/g, "");
-                                    return raw;
-                                }}
                             >
-                                <Input/>
-                            </Form.Item>
-                            <Form.Item
-                                label="Email"
-                                name="customerEmail"
-                                className={'mgbt5'}
-                                rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}, {
-                                    type: 'email',
-                                    message: 'Email không đúng định dạng',
-                                }]}
-                            >
-                                <Input/>
-                            </Form.Item>
-                            <Form.Item
-                                name="agreement"
-                                valuePropName="checked"
-                                className={'mgbt5'}
-                                wrapperCol={{span: 24}}
-                                rules={[
-                                    {
-                                        validator: (_, value) =>
-                                            value ? Promise.resolve() : Promise.reject(new Error('Vui lòng nhập đầy đủ thông tin')),
-                                    },
-                                ]}
-                            >
-                                <Checkbox>
-                                <span>Tôi xác nhận thông tin là chính xác và đồng ý với <a
-                                    href={`./pdf/${productId}.pdf`} target={'_blank'}>quy tắc sản phẩm</a></span>
-                                </Checkbox>
-                            </Form.Item>
+                                <Input placeholder={'Nhập địa chỉ'}></Input>
+                            </Form.Item>}
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <Form.Item
+                                        label="Số điện thoại"
+                                        name="customerPhone"
+                                        className={'mgbt5'}
+                                        rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
+                                        normalize={(value, prevValue) => {
+                                            let raw = value.replace(/[^\d]/g, "");
+                                            return raw;
+                                        }}
+                                    >
+                                        <Input placeholder={'Nhập số điện thoại'}/>
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
+                                    <Form.Item
+                                        label="Email"
+                                        name="customerEmail"
+                                        className={'mgbt5'}
+                                        rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}, {
+                                            type: 'email',
+                                            message: 'Email không đúng định dạng',
+                                        }]}
+                                    >
+                                        <Input placeholder={'Nhập email'}/>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
                             {renderFormByProductId()}
                         </Form>
                     </div>
                 </div>
-                <div className="col-md-5">
-                    <div className="info-order">
-                        <h3>Thông tin đơn hàng</h3>
-                        <p>Tên sản phẩm</p>
-                        <p>Bảo hiểm tai nạn hộ sử dụng điện</p>
-                        <div className="text-small">
-                            <p>Nhà cung cấp: Bảo hiểm PVI</p>
-                            <p>Gói sản phẩm: Gói Đồng</p>
-                            <p>Ngày hiệu lực: 24/04/2022</p>
-                            <p>Ngày hết hạn: 23/04/2023</p>
-                            <p>Tổng phí bảo hiểm: 28.000đ/năm</p>
-                        </div>
-                    </div>
-                </div>
+                {renderOrderInfo()}
             </div>
         </div>
     }
@@ -718,25 +795,23 @@ function RegisterInsurance() {
         }
     }
     const renderStep2 = () => {
-        return <Card>
-            <span
-                className={`robotobold ${isDesktopOrLaptop ? 'txt-size-h1' : 'txt-size-h4'}`}>Thông tin người mua</span>
-            <RowItem title={'Họ và tên'}
-                     value={productId === ENSURE_CAR ? bodyRegister.TenKH : bodyRegister.khach_hang}></RowItem>
-            {/*{productId === ENSURE_ELECTRIC && <RowItem title={'Địa chỉ'} value={bodyRegister.dia_chi}></RowItem>}*/}
-            <RowItem title={'Số điện thoại'}
-                     value={productId === ENSURE_CAR ? bodyRegister.DienThoai : bodyRegister.so_dienthoai}></RowItem>
-            <RowItem title={'Địa chỉ email'}
-                     value={productId === ENSURE_ELECTRIC ? bodyRegister.email : productId === ENSURE_CAR ? bodyRegister.EmailKH : bodyRegister.Email}></RowItem>
+        return <div className="confirm-info">
+            <div className="row">
+                <div className="col-md-7">
+                    <div className="info-customer">
+            <h3>Người mua bảo hiểm</h3>
+            <RowItem title={'Họ và tên'} value={form.getFieldValue('customerName')}></RowItem>
+            {productId === ENSURE_EXTEND && <RowItem title={'Địa chỉ'} value={bodyRegister.dia_chi}></RowItem>}
+            <RowItem title={'Số điện thoại'} value={form.getFieldValue('customerPhone')}></RowItem>
+            <RowItem title={'Địa chỉ email'} value={form.getFieldValue('customerEmail')}></RowItem>
             {
                 productId === ENSURE_ELECTRIC ? <div>
-                    <span className={`robotobold ${isDesktopOrLaptop ? 'txt-size-h1' : 'txt-size-h4'}`}>Chủ hộ</span>
+                    <h3>Chủ hộ</h3>
                     <RowItem title={'Họ và tên'} value={bodyRegister.list_nguoithamgia[0].ten_khach}></RowItem>
                     <RowItem title={'CMND/CCCD/Hộ chiếu'} value={bodyRegister.list_nguoithamgia[0].so_cmnd}></RowItem>
                     {/*<RowItem title={'Số điện thoại'} value={bodyRegister.list_nguoithamgia[0].dien_thoai}></RowItem>*/}
                     {/*<RowItem title={'Ngày sinh'} value={bodyRegister.list_nguoithamgia[0].ngay_sinh}></RowItem>*/}
-                    {bodyRegister.list_nguoithamgia?.length > 1 &&
-                        <span className={`robotobold ${isDesktopOrLaptop ? 'txt-size-h1' : 'txt-size-h4'}`}>Thành viên bổ sung</span>}
+                    {bodyRegister.list_nguoithamgia?.length>1&&<h3>Thành viên bổ sung</h3>}
                     {
                         bodyRegister.list_nguoithamgia.map((x: any, index: number) => {
                             if (index === 0)
@@ -748,55 +823,51 @@ function RegisterInsurance() {
                         })
                     }
                 </div> : productId === ENSURE_CAR ? <div>
-                    <span className={`robotobold ${isDesktopOrLaptop ? 'txt-size-h1' : 'txt-size-h4'}`}>Thông tin đăng ký xe</span>
+                    <h3>Thông tin đăng ký xe</h3>
                     <RowItem title={'Họ và tên'} value={bodyRegister.TenChuXe}></RowItem>
                     <RowItem title={'Biển số xe'} value={bodyRegister.BienKiemSoat}></RowItem>
                     <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected.Text}></RowItem>
                     <RowItem title={'Mục đích sử dụng'} value={getPurpose()}></RowItem>
                     <RowItem title={'Số chỗ ngồi'} value={bodyRegister.ChoNgoi}></RowItem>
                 </div> : productId === ENSURE_HOUSE ? <div>
-                    <span className={`robotobold ${isDesktopOrLaptop ? 'txt-size-h1' : 'txt-size-h4'}`}>Thông tin căn nhà</span>
+                    <h3>Thông tin căn nhà</h3>
                     <RowItem title={'Năm xây dựng'} value={bodyRegister.nam_xaydung}></RowItem>
-                    <span className={'robotobold txt-size-h1'}>Địa điểm căn nhà</span>
+                    <h3>Địa điểm căn nhà</h3>
                     <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected.Text}></RowItem>
                     <RowItem title={'Quận/ Huyện'} value={districtSelected.Text}></RowItem>
                     <RowItem title={'Địa chỉ chi tiết'} value={bodyRegister.dia_chi}></RowItem>
+                </div> :  productId === ENSURE_EXTEND ? <div>
+                    <h3>Thông tin thiết bị được bảo hiểm</h3>
+                    <RowItem title={'Loại thiết bị'} value={dataExtendRegister?.loai_thietbi}></RowItem>
+                    <RowItem title={'Hãng'} value={dataExtendRegister?.hang}></RowItem>
+                    <RowItem title={'Model'} value={dataExtendRegister?.model}></RowItem>
+                    <RowItem title={'Số Serial'} value={dataExtendRegister?.so_serial}></RowItem>
+                    <RowItem title={'Số IMEI'} value={dataExtendRegister?.so_IMEI}></RowItem>
+                    <RowItem title={'Thời hạn bảo hành gốc của nhà sản xuất'} value={`Từ ${dataExtendRegister?.thoihan_batdau_baohanh_nsx} đến ${dataExtendRegister?.thoihan_ketthuc_baohanh_nsx}`}></RowItem>
+                    <RowItem title={'Thời hạn bảo hiểm bảo hành mở rộng'} value={`Từ ${dataExtendRegister.ngay_batdau} đến ${dataExtendRegister.thoihan_bh}`}></RowItem>
+                    <RowItem title={'Giá trị thiết bị tại thời điểm tham gia bảo hiểm'} value={formatMoneyByUnit(dataExtendRegister?.giatri_thietbi)}></RowItem>
+                    <p><strong>{`PHÍ BẢO HIỂM (bao gồm VAT): ${formatMoneyByUnit(fee.TotalFee)}`}</strong></p>
                 </div> : null
             }
-        </Card>
+                </div>
+                </div>
+                {renderOrderInfo()}
+            </div>
+        </div>
     }
     const renderStep3 = () => {
-        return <div className={''}>
-            {isTabletOrMobile && renderOrderInfo()}
-            <Alert
-                message={<span className={'robotobold'}>Thanh toán tiền mặt</span>}
-                description="Nhân viên bán hàng thu tiền mặt của khách hàng."
-                type="success"
-                showIcon
-            />
+        return <div className="confirm-info">
+            <div className="row">
+                <div className="col-md-7">
+                    <div className="info-customer">
+                        <img src={iconTien} alt=""/>
+                            <p>Thanh toán tiền mặt</p>
+                            <p>Nhân viên bán hàng thu tiền mặt <br/>của khách hàng</p>
+                    </div>
+                </div>
+                {renderOrderInfo()}
+            </div>
         </div>
-        // return <Row>
-        //     <Col>
-        //         <CheckCircleOutlined style={{fontSize:40, color:'green'}} />
-        //     </Col>
-        //     <Col flex={'auto'}>
-        //         <Row>
-        //             <span className={'txt-size-h6 robotobold'}>Thanh toán tiền mặt</span>
-        //         </Row>
-        //         <span className={'txt-size-h7'}>Nhân viên bán hàng thu tiền mặt của khách hàng</span>
-        //     </Col>
-        // </Row>
-    }
-    const renderOrderInfo = () => {
-        return <Card title="Thông tin đơn hàng">
-            <RowItem title={'Tên sản phẩm'} value={getProductName()}></RowItem>
-            <RowItem title={'Nhà cung cấp'} value={'Bảo hiểm PVI'}></RowItem>
-            <RowItem title={'Gói sản phẩm'} value={getPackageName()}></RowItem>
-            <RowItem title={'Ngày hiệu lực'} value={currentDateString}></RowItem>
-            <RowItem title={'Chu kì thanh toán'} value={'1 năm'}></RowItem>
-            <RowItem title={'Tổng phí bảo hiểm'}
-                     value={formatMoneyByUnit(lodash.get(fee, 'TotalFee', ''))}></RowItem>
-        </Card>
     }
     const renderStep = () => {
         switch (currentStep) {
@@ -811,81 +882,42 @@ function RegisterInsurance() {
     }
 
     return <MainLayout showProgressBar={showProgressBar} title={'Đăng ký'}>
-        <div className="confirm-page content register">
+        <div className={`confirm-page content ${currentStep<2?'register':'confirm-payment'}`}>
             <div className="container">
                 <div className="head-title">
                     <h1>Đăng ký mua</h1>
                     <p>Vui lòng thực hiện theo các bước</p>
                     <ul>
-                        <li className="active"><a href="#"><img src={iconStep1} alt=""/>Đăng ký</a></li>
-                        <li className="#"><a href="#"><img src={iconStep2} alt=""/>Xác nhận</a></li>
-                        <li><a href="#"><img src={iconStep3} alt=""/>Thanh toán</a></li>
+                        <li className={currentStep===0?'active':currentStep>0?'visited':''}><a><img src={iconStep1} alt=""/>Đăng ký</a></li>
+                        <li className={currentStep===1?'active':currentStep>1?'visited':''}><a><img src={iconStep2} alt=""/>Xác nhận</a></li>
+                        <li className={currentStep===2?'active':''}><a><img src={iconStep3} alt=""/>Thanh toán</a></li>
                     </ul>
                 </div>
                 {renderStep()}
+                {currentStep === 0 && <Row className={'justify-content-center'}>
+                    <p className="agree-info">
+                        <label className="checkbox-container">Tôi xác nhận thông tin là chính xác và đồng ý với <a
+                            href={`./pdf/${productId}.pdf`} target="_blank">quy tắc sản phẩm</a>
+                            <input onChange={e => setAgree(e.target.checked)} type="checkbox" autoComplete="off"
+                                   checked={agree}/>
+                            <span className="checkbox-checkmark"></span>
+                        </label>
+                    </p>
+                </Row>
+                }
+
                 <div className="button-group">
-                    <button type="button" className="cancel">Quay lại</button>
-                    <button type="button" className="continue">Tiếp tục</button>
+                    <button onClick={()=>{
+                        if(currentStep>0) setStep(currentStep - 1);
+                        else navigate(-1);
+                    }
+                    } type="button" className="cancel">Quay lại</button>
+                    <button onClick={nextStep} type="button" className="continue">{currentStep < 2 ? 'Tiếp tục' : 'Xác nhận'}</button>
                 </div>
             </div>
         </div>
-        {/*<div className={'main-content mgt30'}>*/}
-        {/*    {currentStep < 3 ? <div>*/}
-        {/*        <Row className={'justify-content-center'}>*/}
-        {/*            <Col span={isDesktopOrLaptop?12:24}>*/}
-        {/*                <Steps className={'dpl-flex justify-content-center'} responsive={false} labelPlacement={'vertical'} current={currentStep}>*/}
-        {/*                    <Step title="Đăng ký"/>*/}
-        {/*                    <Step title="Xác nhận"/>*/}
-        {/*                    <Step title="Thanh toán"/>*/}
-        {/*                </Steps>*/}
-        {/*            </Col>*/}
-        {/*        </Row>*/}
-        {/*        <Row gutter={24} className={'justify-content-center mgt10'}>*/}
-        {/*            <Col span={isDesktopOrLaptop?12:24} className={''}>*/}
-        {/*                {renderStep()}*/}
-        {/*                <Row className={'justify-content-between mgt20'}>*/}
-        {/*                    <Button onClick={() => {*/}
-        {/*                        if(currentStep>0) setStep(currentStep - 1);*/}
-        {/*                        else navigate(`/products/${productId}`);*/}
-        {/*                    }} size={'large'}*/}
-        {/*                            shape={'round'}>Quay lại</Button>*/}
-        {/*                    <Button onClick={nextStep} size={'large'} shape={'round'}*/}
-        {/*                            type={'primary'}>{currentStep < 2 ? 'Tiếp tục' : 'Xác nhận'}</Button>*/}
-        {/*                </Row>*/}
-        {/*            </Col>*/}
-        {/*            {isDesktopOrLaptop&&<Col span={10} className={''}>*/}
-        {/*                {renderOrderInfo()}*/}
-        {/*            </Col>}*/}
-        {/*        </Row>*/}
-        {/*    </div>:*/}
-        {/*        <div>*/}
-        {/*            {result?<Result*/}
-        {/*                status="success"*/}
-        {/*                title="Đăng ký bảo hiểm thành công"*/}
-        {/*                subTitle="Giấy chứng nhận bảo hiểm sẽ được gửi về email khách hàng đăng ký"*/}
-        {/*                extra={[*/}
-        {/*                    <Button onClick={()=> window.location.reload()} type="primary" key="console">*/}
-        {/*                        Đăng ký tiếp*/}
-        {/*                    </Button>,*/}
-        {/*                    <Button onClick={()=>navigate('/')} key="buy">Trang chủ</Button>,*/}
-        {/*                ]}*/}
-        {/*            />:*/}
-        {/*                <Result*/}
-        {/*                    status="error"*/}
-        {/*                    title="Tạo hợp đồng bảo hiểm thất bại"*/}
-        {/*                    subTitle="Vui lòng thực hiện đăng ký lại"*/}
-        {/*                    extra={[*/}
-        {/*                        <Button onClick={()=> window.location.reload()} type="primary" key="console">*/}
-        {/*                            Đăng ký lại*/}
-        {/*                        </Button>,*/}
-        {/*                        <Button onClick={()=>navigate('/')} key="buy">Trang chủ</Button>,*/}
-        {/*                    ]}*/}
-        {/*                >*/}
-        {/*                </Result>}*/}
-        {/*        </div>*/}
-        {/*    }*/}
-        {/*    <ConfirmModal loading={loading} onSubmit={onSubmit} onCancel={()=> setShowConfirm(false)} visible={showConfirm} title={'Xác nhận thanh toán'} content={'Bạn xác nhận đã thu đủ tiền mặt của khách hàng. Hệ thống sẽ tạo hợp đồng bảo hiểm, Bạn không thể thay đổi thông tin đăng ký này'}></ConfirmModal>*/}
-        {/*</div>*/}
+        {showConfirm&&<ConfirmModal loading={loading} onSubmit={onSubmit} onCancel={()=> setShowConfirm(false)} visible={showConfirm}></ConfirmModal>}
+        {showResult&&<SuccessModal onCancel={()=> setShowResult(false)} visible={showResult} isSuccess={result} gotoHome={()=> navigate('/')} onContinue={onContinue} />}
     </MainLayout>
 }
 

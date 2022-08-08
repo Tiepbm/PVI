@@ -7,13 +7,14 @@ interface RowItemProps{
 }
 function RowItem (props: RowItemProps){
     const{title, value, className} = props;
-    return <Row className={`${className} mgbt5`}>
-        <Col span={12}>
-            <span>{title}</span>
-        </Col>
-        <Col span={12}>
-            <span className={'robotobold'}>{value}</span>
-        </Col>
-    </Row>
+    return <li>{`${title}: ${value}`}</li>
+    // return <Row className={`${className} mgbt5`}>
+    //     <Col span={12}>
+    //         <span>{title}</span>
+    //     </Col>
+    //     <Col span={12}>
+    //         <span className={'robotobold'}>{value}</span>
+    //     </Col>
+    // </Row>
 }
 export default RowItem;

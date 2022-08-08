@@ -165,7 +165,7 @@ function MainLayout(props: MainLayoutProps) {
                                 </div>:
                                     <div className="header-right1">
                                         <div className="header-intro">
-                                            <a href=""><img src={require('../../resources/images/logo_viettel.png')} alt=""/></a>
+                                            <a><img src={require('../../resources/images/logo_viettel.png')} alt=""/></a>
                                         </div>
                                     </div>
                                 }

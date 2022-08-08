@@ -1,46 +1,38 @@
 import * as React from "react";
-import {Button, Modal} from "antd";
+import {Button, Modal, Spin} from "antd";
+import iconPayment from "../../resources/images/payment.svg";
+import iconSuccess from "../../resources/images/tt-thanhcong.svg";
+import { LoadingOutlined } from "@ant-design/icons";
 
 export interface ConfirmModalProps {
-    title?: string;
-    content: string;
     visible: boolean;
     loading: boolean;
-    className?: any;
     onCancel: () => void;
     onSubmit: () => void;
 }
 
 const ConfirmModal = (props: ConfirmModalProps) => {
-    const {title, visible, onCancel, onSubmit, content, loading, className} = props;
+    const {visible, onCancel, onSubmit, loading} = props;
+    if(!visible) return null;
     return (
-        <Modal
-            title={title}
-            visible={visible}
-            onCancel={onCancel}
-            footer={[
-                <Button
-                    className={" btn_cancel _btn-cancel"}
-                    key="cancel"
-                    onClick={onCancel}
-                >
-                    <span className="mgr10"> <i className="fal fa-times"></i></span> Hủy
-
-                </Button>,
-                <Button
-                    className={"_btn-submit btn_check"} key="submit" type="primary"
-                    autoFocus={true}
-                    onClick={onSubmit}
-                    icon={<span className="mgr10"><i className="fal fa-check"></i></span>}
-                    loading={loading ? loading : false}
-                    ghost
-                >
-                    Xác nhận
-                </Button>,
-            ]}
-        >
-            <p className={'_p-content'} dangerouslySetInnerHTML={{__html: content}}/>
-        </Modal>
+        <React.Fragment>
+            <div className="modal-container">
+                <div className="modal fade show" id="confirmPaymentModal" tabIndex={-1}
+                     aria-labelledby="confirmPaymentModalLabel">
+                    <div className="modal-dialog  modal-lg modal-dialog-centered">
+                        <div className="modal-content">
+                            <img src={require('../../resources/images/modal-cancel.png')} alt="" onClick={onCancel}/>
+                            <img src={iconPayment} alt=""/>
+                            <p>Bằng việc bấm “Tiếp tục”, bạn xác nhận đã thu đủ tiền mặt của khách hàng.</p>
+                            <div className="modal-button">
+                                <button onClick={onCancel} className="modal-cancel">Quay lại</button>
+                                <button className="modal-continue" onClick={onSubmit}><Spin spinning={loading} indicator={<LoadingOutlined style={{ fontSize: 20, color:'#fff' }} spin />} /> Tiếp tục</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </React.Fragment>
     );
 }
 export default ConfirmModal;

@@ -22,6 +22,8 @@ import iconPlugin1 from '../../resources/images/plugin1.svg';
 
 import iconHome1 from '../../resources/images/home 1.svg';
 import iconSmartphone1 from '../../resources/images/smartphone 1.svg';
+import iconTicket1 from '../../resources/images/plane-ticket 1.svg';
+import iconPassPort1 from '../../resources/images/passport 1.svg';
 import { Link } from "react-router-dom";
 
 function Home() {
@@ -222,12 +224,12 @@ function Home() {
                                 <p>An toàn thỏa sức khám phá dù ở bất cứ đâu.</p>
                                 <div className="list-insurances">
                                     <Link to={'/categories/tralve?productId=dulichtrongnuoc'} className="insurance-item">
-                                        <span><img src="images/plane-ticket 1.svg" /></span>
+                                        <span><img src={iconTicket1} /></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Du lịch trong nước</p>
                                     </Link>
                                     <Link to={'/categories/tralve?productId=dulichquocte'} className="insurance-item">
-                                        <span><img src="images/passport 1.svg" /></span>
+                                        <span><img src={iconPassPort1} /></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Du lịch quốc tế</p>
                                     </Link>

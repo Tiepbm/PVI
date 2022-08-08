@@ -17,7 +17,7 @@ import {useMediaQuery} from "react-responsive";
 import {formatDate, formatTime} from "../../core/helpers/date-time";
 import moment from "moment";
 import {
-    CPID,
+    CPID, DATA_REGISTER,
     ENSURE_CAR,
     ENSURE_ELECTRIC,
     ENSURE_EXTEND,
@@ -26,10 +26,12 @@ import {
     STANDARD_DATE_FORMAT
 } from "../../core/config";
 import {localStorageSave} from "../../utils/LocalStorageUtils";
-import {sign} from "../../utils/StringUtils";
+import {handleChangeDate, sign} from "../../utils/StringUtils";
 import {productRepository} from "../../repositories/ProductRepository";
 import M24ErrorUtils from "../../utils/M24ErrorUtils";
 import {formatMoneyByUnit} from "../../core/helpers/string";
+import {categoryRepository} from "../../repositories/CategoryRepository";
+import {useSessionStorage} from "../../hooks/useSessionStorage";
 
 function CategoryDetail() {
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
@@ -1071,6 +1073,11 @@ function CategoryDetail() {
         }
     ]);
     const [fee, setFee] = useState<any>();
+    const [webCode, setWebCode] = useSessionStorage('web_code', '');
+    const [devicesCategory, setDevicesCategory] = useState<any>([]);
+    const [formValues, setFormValues] = useState<any>({
+        ngay_batdau: formatDate(moment().add(1, 'd'))
+    });
     const keyCars = ['MayKeo', 'XeChuyenDung', 'XeChoTien', 'XePickUp', 'XeTaiVan', 'XeTapLai', 'XeBus', 'XeCuuThuong', 'Xetaxi', 'XeDauKeo'];
     const [bodyOto, setBodyOto] = useState({
         "ma_trongtai": "",
@@ -1140,6 +1147,11 @@ function CategoryDetail() {
             getFee();
     },[currentPackage]);
     useEffect(()=>{
+        if(formValues.chuong_trinh&&formValues.loai_thietbi&&formValues.giatri_thietbi)
+            getFeeExtend();
+        localStorageSave(DATA_REGISTER,formValues);
+    },[formValues]);
+    useEffect(()=>{
         if(currentProduct)
             getFee();
     },[currentProduct]);
@@ -1165,12 +1177,16 @@ function CategoryDetail() {
             case ENSURE_HOUSE:
                 getFeeHouse();
                 break;
+                // case ENSURE_EXTEND:
+                // getFeeExtend();
+                // break;
         }
     }
     const getFeeHSDD=()=>{
 
         let body = {
             "cpid":CPID,
+            web_code: webCode,
             "sign":sign(currentPackage),
             "package":currentPackage
         };
@@ -1181,6 +1197,22 @@ function CategoryDetail() {
             M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
         }).finally(()=> setLoading(false));
     }
+    const getFeeExtend=()=>{
+        let body = {
+            "cpid":CPID,
+            web_code: webCode,
+            "sign":sign(`${formValues.chuong_trinh}${formValues.giatri_thietbi}${lodash.get(formValues,'khuyen_mai',0)}${formValues.loai_thietbi}`),
+            "loai_thietbi":lodash.get(formValues,'loai_thietbi',''),
+            "chuong_trinh":lodash.get(formValues,'chuong_trinh',''),
+            "khuyen_mai":lodash.get(formValues,'khuyen_mai',0),
+            "giatri_thietbi":lodash.get(formValues,'giatri_thietbi',''),
+        };
+        productRepository.getFeeExtend(body).then(res=>{
+            setFee(res);
+        }).catch(err=>{
+            // M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
+        }).finally(()=> setLoading(false));
+    }
     const canRegister=()=>{
         if(loading||checkDisableRegister()||!fee) return false;
         return true;
@@ -1188,13 +1220,14 @@ function CategoryDetail() {
     const getFeeHouse=()=>{
         let body = {
             "cpid":CPID,
+            web_code: webCode,
             "sign":sign(currentPackage),
             "package":currentPackage
         };
         productRepository.getFeeHouse(body).then(res=>{
             setFee(res);
         }).catch(err=>{
-            M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
+            // M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
         }).finally(()=> setLoading(false));
     }
     const checkDisableRegister=()=>{
@@ -1203,11 +1236,15 @@ function CategoryDetail() {
                 return true;
             else if(purpose.code==='3'&&!bodyOto.ma_trongtai)
                 return true;
+        }else if(currentProduct?.code===ENSURE_EXTEND){
+            if(!formValues.so_IMEI||!formValues.so_serial||!formValues.thoihan_batdau_baohanh_nsx||!formValues.thoihan_ketthuc_baohanh_nsx)
+                return true;
+            return false;
         }
         return false;
     }
     const getFeeTNDSOTO=()=>{
-        let body = lodash.cloneDeep(bodyOto);
+        let body: any = lodash.cloneDeep(bodyOto);
         if(currentPackage!='01'){
             body.thamgia_laiphu=true;
             if(currentPackage==='02')
@@ -1217,6 +1254,7 @@ function CategoryDetail() {
             body.thamgia_laiphu=false;
             body.mtn_laiphu=0;
         }
+        body.web_code=webCode;
         body.giodau=formatTime(moment());
         body.giocuoi=formatTime(moment());
         body.Sign = sign(`${body.ma_trongtai}${body.so_cho}`);
@@ -1229,7 +1267,7 @@ function CategoryDetail() {
         productRepository.getFeeTNDSOTO(body).then(res=>{
             setFee(res);
         }).catch(err=>{
-            M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
+            // M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
         }).finally(()=> setLoading(false));
     }
 
@@ -1246,17 +1284,35 @@ function CategoryDetail() {
             setCurrentProduct(product);
             if(product.code!==ENSURE_EXTEND)
                 setCurrentPackage(product?.benefit?.packages[0]?.code);
+            else getDevicesCategory();
         }
 
     }, [categoryId]);
+   const getDevicesCategory=()=>{
+       categoryRepository.getCategories('THIETBI_DT').then(res=>{
+           setDevicesCategory(res.Data)
+       }).catch(err=>{
+
+       });
+   }
     const tabClick = (data: any) => {
         setFee(null);
         setCurrentProduct(data);
+        if(data.code===ENSURE_EXTEND) getDevicesCategory();
         setSearchParams({productId: data.code});
     }
     const handleChangePackage = (value: any) => {
         setCurrentPackage(value);
         setFee(null);
+    }
+    const handleChangeFormValues=(key: string, value: any)=>{
+       let temp = lodash.cloneDeep(formValues);
+       temp[key]=value;
+       if(key==='chuong_trinh'){
+           let duration = formatDate(moment(temp.ngay_batdau).add(value==='0101'?6:12,'M'));
+           temp.thoihan_bh = duration;
+       }
+       setFormValues(temp);
     }
     const handleChange = (value: any) => {
         let item = categoriesCar.find((x: any) => x.code === value);
@@ -1384,45 +1440,43 @@ function CategoryDetail() {
     const renderExtend=()=>{
         return <div className={'txt-left'}>
             <label>Loại thiết bị</label>
-            <Select className={'width100'}>
-                <Select.Option value="sp1">Điện thoại</Select.Option>
-                <Select.Option value="sp1">Laptop</Select.Option>
-                <Select.Option value="sp1">Máy tính bảng</Select.Option>
-                <Select.Option value="sp1">Đồng hồ thông minh</Select.Option>
-                <Select.Option value="sp1">Máy lọc không khí</Select.Option>
-                <Select.Option value="sp2">Tivi</Select.Option>
-                <Select.Option value="sp2">Tủ lạnh, tủ mát, tủ đông</Select.Option>
-                <Select.Option value="sp2">Máy điều hòa</Select.Option>
-                <Select.Option value="sp2">Máy giặt, máy sấy</Select.Option>
+            <Select className={'width100'} value={lodash.get(formValues,'loai_thietbi','')} onChange={(value:string)=> handleChangeFormValues('loai_thietbi', value)}>
+                {
+                    devicesCategory?.map((x: any)=>    <Select.Option value={x.Value}>{x.Text}</Select.Option>)
+                }
             </Select>
             <label>Hãng</label>
-            <Input placeholder="Ví dụ: Apple" />
+            <Input placeholder="Ví dụ: Apple" onChange={e=>handleChangeFormValues('hang', e.target.value)}/>
             <label>Model</label>
-            <Input placeholder="Ví dụ: Iphone 13" />
-            <label>Số Serial/IMEI</label>
-            <Input/>
+            <Input placeholder="Ví dụ: Iphone 13" onChange={e=> handleChangeFormValues('model', e.target.value)} />
+            <label>Số Serial</label>
+            <Input onChange={e=> handleChangeFormValues('so_serial', e.target.value)}/>
+            <label>Số IMEI</label>
+            <Input onChange={e=> handleChangeFormValues('so_IMEI', e.target.value)}/>
             <label>Thời hạn bảo hành gốc của nhà sản xuất</label>
             <div className="row">
                 <div className="col-md-6">
                     <label>Ngày bắt đầu</label>
-                    <DatePicker disabledDate={disabledDate} defaultValue={moment(new Date(), STANDARD_DATE_FORMAT)}
+                    <DatePicker
                                 suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
-                                format={STANDARD_DATE_FORMAT} onChange={onChangeDate}/>
+                                format={STANDARD_DATE_FORMAT} onChange={(date: any, dateString: string)=> handleChangeFormValues('thoihan_batdau_baohanh_nsx', dateString)}/>
                 </div>
                 <div className="col-md-6">
                     <label>Ngày hết hạn</label>
-                    <DatePicker disabledDate={disabledDate} defaultValue={moment(new Date(), STANDARD_DATE_FORMAT)}
+                    <DatePicker
                                 suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
-                                format={STANDARD_DATE_FORMAT} onChange={onChangeDate}/>
+                                format={STANDARD_DATE_FORMAT}
+                                onChange={(date: any, dateString: string)=> handleChangeFormValues('thoihan_ketthuc_baohanh_nsx', dateString)}/>
                 </div>
             </div>
             <label>Thời hạn bảo hiểm bảo hành mở rộng</label>
-            <Select className={'width100'}>
+            <Select className={'width100'} value={lodash.get(formValues,'chuong_trinh','')} onChange={value=> handleChangeFormValues('chuong_trinh', value)}>
                 <Select.Option value={'0101'}>6 tháng</Select.Option>
                 <Select.Option value={'0102'}>12 tháng</Select.Option>
             </Select>
             <label>Giá trị thiết bị tại thời điểm tham gia bảo hiểm (VNĐ)</label>
-            <Input placeholder="Ví dụ: 2100000" />
+            <Input placeholder="Ví dụ: 2100000" onChange={e=> handleChangeFormValues('giatri_thietbi', e.target.value)}/>
+            <Checkbox checked={formValues?.khuyen_mai} onChange={e=> handleChangeFormValues('khuyen_mai', e.target.checked?1:0)}>Khuyến mại</Checkbox>
         </div>
     }
     const renderFee = () => {
@@ -1560,7 +1614,10 @@ function CategoryDetail() {
                                             margin: '24px 0'
                                         }}>{formatMoneyByUnit(lodash.get(fee,'TotalFee',''))}</p>
                                         <h3 className="mb-show">Phí bảo hiểm <span>{formatMoneyByUnit(lodash.get(fee,'TotalFee',''))}</span></h3>
-                                        <a onClick={() => navigate(`/products/${currentProduct?.code}/register?packageCode=${currentPackage}${currentProduct?.code===ENSURE_CAR?`&purpose=${purpose.code}`:''}`)}>{canRegister()&&<img src={iconCheckmark} alt=""/>}Đăng ký</a>
+                                        <a onClick={() => {
+                                            if(canRegister())
+                                                navigate(currentProduct?.code===ENSURE_EXTEND?`/products/${currentProduct?.code}/register`:`/products/${currentProduct?.code}/register?packageCode=${currentPackage}${currentProduct?.code===ENSURE_CAR?`&purpose=${purpose.code}`:''}`)
+                                        }}>{canRegister()&&<img src={iconCheckmark} alt=""/>}Đăng ký</a>
                                     </div>
                                 </div>
                             </div>

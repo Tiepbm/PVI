@@ -14,6 +14,7 @@ export const TENANT_KEY = 'TENANT_KEY';
 export const TOKEN_KEY = 'M24_TOKEN_KEY';
 export const FEE = 'FEE';
 export const FEE_REQUEST = 'FEE_REQUEST';
+export const DATA_REGISTER = 'DATA_REGISTER';
 
 export const ENSURE_ELECTRIC='tainansudungdien';
 export const ENSURE_CAR='tndsoto';

@@ -1262,6 +1262,7 @@ select {
 }
 .modal {
 	background: rgba(0, 38, 80, 0.8);
+	display: block!important;
 }
 .modal-content {
 	position: relative;

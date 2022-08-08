@@ -22,6 +22,7 @@ export function localStorageRead(key: string) {
     }
 
     let result = localStorage.getItem(key);
+    console.log(result);
     if(result) return JSON.parse(result);
    else return '';
 }

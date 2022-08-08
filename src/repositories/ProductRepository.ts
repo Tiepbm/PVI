@@ -17,6 +17,13 @@ export class ProductRepository extends Repository {
                 return response.data;
             });
     };
+    public getFeeExtend = (body: any): Promise<any> => {
+        return this.http
+            .post(`Get_Phi_BaoHanh_MoRong`, body)
+            .then((response: AxiosResponse<any>) => {
+                return response.data;
+            });
+    };
     public getFeeTNDSOTO = (body: any): Promise<any> => {
         return this.http
             .post(`Get_TongPhi_Auto_TNDS`, body)
@@ -48,6 +55,13 @@ export class ProductRepository extends Repository {
     public createOrderCar = (body: any): Promise<any> => {
         return this.http
             .post(`TaoDon_Auto`, body)
+            .then((response: AxiosResponse<any>) => {
+                return response.data;
+            });
+    };
+    public createOrderExtend = (body: any): Promise<any> => {
+        return this.http
+            .post(`TaoDon_BaoHanh_MoRong`, body)
             .then((response: AxiosResponse<any>) => {
                 return response.data;
             });
