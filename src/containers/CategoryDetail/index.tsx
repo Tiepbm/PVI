@@ -242,7 +242,7 @@ function CategoryDetail() {
                         ]
                     },
                     detail: require('../../resources/images/baohiemoto.jpg'),
-                    file: './files/QTBH/Tom tat TNDS BB oto & Tai nan LPX.pdf'
+                    file: './files/QTBH/tndsoto.pdf'
 
                 },
                 {
@@ -609,7 +609,7 @@ function CategoryDetail() {
                         ]
                     },
                     detail: require('../../resources/images/product-detail.png'),
-                    file: './files/QTBH/Quy tac BH Tai nan Ho su dung dien.pdf'
+                    file: './files/QTBH/tainansudungdien.pdf'
 
                 },
                 {
@@ -776,7 +776,7 @@ function CategoryDetail() {
                         ]
                     },
                     detail: require('../../resources/images/baohiemnhao.jpg'),
-                    file: './files/QTBH/QTBHToandiennhatunhan.pdf'
+                    file: './files/QTBH/nhaotoandien.pdf'
 
                 },
                 {
@@ -893,7 +893,7 @@ function CategoryDetail() {
                         </div>
                     },
                     detail: '',
-                    file: ''
+                    file: './files/QTBH/baohanhmorong.pdf',
 
                 }
             ]

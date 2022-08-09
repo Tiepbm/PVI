@@ -15,7 +15,7 @@ module.exports = override(
                 javascriptEnabled: true,
                 modifyVars: {
                     // '@layout-header-background': '#fff',
-                    '@font-family': 'sans-serif',
+                    '@font-family': 'Inter, sans-serif',
                     '@primary-color': '#1890ff',
                     // '@link-color': '#ec4649',
                     '@font-size-base': '14px',

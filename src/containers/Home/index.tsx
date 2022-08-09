@@ -209,6 +209,11 @@ function Home() {
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Màn hình điện thoại</p>
                                     </Link>
+                                    <Link to={'/categories/asset?productId=baohanhmorong'} className="insurance-item">
+                                        <span><img src={require('../../resources/images/warranty.png')}/></span>
+                                        <p><span className="bg-red">Mới</span></p>
+                                        <p>Bảo hiểm bảo hành mở rộng</p>
+                                    </Link>
                                 </div>
                                 <Link to={'/categories/asset?productId=nhaotoandien'}><img src={require('../../resources/images/icon-up-wt.png')} />Xem chi tiết</Link>
                             </div>

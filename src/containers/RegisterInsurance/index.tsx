@@ -175,6 +175,7 @@ function RegisterInsurance() {
                         dien_thoai: values.ownerPhone
                     });
                     values.persons?.map((x: any) => {
+                        if(x.fullname&&x.so_cmnd)
                         listThamGia.push({
                             ten_khach: x.fullname,
                             so_cmnd: x.so_cmnd
@@ -610,6 +611,7 @@ function RegisterInsurance() {
         if (productId === ENSURE_ELECTRIC) {
             return <div>
                 <h3>Chủ hộ</h3>
+                <p className={'info-italic'}>*Người đứng tên làm chủ hộ trong sổ hộ khẩu. Chỉ cần chủ hộ đăng ký, các thành viên còn lại trong sổ hộ khẩu đều được bảo hiểm</p>
                 <Form.Item
                     label="Họ và tên"
                     name="ownerName"
@@ -631,7 +633,7 @@ function RegisterInsurance() {
                     <Input placeholder={'CMND/CCCD/Hộ chiếu'}/>
                 </Form.Item>
                 <h3>Thành viên bổ sung</h3>
-                <Row className={'mgt5 mgbt5'}><p>* Thành viên trong gia đình sống cùng chủ hộ nhưng không có tên trong hộ khẩu</p></Row>
+                <Row className={'mgt5 mgbt5'}><p className={'info-italic'}>* Thành viên trong gia đình sống cùng chủ hộ nhưng không có tên trong hộ khẩu</p></Row>
                 <Form.List name={'persons'}>
                     {(fields, {add, remove}) => (
                         <>
@@ -648,7 +650,6 @@ function RegisterInsurance() {
                                         label="Họ và tên"
                                         className={'mgbt5'}
                                         name={[name, 'fullname']}
-                                        rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                                     >
                                         <Input placeholder={'Nhập họ và tên'}/>
                                     </Form.Item>
@@ -657,7 +658,6 @@ function RegisterInsurance() {
                                         label="Số CMND/CCCD/Hộ chiếu"
                                         className={'mgbt5'}
                                         name={[name, 'so_cmnd']}
-                                        rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
                                     >
                                         <Input placeholder={'Nhập CMND/CCCD/Hộ chiếu'}/>
                                     </Form.Item>
@@ -884,7 +884,7 @@ function RegisterInsurance() {
                 {currentStep === 0 && <Row className={'justify-content-center'}>
                     <p className="agree-info">
                         <label className="checkbox-container">Tôi xác nhận thông tin là chính xác và đồng ý với <a
-                            href={`./pdf/${productId}.pdf`} target="_blank">quy tắc sản phẩm</a>
+                            href={`./files/QTBH/${productId}.pdf`} target="_blank">quy tắc sản phẩm</a>
                             <input onChange={e => setAgree(e.target.checked)} type="checkbox" autoComplete="off"
                                    checked={agree}/>
                             <span className="checkbox-checkmark"></span>

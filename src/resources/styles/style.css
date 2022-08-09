@@ -1087,7 +1087,7 @@ select {
 .confirm-page .register .info-customer h3 {
 	margin: 0 0 4px 0;
 }
-.confirm-page .register .info-customer h3+p {
+.info-italic {
 	font-size: 16px;
 	line-height: 26px;
 	font-style: italic;
