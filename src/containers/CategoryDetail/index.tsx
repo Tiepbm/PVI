@@ -1299,6 +1299,10 @@ function CategoryDetail() {
         setFee(null);
         setCurrentProduct(data);
         if(data.code===ENSURE_EXTEND) getDevicesCategory();
+        else {
+            if(data.isReady)
+                setCurrentPackage(data?.benefit?.packages[0]?.code);
+        }
         setSearchParams({productId: data.code});
     }
     const handleChangePackage = (value: any) => {
