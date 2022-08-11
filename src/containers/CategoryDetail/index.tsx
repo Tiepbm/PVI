@@ -1200,7 +1200,7 @@ function CategoryDetail() {
     const getFeeExtend=()=>{
         let body = {
             "cpid":CPID,
-            web_code: webCode,
+            web_code: "d8b0498edf11489fb8d5eebc1171012d",
             "sign":sign(`${formValues.chuong_trinh}${formValues.giatri_thietbi}${lodash.get(formValues,'khuyen_mai',0)}${formValues.loai_thietbi}`),
             "loai_thietbi":lodash.get(formValues,'loai_thietbi',''),
             "chuong_trinh":lodash.get(formValues,'chuong_trinh',''),
