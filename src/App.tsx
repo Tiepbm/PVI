@@ -8,6 +8,7 @@ import ProductDetail from "./containers/ProductDetail";
 import RegisterInsurance from "./containers/RegisterInsurance";
 import RuleProductDetail from "./containers/RuleProductDetail";
 import About from "./containers/About";
+import Login from "./containers/Login";
 import Orders from "./containers/Orders";
 import viVN from 'antd/lib/locale-provider/vi_VN'
 import moment from "moment";
@@ -111,7 +112,7 @@ function App() {
           CpId: cpid,
           Sign: sign
         }
-        userRepository.login(body).then(res=>{
+        userRepository.getProfile(body).then(res=>{
             setProfile(true);
             setWebCode(res.WebCode);
             setCardId(cardid);
@@ -129,11 +130,12 @@ function App() {
       <ConfigProvider locale={viVN}>
         <HashRouter>
           <Routes>
-            <Route path={'/'} element={<Home/>}></Route>
+            <Route path={'/'} element={<ProtectedRoute><Home/></ProtectedRoute>}></Route>
             <Route path={'/categories/:categoryId'} element={<ProtectedRoute><CategoryDetail/></ProtectedRoute>}></Route>
             <Route path={'/products/:productId/register'} element={<ProtectedRoute><RegisterInsurance/></ProtectedRoute>}></Route>
             <Route path={'/products/:productId'} element={<ProtectedRoute><ProductDetail/></ProtectedRoute>}></Route>
             <Route path={'/rule/:productId'} element={<ProtectedRoute><RuleProductDetail/></ProtectedRoute>}></Route>
+            <Route path={'/login'} element={<Login/>}></Route>
             <Route path={'/about'} element={<About/>}></Route>
             <Route path={'/orders'} element={<Orders/>}></Route>
 

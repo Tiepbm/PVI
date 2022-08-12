@@ -9,11 +9,9 @@ import {useSessionStorage} from "../../hooks/useSessionStorage";
 
 const ProtectedRoute = ({ children }: any) => {
     const [profile] = useSessionStorage('profile', false);
-
-
-    // if (!profile) {
-    //     return <Navigate to="/login" replace />;
-    // }
+    if (!profile) {
+        return <Navigate to="/login" replace />;
+    }
 
     return children;
 };

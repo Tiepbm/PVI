@@ -431,7 +431,7 @@ function RegisterInsurance() {
                         Email:values.customerEmail,
                         ngay_batdau:dataExtendRegister.ngay_batdau,
                         dia_chi:values.customerAddress,
-                        web_code:'d8b0498edf11489fb8d5eebc1171012d',
+                        web_code:webCode,
                         ThietBiDinhKem:[
                             {
                                 loai_thietbi:lodash.get(dataExtendRegister,'loai_thietbi',''),
@@ -552,7 +552,7 @@ function RegisterInsurance() {
                             form={form}
                             name="basic"
                             layout="vertical"
-                            className={'form-registe mg120'}
+                            className={'form-register mg120'}
                             autoComplete="off"
                         >
                             <Form.Item

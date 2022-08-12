@@ -890,6 +890,14 @@ function CategoryDetail() {
                             <p>- Thiết bị tham gia bảo hiểm phải có ít nhất 1 năm bảo hành chính hãng từ nhà sản xuất và
                                 có hiệu lực bảo hành trong lãnh thổ Việt Nam.</p>
                             <p>- Tổng thời hạn bảo hiểm chính hãng và bảo hành mở rộng không quá 5 năm.</p>
+                            <div className="form-check text-left">
+                                <input className="form-check-input" type="checkbox" value={""} onChange={e=> handleChangeFormValues('khuyen_mai',e.target.checked?1:0)}/>
+                                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                                        Chương trình mua kèm bảo hiểm rơi vỡ
+                                        <br/><i>(Chỉ áp dụng cho Điện thoại và thời hạn bảo hiểm bảo hành mở rộng 6
+                                        tháng)</i>
+                                    </label>
+                            </div>
                         </div>
                     },
                     detail: '',
@@ -1200,7 +1208,7 @@ function CategoryDetail() {
     const getFeeExtend=()=>{
         let body = {
             "cpid":CPID,
-            web_code: "d8b0498edf11489fb8d5eebc1171012d",
+            web_code: webCode,
             "sign":sign(`${formValues.chuong_trinh}${formValues.giatri_thietbi}${lodash.get(formValues,'khuyen_mai',0)}${formValues.loai_thietbi}`),
             "loai_thietbi":lodash.get(formValues,'loai_thietbi',''),
             "chuong_trinh":lodash.get(formValues,'chuong_trinh',''),
@@ -1477,10 +1485,12 @@ function CategoryDetail() {
             <Select className={'width100'} value={lodash.get(formValues,'chuong_trinh','')} onChange={value=> handleChangeFormValues('chuong_trinh', value)}>
                 <Select.Option value={'0101'}>6 tháng</Select.Option>
                 <Select.Option value={'0102'}>12 tháng</Select.Option>
+                <Select.Option value={'0103'}>1 năm</Select.Option>
+                <Select.Option value={'0104'}>3 năm</Select.Option>
             </Select>
             <label>Giá trị thiết bị tại thời điểm tham gia bảo hiểm (VNĐ)</label>
             <Input placeholder="Ví dụ: 2100000" onChange={e=> handleChangeFormValues('giatri_thietbi', e.target.value)}/>
-            <Checkbox checked={formValues?.khuyen_mai} onChange={e=> handleChangeFormValues('khuyen_mai', e.target.checked?1:0)}>Khuyến mại</Checkbox>
+            {/*<Checkbox checked={formValues?.khuyen_mai} onChange={e=> handleChangeFormValues('khuyen_mai', e.target.checked?1:0)}>Khuyến mại</Checkbox>*/}
         </div>
     }
     const renderFee = () => {

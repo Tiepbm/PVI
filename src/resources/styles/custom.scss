@@ -97,6 +97,23 @@
 .ant-picker{
   border-radius: 5px !important;
 }
+
+.scroll-wrapper {
+  height: 100%;
+  overflow: auto;
+}
+
+.login-wrapper {
+  display: flex;
+  min-height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-image:url('../images/img-bg.png');
+  background-position: center;
+  background-size: contain;
+  height: 100vh;
+}
 @import "helpers/variables";
 @import "helpers/mixins";
 
@@ -105,3 +122,4 @@
 @import "module/table";
 @import "module/popup";
 @import "module/modal";
+@import "module/layout-form";
