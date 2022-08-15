@@ -7,15 +7,19 @@ import {userRepository} from "../../repositories/UserRepository";
 import M24ErrorUtils from "../../utils/M24ErrorUtils";
 import {useSessionStorage} from "../../hooks/useSessionStorage";
 import M24Notification from "../../utils/M24Notification";
+import lodash from "lodash";
 function Login(){
     const navigate = useNavigate();
     const [loading, setLoading]= useState<boolean>(false);
     const [profile, setProfile] = useSessionStorage('profile', false);
+    const [webCode, setWebCode] = useSessionStorage('web_code', '');
+
     const onFinish = (values: any) => {
         setLoading(true);
         userRepository.login(values.username, values.password).then(res=>{
             M24Notification.messageSuccess('Đăng nhập thành công');
             setProfile(res.DataUser);
+            setWebCode(lodash.get(res,'DataUser.web_code'));
             navigate('/categories/asset?productId=baohanhmorong');
         }).catch(err=>{
             console.log(err);
