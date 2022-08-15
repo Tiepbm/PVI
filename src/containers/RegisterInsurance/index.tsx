@@ -9,7 +9,7 @@ import {
     CPID, DATA_REGISTER,
     ENSURE_CAR,
     ENSURE_ELECTRIC, ENSURE_EXTEND,
-    ENSURE_HOUSE,
+    ENSURE_HOUSE, ENSURE_MOTOR,
     FEE,
     FEE_REQUEST,
     STANDARD_DATE_FORMAT
@@ -71,7 +71,7 @@ function RegisterInsurance() {
     }
     const [bodyRegister, setBodyRegister] = useState<any>();
     useEffect(() => {
-        if (productId === ENSURE_CAR || productId === ENSURE_HOUSE)
+        if (productId === ENSURE_CAR || productId === ENSURE_HOUSE|| productId === ENSURE_MOTOR)
             getProvinces();
         if (productId === ENSURE_HOUSE) {
             let items: any = [];
@@ -107,6 +107,8 @@ function RegisterInsurance() {
                 return 'Bảo hiểm nhà ở toàn diện';
             case ENSURE_EXTEND:
                 return 'Bảo hiểm bảo hành mở rộng';
+            case ENSURE_MOTOR:
+                return 'Bảo hiểm xe máy PVI';
         }
     }
     const getPackageName = () => {
@@ -119,7 +121,7 @@ function RegisterInsurance() {
                 case '03':
                     return 'Gói Vàng';
             }
-        } else if (productId === ENSURE_CAR) {
+        } else if (productId === ENSURE_CAR||productId === ENSURE_MOTOR) {
             switch (packageCode) {
                 case '01':
                     return 'Gói bắt buộc';
@@ -674,7 +676,7 @@ function RegisterInsurance() {
                 </Form.List>
 
             </div>
-        } else if (productId === ENSURE_CAR) {
+        } else if (productId === ENSURE_CAR||productId === ENSURE_MOTOR) {
             return <div>
                 <span className={'robotobold txt-size-h1'}>Thông tin đăng ký xe</span>
                 <Form.Item
@@ -816,6 +818,11 @@ function RegisterInsurance() {
                     <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected.Text}></RowItem>
                     <RowItem title={'Mục đích sử dụng'} value={getPurpose()}></RowItem>
                     <RowItem title={'Số chỗ ngồi'} value={bodyRegister.ChoNgoi}></RowItem>
+                </div>:productId === ENSURE_MOTOR ? <div>
+                    <h3>Thông tin đăng ký xe</h3>
+                    <RowItem title={'Họ và tên'} value={bodyRegister.TenChuXe}></RowItem>
+                    <RowItem title={'Biển số xe'} value={bodyRegister.BienKiemSoat}></RowItem>
+                    <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected.Text}></RowItem>
                 </div> : productId === ENSURE_HOUSE ? <div>
                     <h3>Thông tin căn nhà</h3>
                     <RowItem title={'Năm xây dựng'} value={bodyRegister.nam_xaydung}></RowItem>

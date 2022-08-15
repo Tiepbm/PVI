@@ -24,6 +24,13 @@ export class ProductRepository extends Repository {
                 return response.data;
             });
     };
+    public getFeeMotor = (body: any): Promise<any> => {
+        return this.http
+            .post(`Get_Phi_XeMay`, body)
+            .then((response: AxiosResponse<any>) => {
+                return response.data;
+            });
+    };
     public getFeeTNDSOTO = (body: any): Promise<any> => {
         return this.http
             .post(`Get_TongPhi_Auto_TNDS`, body)

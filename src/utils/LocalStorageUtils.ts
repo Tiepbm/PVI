@@ -21,10 +21,13 @@ export function localStorageRead(key: string) {
         throw new Error("fail to read object to localStorage");
     }
 
-    let result = localStorage.getItem(key);
-    console.log(result);
-    if(result) return JSON.parse(result);
-   else return '';
+   try{
+       let result = localStorage.getItem(key);
+       if(result) return JSON.parse(result);
+       else return '';
+   }catch (e) {
+       return '';
+   }
 }
 
 

@@ -21,7 +21,7 @@ import {
     ENSURE_CAR,
     ENSURE_ELECTRIC,
     ENSURE_EXTEND,
-    ENSURE_HOUSE,
+    ENSURE_HOUSE, ENSURE_MOTOR,
     FEE, FEE_REQUEST,
     STANDARD_DATE_FORMAT
 } from "../../core/config";
@@ -40,6 +40,7 @@ function CategoryDetail() {
     let {categoryId} = useParams();
     let [searchParams, setSearchParams] = useSearchParams();
     const [detail, setDetail] = useState<any>();
+    const [fromDate, setFromDate] = useState<string>(formatDate(moment(), STANDARD_DATE_FORMAT));
     const [currentProduct, setCurrentProduct] = useState<any>();
     const [currentPackage, setCurrentPackage] = useState<string>('');
     const [products, setProducts] = useState<any>([
@@ -50,8 +51,8 @@ function CategoryDetail() {
             tabClassName: 'baohiemxe',
             products: [
                 {
-                    isReady: false,
-                    code: 'xemay',
+                    isReady: true,
+                    code: ENSURE_MOTOR,
                     name: 'Bảo hiểm xe máy',
                     banner: require('../../resources/images/imagebaohiem4.png'),
                     tabName: 'TNDS xe máy',
@@ -143,7 +144,7 @@ function CategoryDetail() {
                         ]
                     },
                     detail: require('../../resources/images/baohiemxemay.jpg'),
-                    file: './files/QTBH/Quy tac BH Moto-Xe may_21.2.2020.pdf'
+                    file: `./files/QTBH/${ENSURE_MOTOR}.pdf`
 
                 },
                 {
@@ -891,12 +892,13 @@ function CategoryDetail() {
                                 có hiệu lực bảo hành trong lãnh thổ Việt Nam.</p>
                             <p>- Tổng thời hạn bảo hiểm chính hãng và bảo hành mở rộng không quá 5 năm.</p>
                             <div className="form-check text-left">
-                                <input className="form-check-input" type="checkbox" value={""} onChange={e=> handleChangeFormValues('khuyen_mai',e.target.checked?1:0)}/>
-                                    <label className="form-check-label" htmlFor="flexCheckDefault">
-                                        Chương trình mua kèm bảo hiểm rơi vỡ
-                                        <br/><i>(Chỉ áp dụng cho Điện thoại và thời hạn bảo hiểm bảo hành mở rộng 6
-                                        tháng)</i>
-                                    </label>
+                                <input className="form-check-input" type="checkbox" value={""}
+                                       onChange={e => handleChangeFormValues('khuyen_mai', e.target.checked ? 1 : 0)}/>
+                                <label className="form-check-label" htmlFor="flexCheckDefault">
+                                    Chương trình mua kèm bảo hiểm rơi vỡ
+                                    <br/><i>(Chỉ áp dụng cho Điện thoại và thời hạn bảo hiểm bảo hành mở rộng 6
+                                    tháng)</i>
+                                </label>
                             </div>
                         </div>
                     },
@@ -1083,6 +1085,7 @@ function CategoryDetail() {
     const [fee, setFee] = useState<any>();
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
     const [devicesCategory, setDevicesCategory] = useState<any>([]);
+    const [motoCategories, setMotoCategories] = useState<any>([]);
     const [formValues, setFormValues] = useState<any>({
         ngay_batdau: formatDate(moment().add(1, 'd'))
     });
@@ -1147,35 +1150,47 @@ function CategoryDetail() {
         }
     ]
     const [purpose, setPurpose] = useState<any>(categoriesCar[0]);
-    useEffect(()=>{
-        localStorageSave('DATE','');
-    },[]);
-    useEffect(()=>{
-        if(currentPackage)
+    useEffect(() => {
+        localStorageSave('DATE', '');
+        getMotoCategories();
+    }, []);
+    const getMotoCategories = () => {
+        categoryRepository.getCategories('LOAIXEMOTOR').then(res => {
+            setMotoCategories(res.Data);
+        }).catch(err => {
+
+        });
+    }
+    useEffect(() => {
+        if (currentPackage)
             getFee();
-    },[currentPackage]);
-    useEffect(()=>{
-        if(formValues.chuong_trinh&&formValues.loai_thietbi&&formValues.giatri_thietbi)
-            getFeeExtend();
-        localStorageSave(DATA_REGISTER,formValues);
-    },[formValues]);
-    useEffect(()=>{
-        if(currentProduct)
-            getFee();
-    },[currentProduct]);
-    useEffect(()=>{
-        if(currentProduct?.code===ENSURE_CAR){
-            setTimeout(()=>{
-                getFeeTNDSOTO();
-            },1000);
+    }, [currentPackage]);
+    useEffect(() => {
+        if (currentProduct?.code === ENSURE_EXTEND) {
+            if (formValues.chuong_trinh && formValues.loai_thietbi && formValues.giatri_thietbi)
+                getFeeExtend();
+        } else if (currentProduct?.code === ENSURE_MOTOR && formValues.loai_xe) {
+            getFeeMotor();
         }
-    },[bodyOto]);
-    useEffect(()=>{
+        localStorageSave(DATA_REGISTER, formValues);
+    }, [formValues]);
+    useEffect(() => {
+        if (currentProduct)
+            getFee();
+    }, [currentProduct]);
+    useEffect(() => {
+        if (currentProduct?.code === ENSURE_CAR) {
+            setTimeout(() => {
+                getFeeTNDSOTO();
+            }, 1000);
+        }
+    }, [bodyOto]);
+    useEffect(() => {
         localStorageSave(FEE, fee);
-    },[fee]);
-    const getFee=()=>{
+    }, [fee]);
+    const getFee = () => {
         setLoading(true);
-        switch (currentProduct?.code){
+        switch (currentProduct?.code) {
             case ENSURE_ELECTRIC:
                 getFeeHSDD();
                 break;
@@ -1185,98 +1200,123 @@ function CategoryDetail() {
             case ENSURE_HOUSE:
                 getFeeHouse();
                 break;
-                // case ENSURE_EXTEND:
-                // getFeeExtend();
-                // break;
+            case ENSURE_MOTOR:
+                getFeeMotor();
+                break;
         }
     }
-    const getFeeHSDD=()=>{
+    const getFeeHSDD = () => {
 
         let body = {
-            "cpid":CPID,
+            "cpid": CPID,
             web_code: webCode,
-            "sign":sign(currentPackage),
-            "package":currentPackage
+            "sign": sign(currentPackage),
+            "package": currentPackage
         };
-        productRepository.getFeeHSDD(body).then(res=>{
+        productRepository.getFeeHSDD(body).then(res => {
             console.log(res);
             setFee(res);
-        }).catch(err=>{
+        }).catch(err => {
             M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
-        }).finally(()=> setLoading(false));
+        }).finally(() => setLoading(false));
     }
-    const getFeeExtend=()=>{
+    const getFeeExtend = () => {
         let body = {
-            "cpid":CPID,
+            "cpid": CPID,
             web_code: webCode,
-            "sign":sign(`${formValues.chuong_trinh}${formValues.giatri_thietbi}${lodash.get(formValues,'khuyen_mai',0)}${formValues.loai_thietbi}`),
-            "loai_thietbi":lodash.get(formValues,'loai_thietbi',''),
-            "chuong_trinh":lodash.get(formValues,'chuong_trinh',''),
-            "khuyen_mai":lodash.get(formValues,'khuyen_mai',0),
-            "giatri_thietbi":lodash.get(formValues,'giatri_thietbi',''),
+            "sign": sign(`${formValues.chuong_trinh}${formValues.giatri_thietbi}${lodash.get(formValues, 'khuyen_mai', 0)}${formValues.loai_thietbi}`),
+            "loai_thietbi": lodash.get(formValues, 'loai_thietbi', ''),
+            "chuong_trinh": lodash.get(formValues, 'chuong_trinh', ''),
+            "khuyen_mai": lodash.get(formValues, 'khuyen_mai', 0),
+            "giatri_thietbi": lodash.get(formValues, 'giatri_thietbi', ''),
         };
-        productRepository.getFeeExtend(body).then(res=>{
+        productRepository.getFeeExtend(body).then(res => {
             setFee(res);
-        }).catch(err=>{
+        }).catch(err => {
             // M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
-        }).finally(()=> setLoading(false));
+        }).finally(() => setLoading(false));
     }
-    const canRegister=()=>{
-        if(loading||checkDisableRegister()||!fee) return false;
+    const getFeeMotor = () => {
+        if(!formValues.loai_xe) return;
+        let dateStart = formatDate(moment(fromDate, 'DD/MM/YYYY').add(1, 'd'));
+        let duration = formatDate(moment(fromDate, 'DD/MM/YYYY').set('year', moment().get('year') + 1));
+
+        let body = {
+            "cpid": CPID,
+            "sign": sign(`${dateStart}${duration}${lodash.get(formValues, 'loai_xe', '')}`),
+            "ngay_dau": dateStart,
+            "ngay_cuoi": duration,
+            "loai_xe": lodash.get(formValues, 'loai_xe', ''),
+            "thamgia_laiphu": false,
+            muc_trachnhiem_laiphu: '',
+            so_nguoi_tgia_laiphu: '',
+            tyle_phi_laiphu: ''
+        };
+        productRepository.getFeeMotor(body).then(res => {
+            setFee(res);
+        }).catch(err => {
+            // M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
+        }).finally(() => setLoading(false));
+    }
+    const canRegister = () => {
+        if (loading || checkDisableRegister() || !fee) return false;
         return true;
     }
-    const getFeeHouse=()=>{
+    const getFeeHouse = () => {
         let body = {
-            "cpid":CPID,
+            "cpid": CPID,
             web_code: webCode,
-            "sign":sign(currentPackage),
-            "package":currentPackage
+            "sign": sign(currentPackage),
+            "package": currentPackage
         };
-        productRepository.getFeeHouse(body).then(res=>{
+        productRepository.getFeeHouse(body).then(res => {
             setFee(res);
-        }).catch(err=>{
+        }).catch(err => {
             // M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
-        }).finally(()=> setLoading(false));
+        }).finally(() => setLoading(false));
     }
-    const checkDisableRegister=()=>{
-        if(currentProduct?.code===ENSURE_CAR){
-            if(!bodyOto.so_cho)
+    const checkDisableRegister = () => {
+        if (currentProduct?.code === ENSURE_CAR) {
+            if (!bodyOto.so_cho)
                 return true;
-            else if(purpose.code==='3'&&!bodyOto.ma_trongtai)
+            else if (purpose.code === '3' && !bodyOto.ma_trongtai)
                 return true;
-        }else if(currentProduct?.code===ENSURE_EXTEND){
-            if(!formValues.so_IMEI||!formValues.so_serial||!formValues.thoihan_batdau_baohanh_nsx||!formValues.thoihan_ketthuc_baohanh_nsx)
+        } else if (currentProduct?.code === ENSURE_EXTEND) {
+            if (!formValues.so_IMEI || !formValues.so_serial || !formValues.thoihan_batdau_baohanh_nsx || !formValues.thoihan_ketthuc_baohanh_nsx)
                 return true;
             return false;
+        }else if(currentProduct?.code === ENSURE_MOTOR){
+            if(!formValues.loai_xe)
+                return true;
         }
         return false;
     }
-    const getFeeTNDSOTO=()=>{
+    const getFeeTNDSOTO = () => {
         let body: any = lodash.cloneDeep(bodyOto);
-        if(currentPackage!='01'){
-            body.thamgia_laiphu=true;
-            if(currentPackage==='02')
-                body.mtn_laiphu=10000000;
-            else  body.mtn_laiphu=100000000;
-        }else {
-            body.thamgia_laiphu=false;
-            body.mtn_laiphu=0;
+        if (currentPackage != '01') {
+            body.thamgia_laiphu = true;
+            if (currentPackage === '02')
+                body.mtn_laiphu = 10000000;
+            else body.mtn_laiphu = 100000000;
+        } else {
+            body.thamgia_laiphu = false;
+            body.mtn_laiphu = 0;
         }
-        body.web_code=webCode;
-        body.giodau=formatTime(moment());
-        body.giocuoi=formatTime(moment());
+        body.web_code = webCode;
+        body.giodau = formatTime(moment());
+        body.giocuoi = formatTime(moment());
         body.Sign = sign(`${body.ma_trongtai}${body.so_cho}`);
-        if(checkDisableRegister()) {
+        if (checkDisableRegister()) {
             setLoading(false);
             return;
         }
         setLoading(true);
-        localStorageSave(FEE_REQUEST,body);
-        productRepository.getFeeTNDSOTO(body).then(res=>{
+        localStorageSave(FEE_REQUEST, body);
+        productRepository.getFeeTNDSOTO(body).then(res => {
             setFee(res);
-        }).catch(err=>{
+        }).catch(err => {
             // M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
-        }).finally(()=> setLoading(false));
+        }).finally(() => setLoading(false));
     }
 
     useEffect(() => {
@@ -1290,25 +1330,25 @@ function CategoryDetail() {
             }
             if (!product) product = category.products[0];
             setCurrentProduct(product);
-            if(product.code!==ENSURE_EXTEND)
+            if (product.code !== ENSURE_EXTEND)
                 setCurrentPackage(product?.benefit?.packages[0]?.code);
             else getDevicesCategory();
         }
 
     }, [categoryId]);
-   const getDevicesCategory=()=>{
-       categoryRepository.getCategories('THIETBI_DT').then(res=>{
-           setDevicesCategory(res.Data)
-       }).catch(err=>{
+    const getDevicesCategory = () => {
+        categoryRepository.getCategories('THIETBI_DT').then(res => {
+            setDevicesCategory(res.Data)
+        }).catch(err => {
 
-       });
-   }
+        });
+    }
     const tabClick = (data: any) => {
         setFee(null);
         setCurrentProduct(data);
-        if(data.code===ENSURE_EXTEND) getDevicesCategory();
+        if (data.code === ENSURE_EXTEND) getDevicesCategory();
         else {
-            if(data.isReady)
+            if (data.isReady)
                 setCurrentPackage(data?.benefit?.packages[0]?.code);
         }
         setSearchParams({productId: data.code});
@@ -1317,14 +1357,14 @@ function CategoryDetail() {
         setCurrentPackage(value);
         setFee(null);
     }
-    const handleChangeFormValues=(key: string, value: any)=>{
-       let temp = lodash.cloneDeep(formValues);
-       temp[key]=value;
-       if(key==='chuong_trinh'){
-           let duration = formatDate(moment(temp.ngay_batdau).add(value==='0101'?6:12,'M'));
-           temp.thoihan_bh = duration;
-       }
-       setFormValues(temp);
+    const handleChangeFormValues = (key: string, value: any) => {
+        let temp = lodash.cloneDeep(formValues);
+        temp[key] = value;
+        if (key === 'chuong_trinh') {
+            let duration = formatDate(moment(temp.ngay_batdau).add(value === '0101' ? 6 : 12, 'M'));
+            temp.thoihan_bh = duration;
+        }
+        setFormValues(temp);
     }
     const handleChange = (value: any) => {
         let item = categoriesCar.find((x: any) => x.code === value);
@@ -1383,6 +1423,7 @@ function CategoryDetail() {
     }
     const onChangeDate = (date: any, dateString: string) => {
         // console.log(date, dateString);
+        setFromDate(dateString);
         localStorageSave('DATE', dateString);
     }
     const renderFeeCar = () => {
@@ -1424,7 +1465,8 @@ function CategoryDetail() {
                         // if(bodyOto.XeTapLai&&x.code!=='XePickUp'&&x.code!=='XeTaiVan')
                         //     disable=true;
                         return <Col span={12} className={''}>
-                            <Checkbox checked={lodash.get(bodyOto, x.code, false)} onChange={(e)=> changeTypeCar(e.target.checked, x.code)}>{x.name}</Checkbox>
+                            <Checkbox checked={lodash.get(bodyOto, x.code, false)}
+                                      onChange={(e) => changeTypeCar(e.target.checked, x.code)}>{x.name}</Checkbox>
                         </Col>
                     })
                 }
@@ -1449,47 +1491,75 @@ function CategoryDetail() {
 
         </div>
     }
-    const renderExtend=()=>{
+    const renderFeeMotor = () => {
+        return <div className={'txt-left'}>
+            <label>Gói bảo hiểm</label>
+            <Select value={currentPackage} onChange={handleChangePackage} className={'width100'}>
+                {currentProduct?.benefit.packages.map((x: any) => <Select.Option
+                    value={x.code}>{x.name}</Select.Option>)}
+            </Select>
+            <label>Ngày hiệu lực</label>
+            <DatePicker disabledDate={disabledDate} defaultValue={moment(new Date(), STANDARD_DATE_FORMAT)}
+                        suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
+                        format={STANDARD_DATE_FORMAT} onChange={onChangeDate}/>
+            <label>Thời hạn bảo hiểm</label>
+            <Select defaultValue="1" onChange={handleChange} className={'width100'}>
+                <Select.Option value="1">1 năm</Select.Option>
+            </Select>
+            <label>Loại xe</label>
+            <Select value={lodash.get(formValues, 'loai_xe', undefined)}
+                    onChange={(value) => handleChangeFormValues('loai_xe', value)} className={'width100'}>
+                {motoCategories.map((x: any, index: number) => {
+                    return <Select.Option value={x.Value}>{x.Text}</Select.Option>
+                })}
+            </Select>
+        </div>
+    }
+    const renderExtend = () => {
         return <div className={'txt-left'}>
             <label>Loại thiết bị</label>
-            <Select className={'width100'} value={lodash.get(formValues,'loai_thietbi','')} onChange={(value:string)=> handleChangeFormValues('loai_thietbi', value)}>
+            <Select className={'width100'} value={lodash.get(formValues, 'loai_thietbi', '')}
+                    onChange={(value: string) => handleChangeFormValues('loai_thietbi', value)}>
                 {
-                    devicesCategory?.map((x: any)=>    <Select.Option value={x.Value}>{x.Text}</Select.Option>)
+                    devicesCategory?.map((x: any) => <Select.Option value={x.Value}>{x.Text}</Select.Option>)
                 }
             </Select>
             <label>Hãng</label>
-            <Input placeholder="Ví dụ: Apple" onChange={e=>handleChangeFormValues('hang', e.target.value)}/>
+            <Input placeholder="Ví dụ: Apple" onChange={e => handleChangeFormValues('hang', e.target.value)}/>
             <label>Model</label>
-            <Input placeholder="Ví dụ: Iphone 13" onChange={e=> handleChangeFormValues('model', e.target.value)} />
+            <Input placeholder="Ví dụ: Iphone 13" onChange={e => handleChangeFormValues('model', e.target.value)}/>
             <label>Số Serial</label>
-            <Input onChange={e=> handleChangeFormValues('so_serial', e.target.value)}/>
+            <Input onChange={e => handleChangeFormValues('so_serial', e.target.value)}/>
             <label>Số IMEI</label>
-            <Input onChange={e=> handleChangeFormValues('so_IMEI', e.target.value)}/>
+            <Input onChange={e => handleChangeFormValues('so_IMEI', e.target.value)}/>
             <label>Thời hạn bảo hành gốc của nhà sản xuất</label>
             <div className="row">
                 <div className="col-md-6">
                     <label>Ngày bắt đầu</label>
                     <DatePicker
-                                suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
-                                format={STANDARD_DATE_FORMAT} onChange={(date: any, dateString: string)=> handleChangeFormValues('thoihan_batdau_baohanh_nsx', dateString)}/>
+                        suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
+                        format={STANDARD_DATE_FORMAT}
+                        onChange={(date: any, dateString: string) => handleChangeFormValues('thoihan_batdau_baohanh_nsx', dateString)}/>
                 </div>
                 <div className="col-md-6">
                     <label>Ngày hết hạn</label>
                     <DatePicker
-                                suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
-                                format={STANDARD_DATE_FORMAT}
-                                onChange={(date: any, dateString: string)=> handleChangeFormValues('thoihan_ketthuc_baohanh_nsx', dateString)}/>
+                        suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
+                        format={STANDARD_DATE_FORMAT}
+                        onChange={(date: any, dateString: string) => handleChangeFormValues('thoihan_ketthuc_baohanh_nsx', dateString)}/>
                 </div>
             </div>
             <label>Thời hạn bảo hiểm bảo hành mở rộng</label>
-            <Select className={'width100'} value={lodash.get(formValues,'chuong_trinh','')} onChange={value=> handleChangeFormValues('chuong_trinh', value)}>
+            <Select className={'width100'} value={lodash.get(formValues, 'chuong_trinh', '')}
+                    onChange={value => handleChangeFormValues('chuong_trinh', value)}>
                 <Select.Option value={'0101'}>6 tháng</Select.Option>
                 <Select.Option value={'0102'}>12 tháng</Select.Option>
                 <Select.Option value={'0103'}>1 năm</Select.Option>
                 <Select.Option value={'0104'}>3 năm</Select.Option>
             </Select>
             <label>Giá trị thiết bị tại thời điểm tham gia bảo hiểm (VNĐ)</label>
-            <Input placeholder="Ví dụ: 2100000" onChange={e=> handleChangeFormValues('giatri_thietbi', e.target.value)}/>
+            <Input placeholder="Ví dụ: 2100000"
+                   onChange={e => handleChangeFormValues('giatri_thietbi', e.target.value)}/>
             {/*<Checkbox checked={formValues?.khuyen_mai} onChange={e=> handleChangeFormValues('khuyen_mai', e.target.checked?1:0)}>Khuyến mại</Checkbox>*/}
         </div>
     }
@@ -1502,9 +1572,12 @@ function CategoryDetail() {
                 return renderFeeElectric();
             case ENSURE_EXTEND:
                 return renderExtend();
+            case ENSURE_MOTOR:
+                return renderFeeMotor();
         }
     }
-    return <MainLayout showLogoViettel={currentProduct?.code===ENSURE_EXTEND?true:false} isDetail={true} showProgressBar={showProgressBar}
+    return <MainLayout showLogoViettel={currentProduct?.code === ENSURE_EXTEND ? true : false} isDetail={true}
+                       showProgressBar={showProgressBar}
                        title={lodash.get(currentProduct, 'name', 'Chi tiết sản phẩm')}>
         <div className="banner">
             <img src={detail?.banner} style={{width: '100%'}}/>
@@ -1539,42 +1612,43 @@ function CategoryDetail() {
                             <div className="benefit-insurrance">
                                 <h2><img src={iconH22}/>Quyền lợi</h2>
                                 {currentProduct && currentProduct.code !== 'baohanhmorong' ? <div className="row">
-                                    <div className="col-md-4">
-                                        <div>
-                                            {
-                                                currentProduct?.benefit?.categories?.map((x: any) => {
-                                                    return <p key={x.code}>{x.name}</p>
-                                                })
-                                            }
+                                        <div className="col-md-4">
+                                            <div>
+                                                {
+                                                    currentProduct?.benefit?.categories?.map((x: any) => {
+                                                        return <p key={x.code}>{x.name}</p>
+                                                    })
+                                                }
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-md-8">
-                                        <div className="row">
-                                            {
-                                                currentProduct?.benefit?.packages?.map((x: any, index: number) => {
-                                                    return <div className="col-md-4" key={index}>
-                                                        <div
-                                                            className={`package-insurrance ${currentProduct?.benefit?.classNameValue} ${index === 0 ? 'dong' : index === 1 ? 'bac' : 'vang'}`}>
-                                                            <h3>{x.name}</h3>
-                                                            <div>
-                                                                {
-                                                                    x?.benefits.map((xx: any, pos: number) => {
-                                                                        return <p><img
-                                                                            src={index === 0 ? require('../../resources/images/d-check.png') : index === 1 ? require('../../resources/images/b-check.png') : require('../../resources/images/v-check.png')}/><span>{xx.value}</span>
-                                                                        </p>
-                                                                    })
-                                                                }
+                                        <div className="col-md-8">
+                                            <div className="row">
+                                                {
+                                                    currentProduct?.benefit?.packages?.map((x: any, index: number) => {
+                                                        return <div className="col-md-4" key={index}>
+                                                            <div
+                                                                className={`package-insurrance ${currentProduct?.benefit?.classNameValue} ${index === 0 ? 'dong' : index === 1 ? 'bac' : 'vang'}`}>
+                                                                <h3>{x.name}</h3>
+                                                                <div>
+                                                                    {
+                                                                        x?.benefits.map((xx: any, pos: number) => {
+                                                                            return <p><img
+                                                                                src={index === 0 ? require('../../resources/images/d-check.png') : index === 1 ? require('../../resources/images/b-check.png') : require('../../resources/images/v-check.png')}/><span>{xx.value}</span>
+                                                                            </p>
+                                                                        })
+                                                                    }
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                })
+                                                    })
 
-                                            }
+                                                }
+                                            </div>
+
+
                                         </div>
-
-
-                                    </div>
-                                </div>:<div className={'baohiembaohanhmorong'}>{currentProduct?.benefit?.content}</div>
+                                    </div> :
+                                    <div className={'baohiembaohanhmorong'}>{currentProduct?.benefit?.content}</div>
                                 }
                             </div>
                             {currentProduct && currentProduct.code !== 'baohanhmorong' &&
@@ -1626,12 +1700,13 @@ function CategoryDetail() {
                                             fontSize: '24px',
                                             color: '#B12121',
                                             margin: '24px 0'
-                                        }}>{formatMoneyByUnit(lodash.get(fee,'TotalFee',''))}</p>
-                                        <h3 className="mb-show">Phí bảo hiểm <span>{formatMoneyByUnit(lodash.get(fee,'TotalFee',''))}</span></h3>
+                                        }}>{formatMoneyByUnit(lodash.get(fee, 'TotalFee', ''))}</p>
+                                        <h3 className="mb-show">Phí bảo
+                                            hiểm <span>{formatMoneyByUnit(lodash.get(fee, 'TotalFee', ''))}</span></h3>
                                         <a onClick={() => {
-                                            if(canRegister())
-                                                navigate(currentProduct?.code===ENSURE_EXTEND?`/products/${currentProduct?.code}/register`:`/products/${currentProduct?.code}/register?packageCode=${currentPackage}${currentProduct?.code===ENSURE_CAR?`&purpose=${purpose.code}`:''}`)
-                                        }}>{canRegister()&&<img src={iconCheckmark} alt=""/>}Đăng ký</a>
+                                            // if (canRegister())
+                                                navigate(currentProduct?.code === ENSURE_EXTEND ? `/products/${currentProduct?.code}/register` : `/products/${currentProduct?.code}/register?packageCode=${currentPackage}${currentProduct?.code === ENSURE_CAR ? `&purpose=${purpose.code}` : ''}`)
+                                        }}>{canRegister() && <img src={iconCheckmark} alt=""/>}Đăng ký</a>
                                     </div>
                                 </div>
                             </div>

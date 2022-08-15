@@ -18,6 +18,7 @@ export const DATA_REGISTER = 'DATA_REGISTER';
 
 export const ENSURE_ELECTRIC='tainansudungdien';
 export const ENSURE_CAR='tndsoto';
+export const ENSURE_MOTOR='tndxemay';
 export const ENSURE_HOUSE='nhaotoandien';
 export const ENSURE_EXTEND='baohanhmorong';
 export const CPID='WEB_VIEW';
