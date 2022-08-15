@@ -1282,7 +1282,7 @@ function CategoryDetail() {
             else if (purpose.code === '3' && !bodyOto.ma_trongtai)
                 return true;
         } else if (currentProduct?.code === ENSURE_EXTEND) {
-            if (!formValues.so_IMEI || !formValues.so_serial || !formValues.thoihan_batdau_baohanh_nsx || !formValues.thoihan_ketthuc_baohanh_nsx)
+            if (!formValues.so_serial || !formValues.thoihan_batdau_baohanh_nsx || !formValues.thoihan_ketthuc_baohanh_nsx)
                 return true;
             return false;
         }else if(currentProduct?.code === ENSURE_MOTOR){
@@ -1360,8 +1360,9 @@ function CategoryDetail() {
     const handleChangeFormValues = (key: string, value: any) => {
         let temp = lodash.cloneDeep(formValues);
         temp[key] = value;
-        if (key === 'chuong_trinh') {
-            let duration = formatDate(moment(temp.ngay_batdau).add(value === '0101' ? 6 : 12, 'M'));
+        if (key === 'thoihan_ketthuc_baohanh_nsx') {
+            temp.ngay_batdau=formatDate(moment(value,STANDARD_DATE_FORMAT).add(1,'d'));
+            let duration = formatDate(moment(value,STANDARD_DATE_FORMAT).add(formValues.chuong_trinh === '0101' ? 6 :formValues.chuong_trinh === '0102' ? 12: 24, 'months'));
             temp.thoihan_bh = duration;
         }
         setFormValues(temp);
@@ -1515,6 +1516,14 @@ function CategoryDetail() {
             </Select>
         </div>
     }
+    const checkTIVI=()=>{
+        let items = ['TIVI','MS',
+            'MG',
+            'TUD',
+            'TUM',
+            'MDH'];
+        return items.includes(formValues.loai_thietbi);
+    }
     const renderExtend = () => {
         return <div className={'txt-left'}>
             <label>Loại thiết bị</label>
@@ -1528,10 +1537,10 @@ function CategoryDetail() {
             <Input placeholder="Ví dụ: Apple" onChange={e => handleChangeFormValues('hang', e.target.value)}/>
             <label>Model</label>
             <Input placeholder="Ví dụ: Iphone 13" onChange={e => handleChangeFormValues('model', e.target.value)}/>
-            <label>Số Serial</label>
+            <label>Số Serial/IMEI</label>
             <Input onChange={e => handleChangeFormValues('so_serial', e.target.value)}/>
-            <label>Số IMEI</label>
-            <Input onChange={e => handleChangeFormValues('so_IMEI', e.target.value)}/>
+            {/*<label>Số IMEI</label>*/}
+            {/*<Input onChange={e => handleChangeFormValues('so_IMEI', e.target.value)}/>*/}
             <label>Thời hạn bảo hành gốc của nhà sản xuất</label>
             <div className="row">
                 <div className="col-md-6">
@@ -1552,9 +1561,9 @@ function CategoryDetail() {
             <label>Thời hạn bảo hiểm bảo hành mở rộng</label>
             <Select disabled={!formValues?.loai_thietbi} className={'width100'} value={lodash.get(formValues, 'chuong_trinh', '')}
                     onChange={value => handleChangeFormValues('chuong_trinh', value)}>
-                {formValues?.loai_thietbi!=='TIVI'&&<Select.Option value={'0101'}>6 tháng</Select.Option>}
+                {!checkTIVI()&&<Select.Option value={'0101'}>6 tháng</Select.Option>}
                 <Select.Option value={'0102'}>12 tháng</Select.Option>
-                {formValues?.loai_thietbi==='TIVI'&&<Select.Option value={'0103'}>2 năm</Select.Option>}
+                {checkTIVI()&&<Select.Option value={'0103'}>2 năm</Select.Option>}
             </Select>
             <label>Giá trị thiết bị tại thời điểm tham gia bảo hiểm (VNĐ)</label>
             <Input placeholder="Ví dụ: 2100000"

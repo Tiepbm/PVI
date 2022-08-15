@@ -521,7 +521,7 @@ function RegisterInsurance() {
             bodyRegister.CardId = cardId;
         if (productId === ENSURE_ELECTRIC) {
             productRepository.createOrderHSDD(bodyRegister).then(res => {
-                setResult(true);
+                setResult(res);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
@@ -531,7 +531,7 @@ function RegisterInsurance() {
             });
         } else if (productId === ENSURE_HOUSE) {
             productRepository.createOrderHouse(bodyRegister).then(res => {
-                setResult(true);
+                setResult(res);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
@@ -541,7 +541,7 @@ function RegisterInsurance() {
             });
         } else if (productId === ENSURE_CAR) {
             productRepository.createOrderCar(bodyRegister).then(res => {
-                setResult(true);
+                setResult(res);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
@@ -551,7 +551,7 @@ function RegisterInsurance() {
             });
         }else if(productId===ENSURE_EXTEND){
             productRepository.createOrderExtend(bodyRegister).then(res => {
-                setResult(true);
+                setResult(res);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
@@ -561,7 +561,7 @@ function RegisterInsurance() {
             });
         }else if (productId === ENSURE_MOTOR) {
             productRepository.createOrderMotor(bodyRegister).then(res => {
-                setResult(true);
+                setResult(res);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
@@ -585,8 +585,8 @@ function RegisterInsurance() {
                             <RowItem title={'Loại thiết bị'} value={dataExtendRegister?.loai_thietbi}></RowItem>
                             <RowItem title={'Hãng'} value={dataExtendRegister?.hang}></RowItem>
                             <RowItem title={'Model'} value={dataExtendRegister?.model}></RowItem>
-                            <RowItem title={'Số Serial'} value={dataExtendRegister?.so_serial}></RowItem>
-                            <RowItem title={'Số IMEI'} value={dataExtendRegister?.so_IMEI}></RowItem>
+                            <RowItem title={'Số Serial/IMEI'} value={dataExtendRegister?.so_serial}></RowItem>
+                            {/*<RowItem title={'Số IMEI'} value={dataExtendRegister?.so_IMEI}></RowItem>*/}
                             <RowItem title={'Thời hạn bảo hành gốc của nhà sản xuất'} value={`Từ ${dataExtendRegister?.thoihan_batdau_baohanh_nsx} đến ${dataExtendRegister?.thoihan_ketthuc_baohanh_nsx}`}></RowItem>
                             <RowItem title={'Thời hạn bảo hiểm bảo hành mở rộng'} value={`Từ ${dataExtendRegister.ngay_batdau} đến ${dataExtendRegister.thoihan_bh}`}></RowItem>
                             <RowItem title={'Giá trị thiết bị tại thời điểm tham gia bảo hiểm'} value={formatMoneyByUnit(dataExtendRegister?.giatri_thietbi)}></RowItem>
