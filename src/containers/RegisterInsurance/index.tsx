@@ -62,17 +62,23 @@ function RegisterInsurance() {
     const [form] = Form.useForm();
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
     const [cardId, setCardId] = useSessionStorage('cardid', '');
-    const isDesktopOrLaptop = useMediaQuery({minWidth: 768});
-    const isTabletOrMobile = useMediaQuery({maxWidth: 767});
-    console.log(dataExtendRegister);
+    const [motoCategories, setMotoCategories] = useState<any>([]);
     const disabledDate = (current: any) => {
         // Can not select days before today and today
         return current && current > moment().endOf('day');
     }
     const [bodyRegister, setBodyRegister] = useState<any>();
+    const getMotoCategories = () => {
+        categoryRepository.getCategories('LOAIXEMOTOR').then(res => {
+            setMotoCategories(res.Data);
+        }).catch(err => {
+
+        });
+    }
     useEffect(() => {
         if (productId === ENSURE_CAR || productId === ENSURE_HOUSE|| productId === ENSURE_MOTOR)
             getProvinces();
+        getMotoCategories();
         if (productId === ENSURE_HOUSE) {
             let items: any = [];
             for (let i = 0; i <= 50; i++)
@@ -452,6 +458,47 @@ function RegisterInsurance() {
                         ]
 
                 }
+                }else if(productId===ENSURE_MOTOR){
+                    setProvinceSelected(provinces.find((x: any) => x.Value === values.carProvince));
+                    let dateStart = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd'));
+                    let duration = formatDate(moment(currentDateString, 'DD/MM/YYYY').set('year', moment().get('year') + 1));
+
+                    body={
+                        ma_giaodich:`${CPID}${moment().valueOf()}`,
+                        "CpId": CPID,
+                        diachi_nguoimua_bh: '',
+                        so_donbh: '',
+                        ngay_cap: formatDate(moment()),
+                        ngay_dau: dateStart,
+                        ngay_cuoi: duration,
+                        bien_kiemsoat: values.carNumber,
+                        so_may: '',
+                        so_khung: '',
+                        loai_xe: dataExtendRegister.loai_xe,
+                        nhan_hieu: '',
+                        nam_sanxuat: '',
+                        ten_chuxe: values.carName,
+                        email: values.customerEmail,
+                        so_dienthoai: values.customerPhone,
+                        dia_chi: provinceSelected?.Text,
+                        nhom_kenhbh: '',
+                        kenh_banhang: '',
+                        canbo_khaithac: '',
+                        ngay_thanhtoan: '',
+                        ma_daily: '',
+                        ma_donvi: '',
+                        ma_pkt: '',
+                        ma_canbo_kt: '',
+                        ma_user: '',
+                        ma_tinh: values.carProvince,
+                        ngay_ctu: formatDate(moment()), //dd/MM/yyyy
+                        thamgia_laiphu: packageCode==='01'?false:true,
+                        muc_trachnhiem_laiphu: packageCode==='01'?0: packageCode==='02'?10:50,
+                        so_nguoi_tgia_laiphu: packageCode==='01'?0:2,
+                        an_bien_ks: false,
+                        pr_key: 0,
+                    };
+                    body.Sign=sign(`${body.bien_kiemsoat}${body.email}${body.so_dienthoai}${body.loai_xe}`);
                 }
                 setBodyRegister(body);
                 setStep(currentStep + 1);
@@ -504,6 +551,16 @@ function RegisterInsurance() {
             });
         }else if(productId===ENSURE_EXTEND){
             productRepository.createOrderExtend(bodyRegister).then(res => {
+                setResult(true);
+            }).catch(err => {
+                setResult(false);
+            }).finally(() => {
+                setShowConfirm(false);
+                setLoading(false);
+                setShowResult(true);
+            });
+        }else if (productId === ENSURE_MOTOR) {
+            productRepository.createOrderMotor(bodyRegister).then(res => {
                 setResult(true);
             }).catch(err => {
                 setResult(false);
@@ -820,9 +877,10 @@ function RegisterInsurance() {
                     <RowItem title={'Số chỗ ngồi'} value={bodyRegister.ChoNgoi}></RowItem>
                 </div>:productId === ENSURE_MOTOR ? <div>
                     <h3>Thông tin đăng ký xe</h3>
-                    <RowItem title={'Họ và tên'} value={bodyRegister.TenChuXe}></RowItem>
-                    <RowItem title={'Biển số xe'} value={bodyRegister.BienKiemSoat}></RowItem>
-                    <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected.Text}></RowItem>
+                    <RowItem title={'Họ và tên'} value={bodyRegister.ten_chuxe}></RowItem>
+                    <RowItem title={'Biển số xe'} value={bodyRegister.bien_kiemsoat}></RowItem>
+                    <RowItem title={'Tỉnh/Thành Phố'} value={provinceSelected?.Text}></RowItem>
+                    <RowItem title={'Loại xe'} value={motoCategories?.find((x: any)=> x.Value===bodyRegister.loai_xe)?.Text}></RowItem>
                 </div> : productId === ENSURE_HOUSE ? <div>
                     <h3>Thông tin căn nhà</h3>
                     <RowItem title={'Năm xây dựng'} value={bodyRegister.nam_xaydung}></RowItem>

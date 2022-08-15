@@ -1247,13 +1247,13 @@ function CategoryDetail() {
             "ngay_dau": dateStart,
             "ngay_cuoi": duration,
             "loai_xe": lodash.get(formValues, 'loai_xe', ''),
-            "thamgia_laiphu": false,
-            muc_trachnhiem_laiphu: '',
-            so_nguoi_tgia_laiphu: '',
-            tyle_phi_laiphu: ''
+            "thamgia_laiphu": currentPackage==='01'?false:true,
+            muc_trachnhiem_laiphu: currentPackage==='01'?0: currentPackage==='02'?10:50,
+            so_nguoi_tgia_laiphu: currentPackage==='01'?0:2,
+            tyle_phi_laiphu: currentPackage==='01'?0:0.1,
         };
         productRepository.getFeeMotor(body).then(res => {
-            setFee(res);
+            setFee({TotalFee: lodash.get(res,'phi_moto',0)+lodash.get(res,'phi_laiphu',0)});
         }).catch(err => {
             // M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
         }).finally(() => setLoading(false));
@@ -1550,12 +1550,11 @@ function CategoryDetail() {
                 </div>
             </div>
             <label>Thời hạn bảo hiểm bảo hành mở rộng</label>
-            <Select className={'width100'} value={lodash.get(formValues, 'chuong_trinh', '')}
+            <Select disabled={!formValues?.loai_thietbi} className={'width100'} value={lodash.get(formValues, 'chuong_trinh', '')}
                     onChange={value => handleChangeFormValues('chuong_trinh', value)}>
-                <Select.Option value={'0101'}>6 tháng</Select.Option>
+                {formValues?.loai_thietbi!=='TIVI'&&<Select.Option value={'0101'}>6 tháng</Select.Option>}
                 <Select.Option value={'0102'}>12 tháng</Select.Option>
-                <Select.Option value={'0103'}>1 năm</Select.Option>
-                <Select.Option value={'0104'}>3 năm</Select.Option>
+                {formValues?.loai_thietbi==='TIVI'&&<Select.Option value={'0103'}>2 năm</Select.Option>}
             </Select>
             <label>Giá trị thiết bị tại thời điểm tham gia bảo hiểm (VNĐ)</label>
             <Input placeholder="Ví dụ: 2100000"
@@ -1704,7 +1703,7 @@ function CategoryDetail() {
                                         <h3 className="mb-show">Phí bảo
                                             hiểm <span>{formatMoneyByUnit(lodash.get(fee, 'TotalFee', ''))}</span></h3>
                                         <a onClick={() => {
-                                            // if (canRegister())
+                                            if (canRegister())
                                                 navigate(currentProduct?.code === ENSURE_EXTEND ? `/products/${currentProduct?.code}/register` : `/products/${currentProduct?.code}/register?packageCode=${currentPackage}${currentProduct?.code === ENSURE_CAR ? `&purpose=${purpose.code}` : ''}`)
                                         }}>{canRegister() && <img src={iconCheckmark} alt=""/>}Đăng ký</a>
                                     </div>

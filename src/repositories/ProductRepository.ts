@@ -66,6 +66,13 @@ export class ProductRepository extends Repository {
                 return response.data;
             });
     };
+    public createOrderMotor = (body: any): Promise<any> => {
+        return this.http
+            .post(`TaoDon_XeMay`, body)
+            .then((response: AxiosResponse<any>) => {
+                return response.data;
+            });
+    };
     public createOrderExtend = (body: any): Promise<any> => {
         return this.http
             .post(`TaoDon_BaoHanh_MoRong`, body)
