@@ -1524,7 +1524,7 @@ function CategoryDetail() {
             'MG',
             'TUD',
             'TUM',
-            'MDH'];
+            'MDH','TLANH'];
         return items.includes(formValues.loai_thietbi);
     }
     const renderExtend = () => {
