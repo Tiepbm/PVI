@@ -1360,10 +1360,13 @@ function CategoryDetail() {
     const handleChangeFormValues = (key: string, value: any) => {
         let temp = lodash.cloneDeep(formValues);
         temp[key] = value;
-        if (key === 'thoihan_ketthuc_baohanh_nsx') {
-            temp.ngay_batdau=formatDate(moment(value,STANDARD_DATE_FORMAT).add(1,'d'));
-            let duration = formatDate(moment(value,STANDARD_DATE_FORMAT).add(formValues.chuong_trinh === '0101' ? 6 :formValues.chuong_trinh === '0102' ? 12: 24, 'months'));
-            temp.thoihan_bh = duration;
+        if (key === 'thoihan_ketthuc_baohanh_nsx'||key === 'chuong_trinh') {
+            if(temp.chuong_trinh&&temp.thoihan_ketthuc_baohanh_nsx)
+            {
+                temp.ngay_batdau=formatDate(moment(temp.thoihan_ketthuc_baohanh_nsx,STANDARD_DATE_FORMAT).add(1,'d'));
+                let duration = formatDate(moment(temp.ngay_batdau,STANDARD_DATE_FORMAT).add(temp.chuong_trinh === '0101' ? 6 :temp.chuong_trinh === '0102' ? 12: 24, 'months'));
+                temp.thoihan_bh = duration;
+            }
         }
         setFormValues(temp);
     }
