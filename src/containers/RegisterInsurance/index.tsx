@@ -432,7 +432,7 @@ function RegisterInsurance() {
                         ma_user:'',
                         EndTime:'23:59',
                         StartTime:'00:00',
-                        dien_thoai:'',
+                        dien_thoai:values.customerPhone,
                         khach_hang:values.customerName,
                         thoihan_bh:dataExtendRegister.thoihan_bh,
                         pr_key:0,
