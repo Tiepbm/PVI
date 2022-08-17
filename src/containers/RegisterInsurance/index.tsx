@@ -155,7 +155,7 @@ function RegisterInsurance() {
         });
     }
     const onContinue=()=>{
-      window.location.reload();
+      navigate(-1)
     }
     const getDistricts = () => {
         categoryRepository.getCategories('DIADIEM_BH').then(res => {
