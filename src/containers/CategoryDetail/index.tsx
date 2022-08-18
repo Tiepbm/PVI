@@ -1228,7 +1228,7 @@ function CategoryDetail() {
         let body = {
             "cpid": CPID,
             web_code: webCode,
-            "sign": sign(`${formValues.chuong_trinh}${formValues.giatri_thietbi}${lodash.get(formValues, 'khuyen_mai', 0)}${formValues.loai_thietbi}`),
+            "sign": sign(`${formValues.chuong_trinh}${convertStringToNumber(formValues.giatri_thietbi)}${lodash.get(formValues, 'khuyen_mai', 0)}${formValues.loai_thietbi}`),
             "loai_thietbi": lodash.get(formValues, 'loai_thietbi', ''),
             "chuong_trinh": lodash.get(formValues, 'chuong_trinh', ''),
             "khuyen_mai": lodash.get(formValues, 'khuyen_mai', 0),
