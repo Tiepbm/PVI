@@ -4,7 +4,7 @@ export function url(baseURL: string, segments: string) {
 }
 
 export function formatNumber(value: any) {
-  if(value===null||value===''||value===undefined) return '---';
+  if(value===null||value===''||value===undefined) return '';
   return numeral(value).format('0,0.[0000]');
 }
 export function formatMoneyBySuffix(value?: any, prefix: string='', suffix: string='') {
@@ -28,4 +28,10 @@ export function formatMoneyByUnit(value?: any, unit?: string) {
 }
 export function formatNumberDay(value: any) {
   return `${formatNumber(value)} ngày`;
+}
+export function convertStringToNumber(value: any, defaultValue: any=null){
+  if (value === null || value === '' || value === undefined) return defaultValue;
+  value = value.toString().replace(/[.]/g, '');
+  value = value.toString().replace(/[,]/g, '.');
+  return parseFloat(value)
 }

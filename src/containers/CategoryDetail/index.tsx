@@ -29,7 +29,7 @@ import {localStorageSave} from "../../utils/LocalStorageUtils";
 import {handleChangeDate, sign} from "../../utils/StringUtils";
 import {productRepository} from "../../repositories/ProductRepository";
 import M24ErrorUtils from "../../utils/M24ErrorUtils";
-import {formatMoneyByUnit} from "../../core/helpers/string";
+import {convertStringToNumber, formatMoneyByUnit, formatNumber} from "../../core/helpers/string";
 import {categoryRepository} from "../../repositories/CategoryRepository";
 import {useSessionStorage} from "../../hooks/useSessionStorage";
 
@@ -893,7 +893,7 @@ function CategoryDetail() {
                             <p>- Tổng thời hạn bảo hiểm chính hãng và bảo hành mở rộng không quá 5 năm.</p>
                             <div className="form-check text-left">
                                 <input className="form-check-input" type="checkbox" value={""}
-                                       onChange={e => handleChangeFormValues('khuyen_mai', e.target.checked ? 1 : 0)}/>
+                                       onChange={e => setKhuyenMai(e.target.checked ? 1 : 0)}/>
                                 <label className="form-check-label" htmlFor="flexCheckDefault">
                                     Chương trình mua kèm bảo hiểm rơi vỡ
                                     <br/><i>(Chỉ áp dụng cho Điện thoại và thời hạn bảo hiểm bảo hành mở rộng 6
@@ -1086,9 +1086,8 @@ function CategoryDetail() {
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
     const [devicesCategory, setDevicesCategory] = useState<any>([]);
     const [motoCategories, setMotoCategories] = useState<any>([]);
-    const [formValues, setFormValues] = useState<any>({
-        ngay_batdau: formatDate(moment().add(1, 'd'))
-    });
+    const [formValues, setFormValues] = useState<any>();
+    const [khuyenMai, setKhuyenMai] = useState<number>(0);
     const keyCars = ['MayKeo', 'XeChuyenDung', 'XeChoTien', 'XePickUp', 'XeTaiVan', 'XeTapLai', 'XeBus', 'XeCuuThuong', 'Xetaxi', 'XeDauKeo'];
     const [bodyOto, setBodyOto] = useState({
         "ma_trongtai": "",
@@ -1166,14 +1165,19 @@ function CategoryDetail() {
             getFee();
     }, [currentPackage]);
     useEffect(() => {
-        if (currentProduct?.code === ENSURE_EXTEND) {
-            if (formValues.chuong_trinh && formValues.loai_thietbi && formValues.giatri_thietbi)
-                getFeeExtend();
-        } else if (currentProduct?.code === ENSURE_MOTOR && formValues.loai_xe) {
-            getFeeMotor();
+        if(formValues){
+            if (currentProduct?.code === ENSURE_EXTEND) {
+                if (formValues?.chuong_trinh && formValues?.loai_thietbi && formValues?.giatri_thietbi)
+                    getFeeExtend();
+            } else if (currentProduct?.code === ENSURE_MOTOR && formValues.loai_xe) {
+                getFeeMotor();
+            }
+            localStorageSave(DATA_REGISTER, {...formValues, giatri_thietbi: convertStringToNumber(formValues.giatri_thietbi)});
         }
-        localStorageSave(DATA_REGISTER, formValues);
     }, [formValues]);
+    useEffect(() => {
+        handleChangeFormValues('khuyen_mai', khuyenMai);
+    }, [khuyenMai]);
     useEffect(() => {
         if (currentProduct)
             getFee();
@@ -1228,7 +1232,7 @@ function CategoryDetail() {
             "loai_thietbi": lodash.get(formValues, 'loai_thietbi', ''),
             "chuong_trinh": lodash.get(formValues, 'chuong_trinh', ''),
             "khuyen_mai": lodash.get(formValues, 'khuyen_mai', 0),
-            "giatri_thietbi": lodash.get(formValues, 'giatri_thietbi', ''),
+            "giatri_thietbi": convertStringToNumber(lodash.get(formValues, 'giatri_thietbi', '')),
         };
         productRepository.getFeeExtend(body).then(res => {
             setFee(res);
@@ -1282,11 +1286,11 @@ function CategoryDetail() {
             else if (purpose.code === '3' && !bodyOto.ma_trongtai)
                 return true;
         } else if (currentProduct?.code === ENSURE_EXTEND) {
-            if (!formValues.so_serial || !formValues.thoihan_batdau_baohanh_nsx || !formValues.thoihan_ketthuc_baohanh_nsx)
+            if (!formValues?.so_serial || !formValues?.thoihan_batdau_baohanh_nsx || !formValues?.thoihan_ketthuc_baohanh_nsx)
                 return true;
             return false;
         }else if(currentProduct?.code === ENSURE_MOTOR){
-            if(!formValues.loai_xe)
+            if(!formValues?.loai_xe)
                 return true;
         }
         return false;
@@ -1358,7 +1362,7 @@ function CategoryDetail() {
         setFee(null);
     }
     const handleChangeFormValues = (key: string, value: any) => {
-        let temp = lodash.cloneDeep(formValues);
+        let temp = lodash.cloneDeep(formValues)||{};
         temp[key] = value;
         if (key === 'thoihan_ketthuc_baohanh_nsx'||key === 'chuong_trinh') {
             if(temp.chuong_trinh&&temp.thoihan_ketthuc_baohanh_nsx)
@@ -1368,6 +1372,7 @@ function CategoryDetail() {
                 temp.thoihan_bh = duration;
             }
         }
+        console.log(temp);
         setFormValues(temp);
     }
     const handleChange = (value: any) => {
@@ -1525,7 +1530,7 @@ function CategoryDetail() {
             'TUD',
             'TUM',
             'MDH','TLANH'];
-        return items.includes(formValues.loai_thietbi);
+        return items.includes(formValues?.loai_thietbi);
     }
     const renderExtend = () => {
         return <div className={'txt-left'}>
@@ -1569,7 +1574,7 @@ function CategoryDetail() {
                 {checkTIVI()&&<Select.Option value={'0103'}>2 năm</Select.Option>}
             </Select>
             <label>Giá trị thiết bị tại thời điểm tham gia bảo hiểm (VNĐ)</label>
-            <Input placeholder="Ví dụ: 2100000"
+            <Input value={formatNumber(formValues?.giatri_thietbi)} placeholder="Ví dụ: 2100000"
                    onChange={e => handleChangeFormValues('giatri_thietbi', e.target.value)}/>
             {/*<Checkbox checked={formValues?.khuyen_mai} onChange={e=> handleChangeFormValues('khuyen_mai', e.target.checked?1:0)}>Khuyến mại</Checkbox>*/}
         </div>
