@@ -1286,7 +1286,8 @@ function CategoryDetail() {
             else if (purpose.code === '3' && !bodyOto.ma_trongtai)
                 return true;
         } else if (currentProduct?.code === ENSURE_EXTEND) {
-            if (!formValues?.so_serial || !formValues?.thoihan_batdau_baohanh_nsx || !formValues?.thoihan_ketthuc_baohanh_nsx)
+            if (!formValues?.so_serial || !formValues?.thoihan_batdau_baohanh_nsx || !formValues?.thoihan_ketthuc_baohanh_nsx||
+                (khuyenMai&&(formValues.loai_thietbi!='DTDD'||formValues.chuong_trinh!=='0101')))
                 return true;
             return false;
         }else if(currentProduct?.code === ENSURE_MOTOR){
