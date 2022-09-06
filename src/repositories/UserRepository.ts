@@ -12,7 +12,7 @@ export class UserRepository extends Repository {
 
     public getProfile = (body: any): Promise<any> => {
         return this.http
-            .post(`LoginSSO`, body)
+            .post(`ManagerApplication/LoginSSO`, body)
             .then((response: AxiosResponse<any>) => {
                 return response.data;
             });
@@ -26,7 +26,7 @@ export class UserRepository extends Repository {
             Sign: sign(`${username}${password}QLCD`)
         };
         return this.http
-            .post(`LoginWebView`, body)
+            .post(`ManagerApplication/LoginWebView`, body)
             .then((response: AxiosResponse<any>) => {
                 return response.data;
             });

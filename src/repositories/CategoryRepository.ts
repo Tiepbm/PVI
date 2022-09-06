@@ -22,7 +22,7 @@ export class CategoryRepository extends Repository {
             Sign: sign(`${categoryName}00`)
         };
         return this.http
-            .post(`Get_DanhMuc`, body)
+            .post(`ManagerApplication/Get_DanhMuc`, body)
             .then((response: AxiosResponse<any>) => {
                 return response.data;
             });

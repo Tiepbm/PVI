@@ -28,6 +28,7 @@ export interface MainLayoutProps {
     title?: any;
     isDetail?:boolean;
     showLogoViettel?:boolean;
+    showSearch?:boolean;
 }
 const MENU=[
     {
@@ -57,7 +58,7 @@ const MENU=[
     }
 ]
 function MainLayout(props: MainLayoutProps) {
-    const {children, showProgressBar, title, isDetail, showLogoViettel} = props;
+    const {children, showProgressBar, title, isDetail, showLogoViettel, showSearch} = props;
     const [collapsed, setCollapsed] = useState(true);
     const [percent, setPercent] = useState<number>(-1);
     const [autoIncrement, setAutoIncrement] = useState<boolean>(false);
@@ -156,6 +157,13 @@ function MainLayout(props: MainLayoutProps) {
                                     </div>
                                 </div>
                             </div>
+                            {showSearch&&<div className="col">
+                                <div className="header-right">
+                                    <div className="header-intro">
+                                        <Link to={'/search'}><i className="fas fa-search"></i>Tra cứu đơn</Link>
+                                    </div>
+                                </div>
+                            </div>}
                             <div className="col">
                                 {!showLogoViettel ? <div className="header-right">
                                     <div className="header-intro">
@@ -228,5 +236,7 @@ function MainLayout(props: MainLayoutProps) {
         </DocumentTitle>
     );
 }
-
+MainLayout.defaultProps={
+    showSearch: true
+}
 export default MainLayout;

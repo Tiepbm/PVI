@@ -1,6 +1,5 @@
 
 export const API_BASE_URL: string = process.env.REACT_APP_API_URL? process.env.REACT_APP_API_URL:'';
-
 export const INPUT_DEBOUNCE_TIME: number = 400;
 export const STANDARD_DATE_FORMAT: string = 'DD/MM/YYYY';
 export const STANDARD_DATE_FORMAT3: string = 'DD/MM';
