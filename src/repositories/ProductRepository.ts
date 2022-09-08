@@ -140,7 +140,7 @@ export class ProductRepository extends Repository {
         return this.http
             .post(`ManagerCP/Report_BHMR`, body)
             .then((response: AxiosResponse<any>) => {
-                return response.data;
+                return response.data.Data;
             });
     };
 }

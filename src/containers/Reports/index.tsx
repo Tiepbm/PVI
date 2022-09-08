@@ -56,13 +56,13 @@ function SearchOrder(){
         },
         {
             title: 'Điện thoại',
-            dataIndex: 'dien_thoai',
-            key: 'dien_thoai',
+            dataIndex: 'so_dienthoai',
+            key: 'so_dienthoai',
             width: 150,
         },
         {
             title: 'Email',
-            dataIndex: 'Email',
+            dataIndex: 'email',
             key: 'Email',
             width: 200,
         },
@@ -84,7 +84,6 @@ function SearchOrder(){
             dataIndex: 'ma_chtrinh',
             key: 'ma_chtrinh',
             width: 150,
-            render: (text:string) => formatNumber(text)
         }
     ];
     return <MainLayout showProgressBar={showProgressBar} title={'Báo cáo'} showSearch={true}>
