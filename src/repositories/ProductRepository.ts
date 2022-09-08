@@ -128,6 +128,21 @@ export class ProductRepository extends Repository {
                 return response.data.Data;
             });
     }
+    public getReports = (webCode: any, fromDate: string, toDate: string, maUser: any): Promise<any> => {
+        let body = {
+            CpId: CPID,
+            ma_user: maUser,
+            tu_ngay: fromDate,
+            den_ngay: toDate,
+            web_code: webCode,
+            Sign:sign(`${maUser}${fromDate}${webCode}${toDate}`)
+        }
+        return this.http
+            .post(`ManagerCP/Report_BHMR`, body)
+            .then((response: AxiosResponse<any>) => {
+                return response.data;
+            });
+    };
 }
 
 export const productRepository: ProductRepository = new ProductRepository();

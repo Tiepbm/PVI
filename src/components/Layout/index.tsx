@@ -29,6 +29,7 @@ export interface MainLayoutProps {
     isDetail?:boolean;
     showLogoViettel?:boolean;
     showSearch?:boolean;
+    showReport?:boolean;
 }
 const MENU=[
     {
@@ -58,7 +59,7 @@ const MENU=[
     }
 ]
 function MainLayout(props: MainLayoutProps) {
-    const {children, showProgressBar, title, isDetail, showLogoViettel, showSearch} = props;
+    const {children, showProgressBar, title, isDetail, showLogoViettel, showSearch, showReport} = props;
     const [collapsed, setCollapsed] = useState(true);
     const [percent, setPercent] = useState<number>(-1);
     const [autoIncrement, setAutoIncrement] = useState<boolean>(false);
@@ -157,10 +158,17 @@ function MainLayout(props: MainLayoutProps) {
                                     </div>
                                 </div>
                             </div>
+                            {showReport&&<div className="col">
+                                <div className="header-right">
+                                    <div className="header-intro">
+                                        <Link to={'/reports'}><i className="fad fa-file-chart-line mgr5"></i>Báo cáo</Link>
+                                    </div>
+                                </div>
+                            </div>}
                             {showSearch&&<div className="col">
                                 <div className="header-right">
                                     <div className="header-intro">
-                                        <Link to={'/search'}><i className="fas fa-search"></i>Tra cứu đơn</Link>
+                                        <Link to={'/search'}><i className="fas fa-search mgr5"></i>Tra cứu đơn</Link>
                                     </div>
                                 </div>
                             </div>}
@@ -237,6 +245,7 @@ function MainLayout(props: MainLayoutProps) {
     );
 }
 MainLayout.defaultProps={
-    showSearch: true
+    showSearch: true,
+    showReport: false
 }
 export default MainLayout;

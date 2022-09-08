@@ -11,6 +11,7 @@ import About from "./containers/About";
 import Login from "./containers/Login";
 import Orders from "./containers/Orders";
 import SearchOrder from "./containers/SearchOrder";
+import Reports from "./containers/Reports";
 import viVN from 'antd/lib/locale-provider/vi_VN'
 import moment from "moment";
 import {useSessionStorage} from "./hooks/useSessionStorage";
@@ -137,6 +138,7 @@ function App() {
             <Route path={'/products/:productId'} element={<ProtectedRoute><ProductDetail/></ProtectedRoute>}></Route>
             <Route path={'/rule/:productId'} element={<ProtectedRoute><RuleProductDetail/></ProtectedRoute>}></Route>
             <Route path={'/search'} element={<ProtectedRoute><SearchOrder/></ProtectedRoute>}></Route>
+            <Route path={'/reports'} element={<ProtectedRoute><Reports/></ProtectedRoute>}></Route>
             <Route path={'/login'} element={<Login/>}></Route>
             <Route path={'/about'} element={<About/>}></Route>
             <Route path={'/orders'} element={<Orders/>}></Route>
