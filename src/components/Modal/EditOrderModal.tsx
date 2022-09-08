@@ -103,7 +103,6 @@ const EditOrderModal: React.FC<Props> = (props: Props) => {
                     <Form.Item
                         label="Giá trị thiết bị"
                         name="giatri_thietbi"
-                        rules={[{required: true}]}
                     >
                         <Input disabled/>
                     </Form.Item>
@@ -130,7 +129,6 @@ const EditOrderModal: React.FC<Props> = (props: Props) => {
                         <Form.Item
                             name="loai_thietbi"
                             label="Loại thiết bị"
-                            rules={[{required: true}]}
                         >
                             <Input disabled/>
                         </Form.Item>
@@ -159,7 +157,6 @@ const EditOrderModal: React.FC<Props> = (props: Props) => {
                         <Form.Item
                             label="Số Serial/IMEI"
                             name="so_serial"
-                            rules={[{required: true}]}
                         >
                             <Input disabled/>
                         </Form.Item>
@@ -194,7 +191,6 @@ const EditOrderModal: React.FC<Props> = (props: Props) => {
                         <Form.Item
                             label="Thời hạn bảo hiểm bảo hành mở rộng"
                             name="datetime"
-                            rules={[{required: true}]}
                         >
                             <DatePicker.RangePicker disabled className={'width100'}  format={STANDARD_DATE_FORMAT}/>
                         </Form.Item>
