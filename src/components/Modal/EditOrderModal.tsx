@@ -1,4 +1,4 @@
-import {Button, Modal, Form, Input, DatePicker, Row, Col} from 'antd';
+import {Button, Modal, Form, Input, DatePicker, Row, Col, Select} from 'antd';
 import React, {useState} from 'react';
 import lodash from "lodash";
 import {STANDARD_DATE_FORMAT} from "../../core/config";
@@ -26,10 +26,10 @@ const EditOrderModal: React.FC<Props> = (props: Props) => {
                     pr_key: data.pr_key,
                     giatri_thietbi: lodash.get(data,'giatri_thietbi',''),
                     phi_baohiem_thietbi: lodash.get(data,'phi_baohiem_thietbi',''),
-                    thoihan_batdau_baohanh_nsx: lodash.get(data,'thoihan_batdau_baohanh_nsx',''),
-                    ngay_batdau: lodash.get(data,'ngay_batdau',''),
-                    thoihan_ketthuc_baohanh_nsx: formatDate(moment(lodash.get(values,'thoihan_ketthuc_baohanh_nsx','')), STANDARD_DATE_FORMAT),
-                    thoihan_bh: formatDate(moment(lodash.get(values,'thoihan_bh','')), STANDARD_DATE_FORMAT),
+                    thoihan_batdau_baohanh_nsx: formatDate(values.baohanh_nsx[0], STANDARD_DATE_FORMAT),
+                    thoihan_ketthuc_baohanh_nsx: formatDate(values.baohanh_nsx[1], STANDARD_DATE_FORMAT),
+                    thoihan_bh: formatDate(values.datetime[1], STANDARD_DATE_FORMAT),
+                    ngay_batdau: formatDate(values.datetime[0], STANDARD_DATE_FORMAT),
                 }
                 onSubmit(body);
         }).catch(err=>{
@@ -55,7 +55,8 @@ const EditOrderModal: React.FC<Props> = (props: Props) => {
             <Form
                 form={form}
                 layout="vertical"
-                name="form_in_modal"
+                name=""
+                className={'form-edit'}
                 initialValues={{
                     khach_hang: lodash.get(data, 'khach_hang', ''),
                     dia_chi: lodash.get(data, 'dia_chi', ''),
@@ -64,10 +65,20 @@ const EditOrderModal: React.FC<Props> = (props: Props) => {
                     loai_thietbi: lodash.get(data, 'loai_thietbi', ''),
                     hang: lodash.get(data, 'hang', ''),
                     model: lodash.get(data, 'model', ''),
+                    ma_chtrinh: lodash.get(data, 'ma_chtrinh', ''),
                     so_serial: lodash.get(data, 'so_serial', ''),
-                    thoihan_ketthuc_baohanh_nsx: moment(lodash.get(data, 'thoihan_ketthuc_baohanh_nsx', ''), STANDARD_DATE_FORMAT),
-                    thoihan_bh: moment(lodash.get(data, 'thoihan_bh', ''), STANDARD_DATE_FORMAT),
+                    baohanh_nsx: [moment(lodash.get(data, 'thoihan_batdau_baohanh_nsx', ''), STANDARD_DATE_FORMAT),moment(lodash.get(data, 'thoihan_ketthuc_baohanh_nsx', ''), STANDARD_DATE_FORMAT)],
+                    datetime: [moment(lodash.get(data, 'ngay_batdau', ''), STANDARD_DATE_FORMAT),moment(lodash.get(data, 'thoihan_bh', ''), STANDARD_DATE_FORMAT)],
                     giatri_thietbi: formatNumber(lodash.get(data, 'giatri_thietbi', '')),
+                }}
+                onValuesChange={(changedValues, allValues)=>{
+                    if(changedValues.baohanh_nsx){
+                        let from = moment(changedValues.baohanh_nsx[1]).add(1,'d');
+                        let to= moment(changedValues.baohanh_nsx[1]).add(1,'d').add(data.ma_chtrinh === '0101' ? 6 :data.ma_chtrinh === '0102' ? 12: 24, 'months');
+                       form.setFieldsValue({
+                           datetime: [from, to]
+                        });
+                    }
                 }}
             > <Row gutter={16} className={isTabletOrMobile ? 'dpl-block' : 'dpl-flex'}>
                 <Col md={24} lg={8}>
@@ -155,22 +166,37 @@ const EditOrderModal: React.FC<Props> = (props: Props) => {
                     </Col>
                 </Row>
                 <Row gutter={16} className={isTabletOrMobile ? 'dpl-block' : 'dpl-flex align-items-end'}>
-                    <Col md={24} lg={12}>
+                    <Col md={24} lg={16}>
                         <Form.Item
                             label="Thời hạn bảo hành gốc của NSX"
-                            name="thoihan_ketthuc_baohanh_nsx"
+                            name="baohanh_nsx"
                             rules={[{required: true}]}
                         >
-                            <DatePicker className={'width100'} format={STANDARD_DATE_FORMAT}/>
+                            {/*<DatePicker className={'width100'} format={STANDARD_DATE_FORMAT}/>*/}
+                            <DatePicker.RangePicker className={'width100'}  format={STANDARD_DATE_FORMAT}/>
                         </Form.Item>
                     </Col>
-                    <Col md={24} lg={12}>
+                    <Col md={24} lg={8}>
                         <Form.Item
-                            label="Thời hạn BH bảo hành mở rộng"
-                            name="thoihan_bh"
+                            label="Gói bảo hành mở rộng"
+                            name="ma_chtrinh"
+                        >
+                            <Select disabled={true} className={'width100'}>
+                                <Select.Option value={'0101'}>6 tháng</Select.Option>
+                                <Select.Option value={'0102'}>12 tháng</Select.Option>
+                                <Select.Option value={'0103'}>2 năm</Select.Option>
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={16} className={isTabletOrMobile ? 'dpl-block' : 'dpl-flex align-items-end'}>
+                    <Col md={24} lg={16}>
+                        <Form.Item
+                            label="Thời hạn bảo hiểm bảo hành mở rộng"
+                            name="datetime"
                             rules={[{required: true}]}
                         >
-                            <DatePicker className={'width100'} format={STANDARD_DATE_FORMAT}/>
+                            <DatePicker.RangePicker disabled className={'width100'}  format={STANDARD_DATE_FORMAT}/>
                         </Form.Item>
                     </Col>
 
