@@ -2557,3 +2557,89 @@ select {
     background-repeat: no-repeat;
     height: 100vh;
 }
+.container-customer {
+    width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    font-size: 18px;
+    line-height: normal;
+    color: #1E1E1E;
+    scroll-behavior: smooth;
+    scroll-margin: 100px 0 0 0;
+}
+h1 {
+    text-align: center;
+    color: #1f3864;
+    font-size: 24px;
+    margin-bottom: 5px;
+}
+h1+p {
+    text-align: center;
+    color: #1f3864;
+    font-size: 20px;
+    margin-top: 0;
+    font-weight: bold;
+    font-style: italic;
+}
+.table {
+    border: 1px solid #ccc;
+}
+.table p {
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    padding: 4px 8px;
+}
+.table p span {
+    display: block;
+    font-weight: normal;
+    font-style: italic;
+    font-size: 16px;
+}
+.table > p span {
+    font-weight: bold;
+}
+.table > p:last-child span {
+    font-weight: normal !important;
+}
+.divide-col {
+    display: flex;
+}
+.divide-col p:first-child {
+    width: calc(100%/3);
+}
+.divide-col p:nth-child(2) {
+    width: 40px;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    text-align: center;
+    line-height: 38px;
+    font-weight: bold;
+}
+.divide-col p:last-child {
+    width: calc(100% - 100%/3 - 40px);
+}
+.cl-red, .cl-red strong, .cl-red span {
+    color: #c00000;
+}
+.cl-blue {
+    color: #0563c1;
+}
+.table > p:last-child {
+    text-align: center;
+    border-bottom: none;
+}
+.table > p:last-child span {
+    display: inline-block;
+    font-style: normal;
+}
+.table > p:last-child strong {
+    margin-right: 40px;
+}
+@media only screen and (max-width: 992px) {
+    .container {
+        width: 100%;
+    }
+    .divide-col p:nth-child(2) {
+        width: auto;
+    }
+}
