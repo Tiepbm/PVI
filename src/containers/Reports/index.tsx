@@ -12,7 +12,7 @@ import M24ErrorUtils from "../../utils/M24ErrorUtils";
 import {handleChangeDate, handleChangeRangeDate} from "../../utils/StringUtils";
 import {STANDARD_DATE_FORMAT} from "../../core/config";
 import moment from "moment";
-
+import * as XLSX from "xlsx";
 function SearchOrder(){
     const [filter, setFilter] = useState<any>({});
     const [showProgressBar, setShowProgressBar] = useState<boolean>(false);
@@ -86,6 +86,30 @@ function SearchOrder(){
             width: 150,
         }
     ];
+    const onExport=()=>{
+        let headers: any = [];
+        columns.map((x: any)=>{
+            headers.push(x.title);
+            return x;
+        });
+        let items: any=[];
+        datasource.map((row: any)=>{
+            items.push({
+                nhan_vien: row.nhan_vien,
+                so_dienthoai: row.so_dienthoai,
+                email: row.email,
+                loai_thietbi: row.loai_thietbi,
+                phi_bh: row.phi_bh,
+                ma_chtrinh: row.ma_chtrinh,
+            });
+            return row;
+        });
+        const worksheet = XLSX.utils.json_to_sheet(items);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Danh sách ");
+        XLSX.utils.sheet_add_aoa(worksheet, [headers]);
+        XLSX.writeFile(workbook, "pvi-webview.xlsx");
+    }
     return <MainLayout showProgressBar={showProgressBar} title={'Báo cáo'} showSearch={true}>
        <div>
            <div className="content">
@@ -127,7 +151,7 @@ function SearchOrder(){
                           </Col>
                       </Row>
                   </Card>
-                  <Row className={' mgt20 mgbt20'}>
+                  <Row className={' mgt20 mgbt20 justify-content-between'}>
                       <Space>
                           <h3 className='robotomedium mg-0 fsz-16 line-h-24 txt-color-black'>
                               Danh sách dữ liệu
@@ -139,6 +163,8 @@ function SearchOrder(){
                               style={{backgroundColor: 'gray'}}
                           />
                       </Space>
+                      <Button onClick={onExport} type={'primary'} icon={<i
+                          className="far fa-download mgr5"></i>}>Xuất excel</Button>
                   </Row>
                   <Table className={''} dataSource={datasource} columns={columns} pagination={{hideOnSinglePage:true}}/>
               </div>
