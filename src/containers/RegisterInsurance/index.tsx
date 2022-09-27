@@ -659,7 +659,7 @@ function RegisterInsurance() {
                                         label="Email"
                                         name="customerEmail"
                                         className={'mgbt5'}
-                                        rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}, {
+                                        rules={[{required: productId===ENSURE_EXTEND?false:true, message: 'Vui lòng nhập đầy đủ thông tin'}, {
                                             type: 'email',
                                             message: 'Email không đúng định dạng',
                                         }]}

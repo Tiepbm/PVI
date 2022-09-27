@@ -73,12 +73,38 @@ function SearchOrder(){
             width: 150,
         },
         {
-            title: 'Phí bảo hiểm',
+            title: 'Phí bảo hiểm có VAT',
             dataIndex: 'phi_bh',
             key: 'phi_bh',
             width: 150,
             render: (text:string) => formatNumber(text)
+        }, {
+            title: 'Phí bảo hiểm không VAT',
+            dataIndex: 'phi_bh_KVAT',
+            key: 'phi_bh_KVAT',
+            width: 150,
+            render: (text:string) => formatNumber(text)
         },
+        {
+            title: 'Tên khách hàng',
+            dataIndex: 'ten_khach_hang',
+            key: 'ten_khach_hang',
+            width: 150,
+        },
+        {
+            title: 'Ngày cấp',
+            dataIndex: 'ngay_cap',
+            key: 'ngay_cap',
+            width: 150,
+        }
+        ,
+        {
+            title: 'Số đơn bảo hiểm',
+            dataIndex: 'so_donbh',
+            key: 'so_donbh',
+            width: 150,
+        }
+        ,
         {
             title: 'Mã chương trình',
             dataIndex: 'ma_chtrinh',
