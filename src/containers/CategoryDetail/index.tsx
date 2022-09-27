@@ -1568,7 +1568,7 @@ function CategoryDetail() {
                     <DatePicker
                         suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                         format={STANDARD_DATE_FORMAT}
-                        value={formValues.thoihan_batdau_baohanh_nsx?moment(formValues.thoihan_batdau_baohanh_nsx):null}
+                        value={formValues.thoihan_batdau_baohanh_nsx?moment(formValues.thoihan_batdau_baohanh_nsx, STANDARD_DATE_FORMAT):null}
                         onChange={(date: any, dateString: string) => handleChangeFormValues('thoihan_batdau_baohanh_nsx', dateString)}/>
                 </div>
                 <div className="col-md-6">
@@ -1576,7 +1576,7 @@ function CategoryDetail() {
                     <DatePicker
                         suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                         format={STANDARD_DATE_FORMAT}
-                        value={formValues.thoihan_ketthuc_baohanh_nsx?moment(formValues.thoihan_ketthuc_baohanh_nsx):null}
+                        value={formValues.thoihan_ketthuc_baohanh_nsx?moment(formValues.thoihan_ketthuc_baohanh_nsx, STANDARD_DATE_FORMAT):null}
 
                         onChange={(date: any, dateString: string) => handleChangeFormValues('thoihan_ketthuc_baohanh_nsx', dateString)}/>
                 </div>
