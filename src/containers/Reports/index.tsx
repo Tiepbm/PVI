@@ -126,6 +126,10 @@ function SearchOrder(){
                 email: row.email,
                 loai_thietbi: row.loai_thietbi,
                 phi_bh: row.phi_bh,
+                phi_bh_KVAT:row.phi_bh_KVAT,
+                ten_khach_hang:row.ten_khach_hang,
+                ngay_cap:row.ngay_cap,
+                so_donbh:row.so_donbh,
                 ma_chtrinh: row.ma_chtrinh,
             });
             return row;
