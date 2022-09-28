@@ -1459,7 +1459,7 @@ function CategoryDetail() {
                 confirm({
                     title: 'Thông báo',
                     icon: <ExclamationCircleOutlined />,
-                    content: 'Trùng IMEI',
+                    content: <span className={'txt-size-32 txt-color-red'}>Trùng IMEI</span>,
                    okText:'Đồng ý',
                     cancelText:'Đóng'
                 });
