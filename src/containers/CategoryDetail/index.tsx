@@ -1,4 +1,4 @@
-import {Button, Carousel, Checkbox, Col, DatePicker, Image, Input, Row, Select} from "antd";
+import {Button, Carousel, Checkbox, Col, DatePicker, Image, Input, Row, Select, Modal} from "antd";
 import MainLayout from "../../components/Layout";
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
@@ -32,9 +32,12 @@ import M24ErrorUtils from "../../utils/M24ErrorUtils";
 import {convertStringToNumber, formatMoneyByUnit, formatNumber} from "../../core/helpers/string";
 import {categoryRepository} from "../../repositories/CategoryRepository";
 import {useSessionStorage} from "../../hooks/useSessionStorage";
-
+import M24Notification from "../../utils/M24Notification";
+import {ExclamationCircleOutlined} from "@ant-design/icons";
+const { confirm } = Modal;
 function CategoryDetail() {
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
+    const [isDuplicateImei, setDuplicateImei] = useState<boolean>();
     const [loading, setLoading] = useState<boolean>();
     const navigate = useNavigate();
     let {categoryId} = useParams();
@@ -1265,7 +1268,7 @@ function CategoryDetail() {
         }).finally(() => setLoading(false));
     }
     const canRegister = () => {
-        if (loading || checkDisableRegister() || !fee) return false;
+        if (loading || checkDisableRegister() || !fee|| isDuplicateImei) return false;
         return true;
     }
     const getFeeHouse = () => {
@@ -1447,6 +1450,25 @@ function CategoryDetail() {
         setFromDate(dateString);
         localStorageSave('DATE', dateString);
     }
+    const onSearchIMEI=()=>{
+        if(!formValues?.so_serial) return;
+        setDuplicateImei(false);
+        productRepository.searchOrderByImei({imei: formValues?.so_serial}, webCode).then(res=>{
+            if(Array.isArray(res)&&res.length>0){
+                // M24Notification.notifyError('Thông báo', 'Trùng IMEI');
+                confirm({
+                    title: 'Thông báo',
+                    icon: <ExclamationCircleOutlined />,
+                    content: 'Trùng IMEI',
+                   okText:'Đồng ý',
+                    cancelText:'Đóng'
+                });
+                setDuplicateImei(true);
+            }
+        }).catch(err=>{
+
+        })
+    }
     const renderFeeCar = () => {
         return <div className={'txt-left'}>
             <label>Gói bảo hiểm</label>
@@ -1558,7 +1580,7 @@ function CategoryDetail() {
             <label>Model</label>
             <Input placeholder="Ví dụ: Iphone 13" onChange={e => handleChangeFormValues('model', e.target.value)}/>
             <label>Số Serial/IMEI</label>
-            <Input onChange={e => handleChangeFormValues('so_serial', e.target.value)}/>
+            <Input onBlur={onSearchIMEI} onChange={e => handleChangeFormValues('so_serial', e.target.value)}/>
             {/*<label>Số IMEI</label>*/}
             {/*<Input onChange={e => handleChangeFormValues('so_IMEI', e.target.value)}/>*/}
             <label>Thời hạn bảo hành gốc của nhà sản xuất</label>
