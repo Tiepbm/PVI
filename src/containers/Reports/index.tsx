@@ -48,10 +48,44 @@ function SearchOrder(){
         setFilter(temp);
     }
     const columns: any = [
+
         {
-            title: 'Nhân viên',
+            title: 'STT',
+            dataIndex: 'STT',
+            key: 'STT',
+            width: 70,
+            render:(text: any, record: any, index: number) => index+1
+        }
+        ,
+        {
+            title: 'Ngày cấp',
+            dataIndex: 'ngay_cap',
+            key: 'ngay_cap',
+            width: 150,
+        }
+        ,
+        {
+            title: 'Mã siêu thị',
+            dataIndex: 'ma_sieuthi',
+            key: 'ma_sieuthi',
+            width: 150,
+        },
+        {
+            title: 'Mã nhân viên',
+            dataIndex: 'ma_nhanvien',
+            key: 'ma_nhanvien',
+            width: 150,
+        },
+        {
+            title: 'Tên nhân viên',
             dataIndex: 'nhan_vien',
             key: 'nhan_vien',
+            width: 150,
+        },
+        {
+            title: 'Tên khách hàng',
+            dataIndex: 'ten_khach_hang',
+            key: 'ten_khach_hang',
             width: 150,
         },
         {
@@ -85,19 +119,7 @@ function SearchOrder(){
             width: 150,
             render: (text:string) => formatNumber(text)
         },
-        {
-            title: 'Tên khách hàng',
-            dataIndex: 'ten_khach_hang',
-            key: 'ten_khach_hang',
-            width: 150,
-        },
-        {
-            title: 'Ngày cấp',
-            dataIndex: 'ngay_cap',
-            key: 'ngay_cap',
-            width: 150,
-        }
-        ,
+
         {
             title: 'Số đơn bảo hiểm',
             dataIndex: 'so_donbh',
@@ -119,8 +141,12 @@ function SearchOrder(){
             return x;
         });
         let items: any=[];
-        datasource.map((row: any)=>{
+        datasource.map((row: any, index: number)=>{
             items.push({
+                stt: index+1,
+                ngay_cap:row.ngay_cap,
+                ma_sieuthi: row.ma_sieuthi,
+                ma_nhanvien: row.ma_nhanvien,
                 nhan_vien: row.nhan_vien,
                 so_dienthoai: row.so_dienthoai,
                 email: row.email,
@@ -128,7 +154,6 @@ function SearchOrder(){
                 phi_bh: row.phi_bh,
                 phi_bh_KVAT:row.phi_bh_KVAT,
                 ten_khach_hang:row.ten_khach_hang,
-                ngay_cap:row.ngay_cap,
                 so_donbh:row.so_donbh,
                 ma_chtrinh: row.ma_chtrinh,
             });
