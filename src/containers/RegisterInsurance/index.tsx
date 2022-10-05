@@ -425,7 +425,7 @@ function RegisterInsurance() {
                     let chuong_trinh = lodash.get(dataExtendRegister,'chuong_trinh','');
                      body={
                         "CpId": CPID,
-                        "Sign": sign(`${dataExtendRegister.ngay_batdau}${dataExtendRegister.thoihan_bh}${ma_giaodich}${values.customerEmail}`),
+                        "Sign": sign(`${dataExtendRegister.ngay_batdau}${dataExtendRegister.thoihan_bh}${ma_giaodich}${lodash.get(values,'customerEmail','')}`),
                         ma_chuongtrinh:chuong_trinh,
                         ng_gdich_th:values.customerName,
                         dia_chi_th:values.customerAddress,
@@ -437,7 +437,7 @@ function RegisterInsurance() {
                         khach_hang:values.customerName,
                         thoihan_bh:dataExtendRegister.thoihan_bh,
                         pr_key:0,
-                        Email:values.customerEmail,
+                        Email: lodash.get(values,'customerEmail',''),
                         ngay_batdau:dataExtendRegister.ngay_batdau,
                         dia_chi:values.customerAddress,
                         web_code:webCode,
