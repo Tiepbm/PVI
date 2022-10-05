@@ -42,6 +42,7 @@ function RegisterInsurance() {
     let [searchParams, setSearchParams] = useSearchParams();
     let {productId} = useParams();
     const navigate = useNavigate();
+    const [profile, setProfile] = useSessionStorage('profile', false);
     const [packageCode, setPackageCode] = useState<string | null>(searchParams.get('packageCode'));
     const [currentStep, setStep] = useState<number>(0);
     const [fee] = useState<any>(localStorageRead(FEE));
@@ -429,7 +430,7 @@ function RegisterInsurance() {
                         ng_gdich_th:values.customerName,
                         dia_chi_th:values.customerAddress,
                         ma_gdich_doitac:ma_giaodich,
-                        ma_user:'',
+                        ma_user:lodash.get(profile,'ma_user',''),
                         EndTime:'23:59',
                         StartTime:'00:00',
                         dien_thoai:values.customerPhone,
