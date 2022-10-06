@@ -132,6 +132,12 @@ function SearchOrder(){
             dataIndex: 'ma_chtrinh',
             key: 'ma_chtrinh',
             width: 150,
+        } ,
+        {
+            title: 'Serial/Imei',
+            dataIndex: 'Serial',
+            key: 'Serial',
+            width: 150,
         }
     ];
     const onExport=()=>{
@@ -156,6 +162,7 @@ function SearchOrder(){
                 ten_khach_hang:row.ten_khach_hang,
                 so_donbh:row.so_donbh,
                 ma_chtrinh: row.ma_chtrinh,
+                Serial: row.Serial,
             });
             return row;
         });
