@@ -228,7 +228,7 @@ function SearchOrder(){
                       <Button onClick={onExport} type={'primary'} icon={<i
                           className="far fa-download mgr5"></i>}>Xuất excel</Button>
                   </Row>
-                  <Table className={''} dataSource={datasource} columns={columns} pagination={{hideOnSinglePage:true}}/>
+                  <Table className={''} dataSource={datasource} columns={columns} pagination={{hideOnSinglePage:true, pageSize:50}}/>
               </div>
            </div>
        </div>
