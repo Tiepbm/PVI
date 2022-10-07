@@ -1223,7 +1223,7 @@ function CategoryDetail() {
             "package": currentPackage
         };
         productRepository.getFeeHSDD(body).then(res => {
-            console.log(res);
+            // console.log(res);
             setFee(res);
         }).catch(err => {
             M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');
@@ -1389,7 +1389,7 @@ function CategoryDetail() {
                 temp.thoihan_bh = duration;
             }
         }
-        console.log(temp);
+        // console.log(temp);
         setFormValues(temp);
     }
     const handleChange = (value: any) => {
