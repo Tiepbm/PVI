@@ -1294,6 +1294,8 @@ function CategoryDetail() {
             if (!formValues?.so_serial || !formValues?.thoihan_batdau_baohanh_nsx || !formValues?.thoihan_ketthuc_baohanh_nsx||
                 (khuyenMai&&(formValues.loai_thietbi!='DTDD'||formValues.chuong_trinh!=='0101')))
                 return true;
+            else if(moment(formValues.thoihan_ketthuc_baohanh_nsx, STANDARD_DATE_FORMAT).diff(moment(formValues.thoihan_batdau_baohanh_nsx, STANDARD_DATE_FORMAT),'years')<1)
+                return true;
             return false;
         }else if(currentProduct?.code === ENSURE_MOTOR){
             if(!formValues?.loai_xe)
