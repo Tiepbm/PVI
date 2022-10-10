@@ -23,7 +23,7 @@ const SuccessModal = (props: SuccessModalProps) => {
                             <img src={require('../../resources/images/modal-cancel.png')} alt="" onClick={onCancel} />
                             <img src={isSuccess?iconSuccess: iconFailed} alt="" />
                             <p className="text-cl" style={{color:isSuccess?'':'#B82019'}}>Đăng ký bảo hiểm <br />{isSuccess?'thành công':'thất bại'}</p>
-                            <p>{isSuccess?'Giấy chứng nhận bảo hiểm sẽ được gửi về email khách hàng đăng ký':'Vui lòng thực hiện đăng ký lại'}</p>
+                            <p>{isSuccess?'Khách hàng sẽ nhận được thông báo mua bảo hiểm thành công theo số điện thoại đã đăng ký':'Vui lòng thực hiện đăng ký lại'}</p>
                             <div className="modal-button">
                                 <button onClick={onContinue} className="modal-cancel"><a style={{color: '#1363B9', display: 'block'}}>{isSuccess?'Đăng ký tiếp':'Đăng ký lại'}</a></button>
                                 <button onClick={gotoHome} className="modal-continue"><a style={{color: '#fff', display: 'block'}}>Trang chủ</a></button>
