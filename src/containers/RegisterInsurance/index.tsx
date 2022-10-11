@@ -440,7 +440,6 @@ function RegisterInsurance() {
                         Email: lodash.get(values,'customerEmail',''),
                         ngay_batdau:dataExtendRegister.ngay_batdau,
                         dia_chi:values.customerAddress,
-                        web_code:webCode,
                         ThietBiDinhKem:[
                             {
                                 loai_thietbi:lodash.get(dataExtendRegister,'loai_thietbi',''),
@@ -501,6 +500,7 @@ function RegisterInsurance() {
                     };
                     body.Sign=sign(`${body.bien_kiemsoat}${body.email}${body.so_dienthoai}${body.loai_xe}`);
                 }
+                body.web_code=webCode;
                 setBodyRegister(body);
                 setStep(currentStep + 1);
             }).catch(err => {
