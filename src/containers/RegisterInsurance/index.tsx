@@ -12,7 +12,7 @@ import {
     ENSURE_HOUSE, ENSURE_MOTOR,
     FEE,
     FEE_REQUEST,
-    STANDARD_DATE_FORMAT
+    STANDARD_DATE_FORMAT, WEBCODE_VIETTEL_STORE
 } from "../../core/config";
 import {formatDate} from "../../core/helpers/date-time";
 import lodash from "lodash";
@@ -982,8 +982,17 @@ function RegisterInsurance() {
         {showConfirm&&<ConfirmModal loading={loading} onSubmit={onSubmit} onCancel={()=> setShowConfirm(false)} visible={showConfirm}></ConfirmModal>}
         {showResult&&<SuccessModal onCancel={()=> {
             if(!result) setShowResult(false);
-            else navigate('/')
-        }} visible={showResult} isSuccess={result} gotoHome={()=> navigate('/')} onContinue={onContinue} />}
+            else{
+                if(webCode!==WEBCODE_VIETTEL_STORE)
+                    navigate('/')
+                else  navigate(-1)
+            }
+        }} visible={showResult} isSuccess={result} gotoHome={()=> {
+            if(webCode!==WEBCODE_VIETTEL_STORE)
+                navigate('/')
+            else  navigate(-1)
+        }
+        } onContinue={onContinue} />}
     </MainLayout>
 }
 

@@ -23,7 +23,7 @@ import {
     ENSURE_EXTEND,
     ENSURE_HOUSE, ENSURE_MOTOR,
     FEE, FEE_REQUEST,
-    STANDARD_DATE_FORMAT
+    STANDARD_DATE_FORMAT, WEBCODE_VIETTEL_STORE
 } from "../../core/config";
 import {localStorageSave} from "../../utils/LocalStorageUtils";
 import {handleChangeDate, sign} from "../../utils/StringUtils";
@@ -1334,6 +1334,11 @@ function CategoryDetail() {
     useEffect(() => {
         let category = products.find((x: any) => x.code === categoryId);
         if (category) {
+            // console.log('category: ',category);
+            if (webCode===WEBCODE_VIETTEL_STORE){
+                category.products = category.products.filter((x: any)=> x.code==='baohanhmorong');
+            }else
+                category.products = category.products.filter((x: any)=> x.code!=='baohanhmorong');
             setDetail(category);
             let productId = searchParams.get('productId');
             let product: any;

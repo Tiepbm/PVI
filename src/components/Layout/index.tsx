@@ -3,7 +3,7 @@ import {Avatar, Button, Col, Divider, Layout, Menu, Popover, Row} from 'antd';
 import './styles.scss';
 import ProgressBar from "../Spinner/ProgressBar";
 import {localStorageRead, localStorageSave} from "../../utils/LocalStorageUtils";
-import {PROFILE_KEY, TENANT_KEY, TOKEN_KEY} from "../../core/config";
+import {PROFILE_KEY, TENANT_KEY, TOKEN_KEY, WEBCODE_VIETTEL_STORE} from "../../core/config";
 import DocumentTitle from 'react-document-title';
 import {Link, useLocation, useParams, useSearchParams} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
@@ -154,7 +154,8 @@ function MainLayout(props: MainLayoutProps) {
                             <div className="col">
                                 <div className="header-left">
                                     <div className="header-logo">
-                                        <Link to={'/'}><img src={require('../../resources/images/logo.png')} alt=""/></Link>
+                                        {webCode!==WEBCODE_VIETTEL_STORE?<Link to={'/'}><img src={require('../../resources/images/logo.png')} alt=""/></Link>:
+                                            <img src={require('../../resources/images/logo.png')} alt=""/>}
                                     </div>
                                 </div>
                             </div>
@@ -198,7 +199,7 @@ function MainLayout(props: MainLayoutProps) {
                 <Content style={{minHeight: height - 50}}
                          className="content"
                 >
-                    {isDetail&& <div className="nav main-menu">
+                    {webCode!==WEBCODE_VIETTEL_STORE&&isDetail&& <div className="nav main-menu">
                         <div className="container">
                             <ul>
                                 {MENU.map((x: any)=>{

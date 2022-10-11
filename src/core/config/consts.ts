@@ -22,4 +22,5 @@ export const ENSURE_HOUSE='nhaotoandien';
 export const ENSURE_EXTEND='baohanhmorong';
 export const CPID='WEB_VIEW';
 export const API_KEY='59d71ab040d45bb54b8e2bab3993667c';
+export const WEBCODE_VIETTEL_STORE='d8b0498edf11489fb8d5eebc1171012d';
 
