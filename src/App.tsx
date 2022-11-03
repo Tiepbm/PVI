@@ -71,7 +71,7 @@ moment.locale('vi', {
   },
 });
 function App() {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [profile, setProfile] = useSessionStorage('profile', false);
   const [webCode, setWebCode] = useSessionStorage('web_code', '');
   const [cardid, setCardId] = useSessionStorage('cardid', '');
@@ -99,8 +99,9 @@ function App() {
     }
   }, []);
   useEffect(()=>{
-    const search = window.location.search;
-    if(search){
+    const search = window.location.href;
+    // console.log('windown', window.location);
+    if(search?.indexOf('urlcallback')>=0){
       let params = new URLSearchParams(search.substring(search.indexOf('?')));
       let urlCallback = params.get('urlcallback');
       // let webcode = params.get('webcode');
@@ -124,13 +125,13 @@ function App() {
           if(urlCallback)
             window.location.href=urlCallback;
           else  window.location.href='/';
-        });
+        }).finally(()=> setLoading(false));
       }
-    }
+    }else setLoading(false);
   },[]);
   return (
     <div id={"app-main"} className={""}>
-      <ConfigProvider locale={viVN}>
+      {!loading&&<ConfigProvider locale={viVN}>
         <HashRouter>
           <Routes>
             <Route path={'/'} element={<ProtectedRoute><Home/></ProtectedRoute>}></Route>
@@ -147,7 +148,7 @@ function App() {
 
           </Routes>
         </HashRouter>
-      </ConfigProvider>
+      </ConfigProvider>}
     </div>
   );
 }
