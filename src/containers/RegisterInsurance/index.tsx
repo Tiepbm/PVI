@@ -299,6 +299,7 @@ function RegisterInsurance() {
                     body = {
                         'ma_giaodich': ma_giaodich,
                         "TenKH": values.customerName,
+                        "CardId": lodash.get(values,'customerCardId',''),
                         "DiaChiKH": "",
                         "TenChuXe": values.carName,
                         "DiaChiChuXe": '',
@@ -518,8 +519,6 @@ function RegisterInsurance() {
         setLoading(true);
         if (webCode)
             bodyRegister.web_code = webCode;
-        if (cardId)
-            bodyRegister.CardId = cardId;
         if (productId === ENSURE_ELECTRIC) {
             productRepository.createOrderHSDD(bodyRegister).then(res => {
                 if(res.URL_Payment){
@@ -669,6 +668,12 @@ function RegisterInsurance() {
                                     </Form.Item>
                                 </Col>
                             </Row>
+                            {productId===ENSURE_CAR&& <Form.Item
+                                label="Mã giới thiệu"
+                                name="customerCardId"
+                            >
+                                <Input placeholder={'Nhập mã giới thiệu'}></Input>
+                            </Form.Item>}
                             {renderFormByProductId()}
                         </Form>
                     </div>
@@ -858,6 +863,7 @@ function RegisterInsurance() {
             {productId === ENSURE_EXTEND && <RowItem title={'Địa chỉ'} value={bodyRegister.dia_chi}></RowItem>}
             <RowItem title={'Số điện thoại'} value={form.getFieldValue('customerPhone')}></RowItem>
             <RowItem title={'Địa chỉ email'} value={form.getFieldValue('customerEmail')}></RowItem>
+            {productId === ENSURE_CAR && <RowItem title={'Mã giới thiệu'} value={bodyRegister.CardId}></RowItem>}
             {
                 productId === ENSURE_ELECTRIC ? <div>
                     <h3>Chủ hộ</h3>
