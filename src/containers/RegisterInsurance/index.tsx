@@ -510,7 +510,7 @@ function RegisterInsurance() {
         } else if (currentStep < 2) {
             setStep(currentStep + 1);
         } else {
-            console.log('vao day');
+            // console.log('vao day');
             setShowConfirm(true);
         }
 
@@ -522,8 +522,9 @@ function RegisterInsurance() {
         if (productId === ENSURE_ELECTRIC) {
             productRepository.createOrderHSDD(bodyRegister).then(res => {
                 if(res.URL_Payment){
-                    window.open(res.URL_Payment,'_blank');
-                }else setResult(true);
+                    window.open(res.URL_Payment);
+                }
+                setResult(true);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
@@ -534,8 +535,9 @@ function RegisterInsurance() {
         } else if (productId === ENSURE_HOUSE) {
             productRepository.createOrderHouse(bodyRegister).then(res => {
                 if(res.URL_Payment){
-                    window.open(res.URL_Payment,'_blank');
-                }else setResult(true);
+                    window.open(res.URL_Payment);
+                }
+                setResult(true);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
@@ -546,8 +548,9 @@ function RegisterInsurance() {
         } else if (productId === ENSURE_CAR) {
             productRepository.createOrderCar(bodyRegister).then(res => {
                 if(res.URL_Payment){
-                    window.open(res.URL_Payment,'_blank');
-                }else setResult(true);
+                    window.open(res.URL_Payment);
+                }
+                setResult(true);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
@@ -558,8 +561,9 @@ function RegisterInsurance() {
         }else if(productId===ENSURE_EXTEND){
             productRepository.createOrderExtend(bodyRegister).then(res => {
                 if(res.URL_Payment){
-                    window.open(res.URL_Payment,'_blank');
-                }else setResult(true);
+                    window.open(res.URL_Payment);
+                }
+                setResult(true);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
@@ -570,8 +574,9 @@ function RegisterInsurance() {
         }else if (productId === ENSURE_MOTOR) {
             productRepository.createOrderMotor(bodyRegister).then(res => {
                 if(res.URL_Payment){
-                    window.open(res.URL_Payment,'_blank');
-                }else setResult(true);
+                    window.open(res.URL_Payment);
+                }
+                setResult(true);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
