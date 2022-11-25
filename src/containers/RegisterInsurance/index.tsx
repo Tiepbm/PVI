@@ -522,7 +522,8 @@ function RegisterInsurance() {
         if (productId === ENSURE_ELECTRIC) {
             productRepository.createOrderHSDD(bodyRegister).then(res => {
                 if(res.URL_Payment){
-                    window.open(res.URL_Payment);
+                    window.location.href=res.URL_Payment;
+                    // window.open(res.URL_Payment);
                 }
                 setResult(true);
             }).catch(err => {
@@ -535,7 +536,8 @@ function RegisterInsurance() {
         } else if (productId === ENSURE_HOUSE) {
             productRepository.createOrderHouse(bodyRegister).then(res => {
                 if(res.URL_Payment){
-                    window.open(res.URL_Payment);
+                    // window.open(res.URL_Payment);
+                    window.location.href=res.URL_Payment;
                 }
                 setResult(true);
             }).catch(err => {
@@ -548,7 +550,8 @@ function RegisterInsurance() {
         } else if (productId === ENSURE_CAR) {
             productRepository.createOrderCar(bodyRegister).then(res => {
                 if(res.URL_Payment){
-                    window.open(res.URL_Payment);
+                    // window.open(res.URL_Payment);
+                    window.location.href=res.URL_Payment;
                 }
                 setResult(true);
             }).catch(err => {
@@ -561,7 +564,8 @@ function RegisterInsurance() {
         }else if(productId===ENSURE_EXTEND){
             productRepository.createOrderExtend(bodyRegister).then(res => {
                 if(res.URL_Payment){
-                    window.open(res.URL_Payment);
+                    // window.open(res.URL_Payment);
+                    window.location.href=res.URL_Payment;
                 }
                 setResult(true);
             }).catch(err => {
@@ -574,7 +578,8 @@ function RegisterInsurance() {
         }else if (productId === ENSURE_MOTOR) {
             productRepository.createOrderMotor(bodyRegister).then(res => {
                 if(res.URL_Payment){
-                    window.open(res.URL_Payment);
+                    // window.open(res.URL_Payment);
+                    window.location.href=res.URL_Payment;
                 }
                 setResult(true);
             }).catch(err => {
