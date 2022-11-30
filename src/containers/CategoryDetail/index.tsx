@@ -894,15 +894,15 @@ function CategoryDetail() {
                             <p>- Thiết bị tham gia bảo hiểm phải có ít nhất 1 năm bảo hành chính hãng từ nhà sản xuất và
                                 có hiệu lực bảo hành trong lãnh thổ Việt Nam.</p>
                             <p>- Tổng thời hạn bảo hiểm chính hãng và bảo hành mở rộng không quá 5 năm.</p>
-                            <div className="form-check text-left">
-                                <input className="form-check-input" type="checkbox" value={""}
-                                       onChange={e => setKhuyenMai(e.target.checked ? 1 : 0)}/>
-                                <label className="form-check-label" htmlFor="flexCheckDefault">
-                                    Chương trình mua kèm bảo hiểm rơi vỡ
-                                    <br/><i>(Chỉ áp dụng cho Điện thoại và thời hạn bảo hiểm bảo hành mở rộng 6
-                                    tháng)</i>
-                                </label>
-                            </div>
+                            {/*<div className="form-check text-left">*/}
+                            {/*    <input className="form-check-input" type="checkbox" value={""}*/}
+                            {/*           onChange={e => setKhuyenMai(e.target.checked ? 1 : 0)}/>*/}
+                            {/*    <label className="form-check-label" htmlFor="flexCheckDefault">*/}
+                            {/*        Chương trình mua kèm bảo hiểm rơi vỡ*/}
+                            {/*        <br/><i>(Chỉ áp dụng cho Điện thoại và thời hạn bảo hiểm bảo hành mở rộng 6*/}
+                            {/*        tháng)</i>*/}
+                            {/*    </label>*/}
+                            {/*</div>*/}
                         </div>
                     },
                     detail: '',
