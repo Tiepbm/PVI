@@ -1090,7 +1090,9 @@ function CategoryDetail() {
     const [devicesCategory, setDevicesCategory] = useState<any>([]);
     const [motoCategories, setMotoCategories] = useState<any>([]);
     const [formValues, setFormValues] = useState<any>(
-        {loai_thietbi:'DTDD'}
+        {loai_thietbi:'DTDD',
+            thoihan_batdau_baohanh_nsx: formatDate(moment(), STANDARD_DATE_FORMAT)
+        }
     );
     const [khuyenMai, setKhuyenMai] = useState<number>(0);
     const keyCars = ['MayKeo', 'XeChuyenDung', 'XeChoTien', 'XePickUp', 'XeTaiVan', 'XeTapLai', 'XeBus', 'XeCuuThuong', 'Xetaxi', 'XeDauKeo'];
@@ -1597,6 +1599,7 @@ function CategoryDetail() {
                     <DatePicker
                         suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                         format={STANDARD_DATE_FORMAT}
+                        disabled
                         value={formValues.thoihan_batdau_baohanh_nsx?moment(formValues.thoihan_batdau_baohanh_nsx, STANDARD_DATE_FORMAT):null}
                         onChange={(date: any, dateString: string) => handleChangeFormValues('thoihan_batdau_baohanh_nsx', dateString)}/>
                 </div>
