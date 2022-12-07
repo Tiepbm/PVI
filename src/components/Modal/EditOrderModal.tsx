@@ -170,7 +170,7 @@ const EditOrderModal: React.FC<Props> = (props: Props) => {
                             rules={[{required: true}]}
                         >
                             {/*<DatePicker className={'width100'} format={STANDARD_DATE_FORMAT}/>*/}
-                            <DatePicker.RangePicker className={'width100'}  format={STANDARD_DATE_FORMAT}/>
+                            <DatePicker.RangePicker disabled={[true,false]} className={'width100'}  format={STANDARD_DATE_FORMAT}/>
                         </Form.Item>
                     </Col>
                     <Col md={24} lg={8}>
