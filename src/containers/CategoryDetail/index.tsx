@@ -1091,7 +1091,9 @@ function CategoryDetail() {
     const [motoCategories, setMotoCategories] = useState<any>([]);
     const [formValues, setFormValues] = useState<any>(
         {loai_thietbi:'DTDD',
-            thoihan_batdau_baohanh_nsx: formatDate(moment(), STANDARD_DATE_FORMAT)
+            thoihan_batdau_baohanh_nsx: formatDate(moment(), STANDARD_DATE_FORMAT),
+            thoihan_ketthuc_baohanh_nsx: formatDate(moment().add(1,'y')),
+            ngay_batdau:formatDate(moment().add(1,'y').add(1,'d'))
         }
     );
     const [khuyenMai, setKhuyenMai] = useState<number>(0);
