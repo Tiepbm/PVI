@@ -894,15 +894,15 @@ function CategoryDetail() {
                             <p>- Thiết bị tham gia bảo hiểm phải có ít nhất 1 năm bảo hành chính hãng từ nhà sản xuất và
                                 có hiệu lực bảo hành trong lãnh thổ Việt Nam.</p>
                             <p>- Tổng thời hạn bảo hiểm chính hãng và bảo hành mở rộng không quá 5 năm.</p>
-                            <div className="form-check text-left">
-                                <input className="form-check-input" type="checkbox" value={""}
-                                       onChange={e => setKhuyenMai(e.target.checked ? 1 : 0)}/>
-                                <label className="form-check-label" htmlFor="flexCheckDefault">
-                                    Chương trình mua kèm bảo hiểm rơi vỡ
-                                    <br/><i>(Chỉ áp dụng cho Điện thoại và thời hạn bảo hiểm bảo hành mở rộng 6
-                                    tháng)</i>
-                                </label>
-                            </div>
+                            {/*<div className="form-check text-left">*/}
+                            {/*    <input className="form-check-input" type="checkbox" value={""}*/}
+                            {/*           onChange={e => setKhuyenMai(e.target.checked ? 1 : 0)}/>*/}
+                            {/*    <label className="form-check-label" htmlFor="flexCheckDefault">*/}
+                            {/*        Chương trình mua kèm bảo hiểm rơi vỡ*/}
+                            {/*        <br/><i>(Chỉ áp dụng cho Điện thoại và thời hạn bảo hiểm bảo hành mở rộng 6*/}
+                            {/*        tháng)</i>*/}
+                            {/*    </label>*/}
+                            {/*</div>*/}
                         </div>
                     },
                     detail: '',
@@ -1090,7 +1090,11 @@ function CategoryDetail() {
     const [devicesCategory, setDevicesCategory] = useState<any>([]);
     const [motoCategories, setMotoCategories] = useState<any>([]);
     const [formValues, setFormValues] = useState<any>(
-        {loai_thietbi:'DTDD'}
+        {loai_thietbi:'DTDD',
+            thoihan_batdau_baohanh_nsx: formatDate(moment(), STANDARD_DATE_FORMAT),
+            thoihan_ketthuc_baohanh_nsx: formatDate(moment().add(1,'y')),
+            ngay_batdau:formatDate(moment().add(1,'y').add(1,'d'))
+        }
     );
     const [khuyenMai, setKhuyenMai] = useState<number>(0);
     const keyCars = ['MayKeo', 'XeChuyenDung', 'XeChoTien', 'XePickUp', 'XeTaiVan', 'XeTapLai', 'XeBus', 'XeCuuThuong', 'Xetaxi', 'XeDauKeo'];
@@ -1597,6 +1601,7 @@ function CategoryDetail() {
                     <DatePicker
                         suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                         format={STANDARD_DATE_FORMAT}
+                        disabled
                         value={formValues.thoihan_batdau_baohanh_nsx?moment(formValues.thoihan_batdau_baohanh_nsx, STANDARD_DATE_FORMAT):null}
                         onChange={(date: any, dateString: string) => handleChangeFormValues('thoihan_batdau_baohanh_nsx', dateString)}/>
                 </div>
