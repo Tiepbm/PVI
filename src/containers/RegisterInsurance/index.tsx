@@ -351,7 +351,7 @@ function RegisterInsurance() {
                         "MaUser": "",
                         "EmailKH": values.customerEmail,
                         "SoCtu": "",
-                        "LoaiXe": "",
+                        "LoaiXe": lodash.get(feeRequest,'ma_loaixe',''),
                         "ChoNgoi": lodash.get(feeRequest, 'so_cho', '0'),
                         "TrongTai": lodash.get(feeRequest, 'ma_trongtai', ''),
                         "MTNHangHoa": "0",
