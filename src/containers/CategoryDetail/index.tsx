@@ -1329,6 +1329,8 @@ function CategoryDetail() {
         setLoading(true);
         localStorageSave(FEE_REQUEST, body);
         productRepository.getFeeTNDSOTO(body).then(res => {
+            body.ma_loaixe = res.ma_loaixe;
+            localStorageSave(FEE_REQUEST, body);
             setFee(res);
         }).catch(err => {
             // M24ErrorUtils.showError('Xảy ra lỗi. Vui lòng thử lại');

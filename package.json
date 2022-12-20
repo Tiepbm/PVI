@@ -68,8 +68,8 @@
     "customize-cra-less-loader": "^2.0.0",
     "less": "^4.1.2",
     "less-loader": "^10.2.0",
-    "node-sass": "^7.0.1",
     "path-browserify": "^1.0.1",
-    "react-app-rewired": "^2.1.11"
+    "react-app-rewired": "^2.1.11",
+    "sass": "^1.57.1"
   }
 }
