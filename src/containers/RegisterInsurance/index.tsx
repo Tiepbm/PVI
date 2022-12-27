@@ -174,7 +174,7 @@ function RegisterInsurance() {
                 let body: any = {};
                 let dateStart = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd'));
                 let datePaid = formatDate(moment());
-                let duration = formatDate(moment(currentDateString, 'DD/MM/YYYY').set('year', moment().get('year') + 1));
+                let duration = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd').add(1, 'y'));
                 if (productId === ENSURE_ELECTRIC) {
                     let listThamGia = [];
                     listThamGia.push({
@@ -613,8 +613,8 @@ function RegisterInsurance() {
                             <p><strong>{`PHÍ BẢO HIỂM (bao gồm VAT): ${formatMoneyByUnit(fee.TotalFee)}`}</strong></p>
                         </div>:
                         <div>
-                            <p>Ngày hiệu lực: 24/04/2022</p>
-                            <p>Ngày hết hạn: 23/04/2023</p>
+                            <p>Ngày hiệu lực: {formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd'))}</p>
+                            <p>Ngày hết hạn: {formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd').add(1, 'y'))}</p>
                             <p>{`Tổng phí bảo hiểm: ${formatMoneyByUnit(fee?.TotalFee)}/năm`}</p>
                         </div>}
                 </div>
