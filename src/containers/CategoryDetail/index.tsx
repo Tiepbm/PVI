@@ -1252,7 +1252,7 @@ function CategoryDetail() {
     const getFeeMotor = () => {
         if(!formValues.loai_xe) return;
         let dateStart = formatDate(moment(fromDate, 'DD/MM/YYYY').add(1, 'd'));
-        let duration = formatDate(moment(fromDate, 'DD/MM/YYYY').set('year', moment().get('year') + 1));
+        let duration = formatDate(moment(fromDate, 'DD/MM/YYYY').add(1, 'd').add(1,'y'));
 
         let body = {
             "cpid": CPID,

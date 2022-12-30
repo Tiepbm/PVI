@@ -462,8 +462,7 @@ function RegisterInsurance() {
                 }else if(productId===ENSURE_MOTOR){
                     setProvinceSelected(provinces.find((x: any) => x.Value === values.carProvince));
                     let dateStart = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd'));
-                    let duration = formatDate(moment(currentDateString, 'DD/MM/YYYY').set('year', moment().get('year') + 1));
-
+                    let duration = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd').add(1, 'y'));
                     body={
                         ma_giaodich:`${CPID}${moment().valueOf()}`,
                         "CpId": CPID,
@@ -501,7 +500,7 @@ function RegisterInsurance() {
                     };
                     body.Sign=sign(`${body.bien_kiemsoat}${body.email}${body.so_dienthoai}${body.loai_xe}`);
                 }
-                body.web_code=webCode;
+                body.web_code=webCode?webCode:'';
                 setBodyRegister(body);
                 setStep(currentStep + 1);
             }).catch(err => {
