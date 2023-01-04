@@ -148,7 +148,7 @@ function CategoryDetail() {
                         ]
                     },
                     detail: require('../../resources/images/baohiemxemay.jpg'),
-                    file: `./files/QTBH/${ENSURE_MOTOR}.pdf`
+                    file: require(`../../resources/files/QTBH/tndsxemay.pdf`)
 
                 },
                 {
@@ -247,7 +247,7 @@ function CategoryDetail() {
                         ]
                     },
                     detail: require('../../resources/images/baohiemoto.jpg'),
-                    file: './files/QTBH/tndsoto.pdf'
+                    file: require(`../../resources/files/QTBH/tndsoto.pdf`)
 
                 },
                 {
@@ -614,7 +614,7 @@ function CategoryDetail() {
                         ]
                     },
                     detail: require('../../resources/images/product-detail.png'),
-                    file: './files/QTBH/tainansudungdien.pdf'
+                    file: require(`../../resources/files/QTBH/tainansudungdien.pdf`)
 
                 },
                 {
@@ -781,7 +781,7 @@ function CategoryDetail() {
                         ]
                     },
                     detail: require('../../resources/images/baohiemnhao.jpg'),
-                    file: './files/QTBH/nhaotoandien.pdf'
+                    file: require(`../../resources/files/QTBH/nhaotoandien.pdf`)
 
                 },
                 {
@@ -907,7 +907,7 @@ function CategoryDetail() {
                         </div>
                     },
                     detail: '',
-                    file: './files/QTBH/baohanhmorong.pdf',
+                    file: require(`../../resources/files/QTBH/baohanhmorong.pdf`)
 
                 }
             ]
