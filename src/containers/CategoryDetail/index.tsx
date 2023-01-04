@@ -3,6 +3,7 @@ import MainLayout from "../../components/Layout";
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate, useParams, useSearchParams} from "react-router-dom";
 import iconScooter from '../../resources/images/scooter 1.svg';
+import iconScooter2 from '../../resources/images/icon_scooter.svg';
 import iconHome from '../../resources/images/icon_home.svg';
 import iconCar from '../../resources/images/icon_car.svg';
 
@@ -59,7 +60,7 @@ function CategoryDetail() {
                     name: 'Bảo hiểm xe máy',
                     banner: require('../../resources/images/imagebaohiem4.png'),
                     tabName: 'TNDS xe máy',
-                    description: <div><h2><img src={iconScooter}/>Bảo hiểm xe máy</h2>
+                    description: <div><h2><img src={iconScooter2}/>Bảo hiểm xe máy</h2>
                         <p>Bảo hiểm xe máy bắt buộc hay bảo hiểm trách nhiệm dân sự (TNDS) xe máy là loại bảo hiểm mà
                             chủ phương tiện phải mua theo quy định của pháp luật. Nếu không tuân thủ sẽ bị cảnh sát giao
                             thông phạt từ 100.000 - 200.000 đồng/lần. Trong trường hợp không may gây tai nạn cho người
@@ -1429,22 +1430,28 @@ function CategoryDetail() {
         let body = lodash.cloneDeep(bodyOto);
         // @ts-ignore
         body[code] = checked;
-        let item = purpose.items.find((x: any) => x.code === code);
-        if (!item.dependencies) {
-            keyCars.map((x: string) => {
-                if (x !== code) {
-                    // @ts-ignore
-                    body[x] = false;
-                }
-            });
-        } else {
-            keyCars.map((x: string) => {
-                if (!item.dependencies.includes(x) && x !== code) {
-                    // @ts-ignore
-                    body[x] = false;
-                }
-            });
-        }
+        keyCars.map((x: string) => {
+            if (x !== code) {
+                // @ts-ignore
+                body[x] = false;
+            }
+        });
+        // let item = purpose.items.find((x: any) => x.code === code);
+        // if (!item.dependencies) {
+        //     keyCars.map((x: string) => {
+        //         if (x !== code) {
+        //             // @ts-ignore
+        //             body[x] = false;
+        //         }
+        //     });
+        // } else {
+        //     keyCars.map((x: string) => {
+        //         if (!item.dependencies.includes(x) && x !== code) {
+        //             // @ts-ignore
+        //             body[x] = false;
+        //         }
+        //     });
+        // }
         setBodyOto(body);
     }
     const changeValueCar = (key: string, value: any) => {
@@ -1456,7 +1463,7 @@ function CategoryDetail() {
     }
     const disabledDate = (current: any) => {
         // Can not select days before today and today
-        return current && current < moment().endOf('day');
+        return current && current <= moment().endOf('day');
     }
     const onChangeDate = (date: any, dateString: string) => {
         // console.log(date, dateString);
@@ -1555,7 +1562,7 @@ function CategoryDetail() {
                     value={x.code}>{x.name}</Select.Option>)}
             </Select>
             <label>Ngày hiệu lực</label>
-            <DatePicker disabledDate={disabledDate} defaultValue={moment(new Date(), STANDARD_DATE_FORMAT)}
+            <DatePicker disabledDate={disabledDate} defaultValue={moment(moment().add(1,'d'), STANDARD_DATE_FORMAT)}
                         suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                         format={STANDARD_DATE_FORMAT} onChange={onChangeDate}/>
             <label>Thời hạn bảo hiểm</label>

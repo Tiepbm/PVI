@@ -172,9 +172,9 @@ function RegisterInsurance() {
                 // let fiels = form.getFieldsValue();
                 // console.log(values);
                 let body: any = {};
-                let dateStart = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd'));
+                let dateStart = formatDate(moment(currentDateString, 'DD/MM/YYYY'));
                 let datePaid = formatDate(moment());
-                let duration = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd').add(1, 'y'));
+                let duration = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'y'));
                 if (productId === ENSURE_ELECTRIC) {
                     let listThamGia = [];
                     listThamGia.push({
@@ -461,8 +461,8 @@ function RegisterInsurance() {
                 }
                 }else if(productId===ENSURE_MOTOR){
                     setProvinceSelected(provinces.find((x: any) => x.Value === values.carProvince));
-                    let dateStart = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd'));
-                    let duration = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd').add(1, 'y'));
+                    let dateStart = formatDate(moment(currentDateString, 'DD/MM/YYYY'));
+                    let duration = formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'y'));
                     body={
                         ma_giaodich:`${CPID}${moment().valueOf()}`,
                         "CpId": CPID,
@@ -524,13 +524,13 @@ function RegisterInsurance() {
                     window.location.href=res.URL_Payment;
                     // window.open(res.URL_Payment);
                 }
-                setResult(true);
+                // setResult(true);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
-                setShowResult(true);
+                // setShowResult(true);
             });
         } else if (productId === ENSURE_HOUSE) {
             productRepository.createOrderHouse(bodyRegister).then(res => {
@@ -538,13 +538,13 @@ function RegisterInsurance() {
                     // window.open(res.URL_Payment);
                     window.location.href=res.URL_Payment;
                 }
-                setResult(true);
+                // setResult(true);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
-                setShowResult(true);
+                // setShowResult(true);
             });
         } else if (productId === ENSURE_CAR) {
             productRepository.createOrderCar(bodyRegister).then(res => {
@@ -552,13 +552,13 @@ function RegisterInsurance() {
                     // window.open(res.URL_Payment);
                     window.location.href=res.URL_Payment;
                 }
-                setResult(true);
+                // setResult(true);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
-                setShowResult(true);
+                // setShowResult(true);
             });
         }else if(productId===ENSURE_EXTEND){
             productRepository.createOrderExtend(bodyRegister).then(res => {
@@ -580,13 +580,13 @@ function RegisterInsurance() {
                     // window.open(res.URL_Payment);
                     window.location.href=res.URL_Payment;
                 }
-                setResult(true);
+                // setResult(true);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
-                setShowResult(true);
+                // setShowResult(true);
             });
         }
     }
@@ -612,8 +612,8 @@ function RegisterInsurance() {
                             <p><strong>{`PHÍ BẢO HIỂM (bao gồm VAT): ${formatMoneyByUnit(fee.TotalFee)}`}</strong></p>
                         </div>:
                         <div>
-                            <p>Ngày hiệu lực: {formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd'))}</p>
-                            <p>Ngày hết hạn: {formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'd').add(1, 'y'))}</p>
+                            <p>Ngày hiệu lực: {formatDate(moment(currentDateString, 'DD/MM/YYYY'))}</p>
+                            <p>Ngày hết hạn: {formatDate(moment(currentDateString, 'DD/MM/YYYY').add(1, 'y'))}</p>
                             <p>{`Tổng phí bảo hiểm: ${formatMoneyByUnit(fee?.TotalFee)}/năm`}</p>
                         </div>}
                 </div>
