@@ -535,7 +535,7 @@ function RegisterInsurance() {
         } else if (productId === ENSURE_HOUSE) {
             productRepository.createOrderHouse(bodyRegister).then(res => {
                 if(res.URL_Payment){
-                    // window.open(res.URL_Payment);
+                    // window.open(res.URL_Payment);ắc
                     window.location.href=res.URL_Payment;
                 }
                 // setResult(true);
@@ -975,7 +975,7 @@ function RegisterInsurance() {
                 {currentStep === 0 && <Row className={'justify-content-center'}>
                     <p className="agree-info">
                         <label className="checkbox-container">Tôi xác nhận thông tin là chính xác và đồng ý với <a
-                            href={`./files/QTBH/${productId}.pdf`} target="_blank">quy tắc sản phẩm</a>
+                            href={require(`../../resources/files/QTBH/${productId}.pdf`)} target="_blank">quy tắc sản phẩm</a>
                             <input onChange={e => setAgree(e.target.checked)} type="checkbox" autoComplete="off"
                                    checked={agree}/>
                             <span className="checkbox-checkmark"></span>

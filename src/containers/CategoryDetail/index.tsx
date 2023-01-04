@@ -148,7 +148,7 @@ function CategoryDetail() {
                         ]
                     },
                     detail: require('../../resources/images/baohiemxemay.jpg'),
-                    file: require(`../../resources/files/QTBH/tndsxemay.pdf`)
+                    file: require(`../../resources/files/QTBH/tndxemay.pdf`)
 
                 },
                 {
