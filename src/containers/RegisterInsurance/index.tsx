@@ -88,7 +88,7 @@ function RegisterInsurance() {
             getDistricts();
         }
         if (!currentDateString) {
-            setCurrentDateString(formatDate(moment()));
+            setCurrentDateString(formatDate(moment().add(1,'d')));
         }
     }, []);
     const getPurpose = () => {
