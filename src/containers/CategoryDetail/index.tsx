@@ -78,11 +78,11 @@ function CategoryDetail() {
                         classNameValue: 'baohiemxemay',
                         categories: [
                             {
-                                name: 'Người điều khiển xe máy gây tai nạn dẫn đến thiệt hại về sức khỏe, tính mạng cho bên thứ ba (nạn nhân). Công ty bảo hiểm sẽ thay người điều khiển xe bồi thường cho bên thứ 3.',
+                                name: 'Người điều khiển xe máy gây tai nạn dẫn đến thiệt hại về sức khỏe, tính mạng cho bên thứ ba (nạn nhân). Công ty bảo hiểm sẽ thay người điều khiển xe bồi thường cho bên thứ ba.',
                                 code: '1'
                             },
                             {
-                                name: 'Người điều khiển xe máy gây tai nạn dẫn đến thiệt hại về tài sản của bên thứ ba (nạn nhân). Công ty bảo hiểm sẽ thay người điều khiển xe bồi thường cho bên thứ 3.',
+                                name: 'Người điều khiển xe máy gây tai nạn dẫn đến thiệt hại về tài sản của bên thứ ba (nạn nhân). Công ty bảo hiểm sẽ thay người điều khiển xe bồi thường cho bên thứ ba.',
                                 code: '2'
                             },
                             {
@@ -101,7 +101,7 @@ function CategoryDetail() {
                                     },
                                     {
                                         category: '2',
-                                        value: 'Tối đa 50 triệu đồng/người/vụ'
+                                        value: 'Tối đa 50 triệu đồng/vụ'
                                     },
                                     {
                                         category: '3',
@@ -119,7 +119,7 @@ function CategoryDetail() {
                                     },
                                     {
                                         category: '2',
-                                        value: 'Tối đa 50 triệu đồng/người/vụ'
+                                        value: 'Tối đa 50 triệu đồng/vụ'
                                     },
                                     {
                                         category: '3',
@@ -137,7 +137,7 @@ function CategoryDetail() {
                                     },
                                     {
                                         category: '2',
-                                        value: 'Tối đa 50 triệu đồng/người/vụ'
+                                        value: 'Tối đa 50 triệu đồng/vụ'
                                     },
                                     {
                                         category: '3',
@@ -177,11 +177,11 @@ function CategoryDetail() {
                         classNameValue: 'baohiemoto',
                         categories: [
                             {
-                                name: 'Người điều khiển xe ô tô gây tai nạn dẫn đến thiệt hại về sức khỏe, tính mạng cho bên thứ ba (nạn nhân). Công ty bảo hiểm sẽ hỗ trợ bồi thường cho bên thứ 3.',
+                                name: 'Người điều khiển xe ô tô gây tai nạn dẫn đến thiệt hại về sức khỏe, tính mạng cho bên thứ ba (nạn nhân). Công ty bảo hiểm sẽ hỗ trợ bồi thường cho bên thứ ba.',
                                 code: '1'
                             },
                             {
-                                name: 'Người điều khiển xe ô tô gây tai nạn dẫn đến thiệt hại về tài sản của bên thứ ba (nạn nhân). Công ty bảo hiểm sẽ hỗ trợ bồi thường cho bên thứ 3.',
+                                name: 'Người điều khiển xe ô tô gây tai nạn dẫn đến thiệt hại về tài sản của bên thứ ba (nạn nhân). Công ty bảo hiểm sẽ hỗ trợ bồi thường cho bên thứ ba.',
                                 code: '2'
                             },
                             {
@@ -200,7 +200,7 @@ function CategoryDetail() {
                                     },
                                     {
                                         category: '2',
-                                        value: 'Tối đa 100 triệu đồng/người/vụ'
+                                        value: 'Tối đa 100 triệu đồng/vụ'
                                     },
                                     {
                                         category: '3',
@@ -218,7 +218,7 @@ function CategoryDetail() {
                                     },
                                     {
                                         category: '2',
-                                        value: 'Tối đa 100 triệu đồng/người/vụ'
+                                        value: 'Tối đa 100 triệu đồng/vụ'
                                     },
                                     {
                                         category: '3',
@@ -236,7 +236,7 @@ function CategoryDetail() {
                                     },
                                     {
                                         category: '2',
-                                        value: 'Tối đa 100 triệu đồng/người/vụ'
+                                        value: 'Tối đa 100 triệu đồng/vụ'
                                     },
                                     {
                                         category: '3',
@@ -1262,9 +1262,9 @@ function CategoryDetail() {
             "ngay_cuoi": duration,
             "loai_xe": lodash.get(formValues, 'loai_xe', ''),
             "thamgia_laiphu": currentPackage==='01'?false:true,
-            muc_trachnhiem_laiphu: currentPackage==='01'?0: currentPackage==='02'?10:50,
+            muc_trachnhiem_laiphu: currentPackage==='01'?0: currentPackage==='02'?10000000:50000000,
             so_nguoi_tgia_laiphu: currentPackage==='01'?0:2,
-            tyle_phi_laiphu: currentPackage==='01'?0:0.1,
+            tyle_phi_laiphu: 0,
         };
         productRepository.getFeeMotor(body).then(res => {
             setFee({TotalFee: lodash.get(res,'phi_moto',0)+lodash.get(res,'phi_laiphu',0)});

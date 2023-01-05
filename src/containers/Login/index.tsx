@@ -36,7 +36,7 @@ function Login(){
             <div className="wrapper login-wrapper width100 min-width-page position-re dpl-flex ">
                 <div className="boxform bg-color-white">
                     <h1 className="txt-center mgbt20">
-                        <img style={{maxWidth:80,height:'auto'}} src={require('../../resources/images/logo_pvi.png')} />
+                        <img style={{maxWidth:80,height:'auto'}} src={require('../../resources/images/logo.png')} />
                     </h1>
                     {/*<h2 className="txt-size-48 robotobold txt-color-blue txt-center">*/}
                     {/*    {'Đăng nhập'}*/}

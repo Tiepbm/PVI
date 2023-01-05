@@ -153,9 +153,9 @@ function MainLayout(props: MainLayoutProps) {
                         <div className="row">
                             <div className="col">
                                 <div className="header-left">
-                                    <div className="header-logo">
-                                        {webCode!==WEBCODE_VIETTEL_STORE?<Link to={'/'}><img src={require('../../resources/images/logo.png')} alt=""/></Link>:
-                                            <img src={require('../../resources/images/logo.png')} alt=""/>}
+                                    <div className="">
+                                        {webCode!==WEBCODE_VIETTEL_STORE?<Link to={'/'}><img className={'logo'} src={require('../../resources/images/logo.png')} alt=""/></Link>:
+                                            <img  src={require('../../resources/images/logo.png')} alt=""/>}
                                     </div>
                                 </div>
                             </div>

@@ -91,11 +91,14 @@ body {
     margin: 0 auto;
     overflow: hidden;
 }
-
-img {
-    max-width: 100%;
+.logo{
+    width: 100px;
     height: auto;
 }
+/*img {*/
+/*    max-width: 100%;*/
+/*    height: auto;*/
+/*}*/
 
 a {
     text-decoration: none;
