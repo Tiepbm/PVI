@@ -1320,6 +1320,7 @@ function CategoryDetail() {
             body.mtn_laiphu = 0;
         }
         body.web_code = webCode;
+        body.so_nguoi = body.so_cho;
         body.giodau = formatTime(moment());
         body.giocuoi = formatTime(moment());
         body.Sign = sign(`${body.ma_trongtai}${body.so_cho}`);
