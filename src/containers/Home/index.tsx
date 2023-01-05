@@ -119,7 +119,7 @@ function Home() {
                                 <div className="list-insurances">
                                     <Link to={'/categories/transport?productId=tndxemay'} className="insurance-item">
                                         <span><img src={iconScooter} /></span>
-                                        <p><span className="bg-orange">Sắp ra mắt</span></p>
+                                        <p><span className="bg-red">Mới</span></p>
                                         <p>Trách nhiệm <br /> dân sự xe máy</p>
                                     </Link>
                                     <Link to={'/categories/transport?productId=tndsoto'} className="insurance-item">

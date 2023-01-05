@@ -523,7 +523,7 @@ function CategoryDetail() {
             tabClassName: 'baohiemtainan',
             products: [
                 {
-                    isReady: true,
+                    isReady: false,
                     code: ENSURE_ELECTRIC,
                     name: 'Bảo hiểm tai nạn hộ sử dụng điện',
                     banner: require('../../resources/images/imagebaohiem1.png'),
@@ -709,7 +709,7 @@ function CategoryDetail() {
             tabClassName: 'baohiemsuckhoe',
             products: [
                 {
-                    isReady: true,
+                    isReady: false,
                     code: ENSURE_HOUSE,
                     name: 'Bảo hiểm nhà ở toàn diện',
                     banner: require('../../resources/images/imagebaohiem3.png'),
