@@ -1498,7 +1498,7 @@ function CategoryDetail() {
                     value={x.code}>{x.name}</Select.Option>)}
             </Select>
             <label>Ngày hiệu lực</label>
-            <DatePicker disabledDate={disabledDate} defaultValue={moment(new Date(), STANDARD_DATE_FORMAT)}
+            <DatePicker disabledDate={disabledDate} defaultValue={moment(moment().add(1,'d'), STANDARD_DATE_FORMAT)}
                         suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
                         format={STANDARD_DATE_FORMAT} onChange={onChangeDate}/>
             <label>Thời hạn bảo hiểm</label>
