@@ -1800,7 +1800,7 @@ function CategoryDetail() {
                     </div>}
                 </div>
             </div>
-            {currentProduct?.isReady && <div className="img_content"><img src={currentProduct?.detail}/></div>}
+            {currentProduct?.isReady && <div className="img_content"><img className={'imgContent'} src={currentProduct?.detail}/></div>}
         </div>
     </MainLayout>
 }

@@ -203,7 +203,10 @@ input, button {
     right: 0;
     bottom: 20%;
 }
-
+.imgContent{
+    max-width:100%;
+    height: auto;
+}
 .box_item_content .banner-content-bt {
     margin-top: 30px;
     background: #fff;
