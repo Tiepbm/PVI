@@ -155,7 +155,7 @@ function MainLayout(props: MainLayoutProps) {
                                 <div className="header-left">
                                     <div className="">
                                         {webCode!==WEBCODE_VIETTEL_STORE?<Link to={'/'}><img className={'logo'} src={require('../../resources/images/logo.png')} alt=""/></Link>:
-                                            <img  src={require('../../resources/images/logo.png')} alt=""/>}
+                                            <img  className={'logo'} src={require('../../resources/images/logo.png')} alt=""/>}
                                     </div>
                                 </div>
                             </div>
