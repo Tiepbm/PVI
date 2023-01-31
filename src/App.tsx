@@ -134,7 +134,7 @@ function App() {
       {!loading&&<ConfigProvider locale={viVN}>
         <HashRouter>
           <Routes>
-            <Route path={'/'} element={<ProtectedRoute><Home/></ProtectedRoute>}></Route>
+            {/*<Route path={'/'} element={<ProtectedRoute><Home/></ProtectedRoute>}></Route>*/}
             <Route path={'/categories/:categoryId'} element={<ProtectedRoute><CategoryDetail/></ProtectedRoute>}></Route>
             <Route path={'/products/:productId/register'} element={<ProtectedRoute><RegisterInsurance/></ProtectedRoute>}></Route>
             <Route path={'/products/:productId'} element={<ProtectedRoute><ProductDetail/></ProtectedRoute>}></Route>
