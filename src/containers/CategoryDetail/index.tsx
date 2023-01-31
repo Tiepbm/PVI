@@ -1340,7 +1340,8 @@ function CategoryDetail() {
     }
 
     useEffect(() => {
-        let category = products.find((x: any) => x.code === categoryId);
+        // let category = products.find((x: any) => x.code === categoryId);
+        let category = products.find((x: any) => x.code === 'asset');
         if (category) {
             // console.log('category: ',category);
             if (webCode===WEBCODE_VIETTEL_STORE){
@@ -1348,7 +1349,8 @@ function CategoryDetail() {
             }else
                 category.products = category.products.filter((x: any)=> x.code!=='baohanhmorong');
             setDetail(category);
-            let productId = searchParams.get('productId');
+            // let productId = searchParams.get('productId');
+            let productId = 'baohanhmorong';
             let product: any;
             if (productId) {
                 product = category.products.find((x: any) => x.code === productId);
@@ -1360,7 +1362,7 @@ function CategoryDetail() {
             else getDevicesCategory();
         }
 
-    }, [categoryId]);
+    }, []);
     const getDevicesCategory = () => {
         categoryRepository.getCategories('THIETBI_DT').then(res => {
             setDevicesCategory(res.Data)
