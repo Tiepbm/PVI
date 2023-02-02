@@ -8,6 +8,7 @@ import DocumentTitle from 'react-document-title';
 import {Link, useLocation, useParams, useSearchParams} from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 import useWindowDimensions from "../../hooks";
+import lodash from "lodash";
 import logo from '../../resources/images/logo-pvi-view.png';
 import MediaQuery, {useMediaQuery} from 'react-responsive';
 import {useSessionStorage} from "../../hooks/useSessionStorage";
@@ -18,6 +19,10 @@ import iconInsurance1 from '../../resources/images/insurance-2 1.svg';
 import iconInsurance2 from '../../resources/images/insurance-2 2.svg';
 import iconAsset1 from '../../resources/images/asset 1.svg';
 import iconTralve1 from '../../resources/images/travel 1.svg';
+import {
+    DownOutlined,
+    LogoutOutlined,
+} from '@ant-design/icons';
 
 const {Header, Sider, Content, Footer} = Layout;
 const PERCENT_COMPLETE = 100;
@@ -64,6 +69,8 @@ function MainLayout(props: MainLayoutProps) {
     const [percent, setPercent] = useState<number>(-1);
     const [autoIncrement, setAutoIncrement] = useState<boolean>(false);
     const [intervalTime, setIntervalTime] = useState<number>(200);
+    const [isShowMenuDropDown, setShowMenuDropDown] = useState<boolean>(false);
+    const [profile, setProfile] = useSessionStorage('profile', false);
     const [activeKey, setActiveKey] = useState<string>('');
     let {categoryId} = useParams();
     let [searchParams, setSearchParams] = useSearchParams();
@@ -100,12 +107,10 @@ function MainLayout(props: MainLayoutProps) {
 
     const onConfirmLogOut = () => {
         // console.log('logout');
-        setLoading(true)
-        localStorageSave(PROFILE_KEY, null);
-        localStorageSave(TOKEN_KEY, null);
-        localStorageSave(TENANT_KEY, null);
-        window.location.href = process.env.REACT_APP_LOGOUT_URL!;
-        setLoading(false)
+        // setLoading(true)
+       setProfile(null);
+        navigate('/login');
+        // setLoading(false)
         // console.log(process.env.REACT_APP_LOGOUT_URL)
     }
 
@@ -114,7 +119,25 @@ function MainLayout(props: MainLayoutProps) {
         setLoading(false)
     }
 
-
+    const handleVisibleChange = (visible: boolean) => {
+        setShowMenuDropDown(visible);
+    };
+    const renderDropDownAvatar = () => {
+        return <div style={{width: 200}}>
+            {showSearch&&<Row className={'dpl-flex align-items-center pdt5 pdbt10'} key={"profile"}>
+                <span onClick={() => navigate(`/search`)} className="txt-color-black cursor-pointer">
+                    <i className="fas fa-search mgr5"></i><span>{'Tra cứu đơn'}</span></span>
+            </Row>}
+            {showReport&&<Row className={'dpl-flex align-items-center pdt5 pdbt10'} key={"profile"}>
+                <span onClick={() => navigate(`/reports`)} className="txt-color-black cursor-pointer">
+                    <i className="fas fa-chart-line mgr5"></i><span>{'Báo cáo'}</span></span>
+            </Row>}
+            <Row className={'dpl-flex align-items-center pdt5 pdbt10'} key={"logout"}>
+                <span onClick={onConfirmLogOut} className="_logout-btn txt-color-black cursor-pointer">
+                    <i className="far fa-sign-out-alt mgr5"></i><span>{'Đăng xuất'}</span></span>
+            </Row>
+        </div>;
+    };
     /**
      * hiển thị progressbar
      **/
@@ -150,44 +173,55 @@ function MainLayout(props: MainLayoutProps) {
             <div className={''}>
                 <header>
                     <div className="container">
-                        <div className="row">
-                            <div className="col">
-                                <div className="header-left">
+                        <Row className={'align-items-center justify-content-between'}>
+                            <Col lg={10} md={8}>
+                                <div className="">
                                     <div className="">
                                         {webCode!==WEBCODE_VIETTEL_STORE?<Link to={'/'}><img className={'logo'} src={require('../../resources/images/logo.png')} alt=""/></Link>:
                                             <img  className={'logo'} src={require('../../resources/images/logo.png')} alt=""/>}
                                     </div>
                                 </div>
-                            </div>
-                            {showReport&&<div className="col">
-                                <div className="header-right">
-                                    <div className="header-intro">
-                                        <Link to={'/reports'}><i className="fad fa-file-chart-line mgr5"></i>Báo cáo</Link>
+                            </Col>
+                            {/*{showReport&&<div className="col">*/}
+                            {/*    <div className="header-right">*/}
+                            {/*        <div className="header-intro">*/}
+                            {/*            <Link to={'/reports'}><i className="fad fa-file-chart-line mgr5"></i>Báo cáo</Link>*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</div>}*/}
+                            {/*{showSearch&&<div className="col">*/}
+                            {/*    <div className="header-right">*/}
+                            {/*        <div className="header-intro">*/}
+                            {/*            <Link to={'/search'}><i className="fas fa-search mgr5"></i>Tra cứu đơn</Link>*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</div>}*/}
+                            {/*<div className="col">*/}
+                            {/*    <div className="header-right1">*/}
+                            {/*        <div className="header-intro">*/}
+                            {/*            <a><img src={require('../../resources/images/logo_viettel.png')} alt=""/></a>*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</div>*/}
+                            <Col  lg={14} md={16}>
+                                <Popover
+                                    visible={isShowMenuDropDown}
+                                    onVisibleChange={handleVisibleChange}
+                                    placement="bottomRight" content={renderDropDownAvatar()}
+                                    trigger="click">
+                                    <div style={{height: 64}}
+                                         className={'dpl-flex justify-content-end align-items-center'}>
+                                        <a><img src={require('../../resources/images/logo_viettel.png')} alt=""/></a>
+                                        <p className={'_user-name mgt15 txt-size-h7 robotoregular txt-color-black mgr3 mgl3'}>{lodash.get(profile, 'full_name', null)}
+                                            <DownOutlined
+                                                className={'txt-size-h9 txt-color-gray mgl5'}/>
+                                        </p>
+
+
                                     </div>
-                                </div>
-                            </div>}
-                            {showSearch&&<div className="col">
-                                <div className="header-right">
-                                    <div className="header-intro">
-                                        <Link to={'/search'}><i className="fas fa-search mgr5"></i>Tra cứu đơn</Link>
-                                    </div>
-                                </div>
-                            </div>}
-                            <div className="col">
-                                {!showLogoViettel ? <div className="header-right">
-                                    <div className="header-intro">
-                                        <Link to={'/about'}><img src={require('../../resources/images/icon-gt.png')}
-                                                                 alt=""/>Giới thiệu</Link>
-                                    </div>
-                                </div>:
-                                    <div className="header-right1">
-                                        <div className="header-intro">
-                                            <a><img src={require('../../resources/images/logo_viettel.png')} alt=""/></a>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
+                                </Popover>
+                            </Col>
+                        </Row>
                     </div>
                 </header>
                 <ProgressBar
