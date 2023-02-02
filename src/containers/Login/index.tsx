@@ -13,12 +13,14 @@ function Login(){
     const [loading, setLoading]= useState<boolean>(false);
     const [profile, setProfile] = useSessionStorage('profile', false);
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
+    const [marketCode, setMarketCode] = useSessionStorage('market_code', '');
 
     const onFinish = (values: any) => {
         setLoading(true);
         userRepository.login(values.username, values.password).then(res=>{
             M24Notification.messageSuccess('Đăng nhập thành công');
             setProfile(res.DataUser);
+            setMarketCode(values.password);
             setWebCode(lodash.get(res,'DataUser.web_code'));
             navigate('/categories/asset?productId=baohanhmorong');
         }).catch(err=>{
