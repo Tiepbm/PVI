@@ -234,19 +234,19 @@ function MainLayout(props: MainLayoutProps) {
                 <Content style={{minHeight: height - 50}}
                          className="content"
                 >
-                    {webCode!==WEBCODE_VIETTEL_STORE&&isDetail&& <div className="nav main-menu">
-                        <div className="container">
-                            <ul>
-                                {MENU.map((x: any)=>{
-                                    return  <li onClick={()=>{
-                                        navigate(`/categories/${x.code}`);
-                                        // window.location.reload();
-                                    }
-                                    }><a className={categoryId&&categoryId===x.code?'active':''}><img src={x.icon} alt=""/>{x.name}</a></li>
-                                })}
-                            </ul>
-                        </div>
-                    </div>}
+                    {/*{webCode!==WEBCODE_VIETTEL_STORE&&isDetail&& <div className="nav main-menu">*/}
+                    {/*    <div className="container">*/}
+                    {/*        <ul>*/}
+                    {/*            {MENU.map((x: any)=>{*/}
+                    {/*                return  <li onClick={()=>{*/}
+                    {/*                    navigate(`/categories/${x.code}`);*/}
+                    {/*                    // window.location.reload();*/}
+                    {/*                }*/}
+                    {/*                }><a className={categoryId&&categoryId===x.code?'active':''}><img src={x.icon} alt=""/>{x.name}</a></li>*/}
+                    {/*            })}*/}
+                    {/*        </ul>*/}
+                    {/*    </div>*/}
+                    {/*</div>}*/}
                     {children}
                 </Content>
                 <footer>

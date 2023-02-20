@@ -1344,10 +1344,10 @@ function CategoryDetail() {
         let category = products.find((x: any) => x.code === 'asset');
         if (category) {
             // console.log('category: ',category);
-            if (webCode===WEBCODE_VIETTEL_STORE){
+            // if (webCode===WEBCODE_VIETTEL_STORE){
                 category.products = category.products.filter((x: any)=> x.code==='baohanhmorong');
-            }else
-                category.products = category.products.filter((x: any)=> x.code!=='baohanhmorong');
+            // }else
+            //     category.products = category.products.filter((x: any)=> x.code!=='baohanhmorong');
             setDetail(category);
             // let productId = searchParams.get('productId');
             let productId = 'baohanhmorong';
@@ -1653,7 +1653,7 @@ function CategoryDetail() {
                 return renderFeeMotor();
         }
     }
-    return <MainLayout showLogoViettel={currentProduct?.code === ENSURE_EXTEND ? true : false} isDetail={true}
+    return <MainLayout showLogoViettel={true} isDetail={true}
                        showProgressBar={showProgressBar}
                        title={lodash.get(currentProduct, 'name', 'Chi tiết sản phẩm')}>
         <div className="banner">
