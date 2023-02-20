@@ -998,14 +998,16 @@ function RegisterInsurance() {
         {showResult&&<SuccessModal onCancel={()=> {
             if(!result) setShowResult(false);
             else{
-                if(webCode!==WEBCODE_VIETTEL_STORE)
-                    navigate('/')
-                else  navigate(-1)
+                // if(webCode!==WEBCODE_VIETTEL_STORE)
+                //     navigate('/')
+                // else
+                    navigate(-1)
             }
         }} visible={showResult} isSuccess={result} gotoHome={()=> {
-            if(webCode!==WEBCODE_VIETTEL_STORE)
-                navigate('/')
-            else  navigate(-1)
+            // if(webCode!==WEBCODE_VIETTEL_STORE)
+            //     navigate('/')
+            // else
+                navigate(-1)
         }
         } onContinue={onContinue} />}
     </MainLayout>

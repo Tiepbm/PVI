@@ -178,8 +178,7 @@ function MainLayout(props: MainLayoutProps) {
                             <Col lg={10} md={8}>
                                 <div className="">
                                     <div className="">
-                                        {webCode!==WEBCODE_VIETTEL_STORE?<Link to={'/'}><img className={'logo'} src={require('../../resources/images/logo.png')} alt=""/></Link>:
-                                            <img  className={'logo'} src={require('../../resources/images/logo.png')} alt=""/>}
+                                        <img  className={'logo'} src={require('../../resources/images/logo.png')} alt=""/>
                                     </div>
                                 </div>
                             </Col>
