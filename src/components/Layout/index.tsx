@@ -182,20 +182,20 @@ function MainLayout(props: MainLayoutProps) {
                                     </div>
                                 </div>
                             </Col>
-                            {/*{showReport&&<div className="col">*/}
-                            {/*    <div className="header-right">*/}
-                            {/*        <div className="header-intro">*/}
-                            {/*            <Link to={'/reports'}><i className="fad fa-file-chart-line mgr5"></i>Báo cáo</Link>*/}
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*</div>}*/}
-                            {/*{showSearch&&<div className="col">*/}
-                            {/*    <div className="header-right">*/}
-                            {/*        <div className="header-intro">*/}
-                            {/*            <Link to={'/search'}><i className="fas fa-search mgr5"></i>Tra cứu đơn</Link>*/}
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*</div>}*/}
+                            {showReport&&<div className="col">
+                                <div className="header-right">
+                                    <div className="header-intro">
+                                        <Link to={'/reports'}><i className="fad fa-file-chart-line mgr5"></i>Báo cáo</Link>
+                                    </div>
+                                </div>
+                            </div>}
+                            {showSearch&&<div className="col">
+                                <div className="header-right">
+                                    <div className="header-intro">
+                                        <Link to={'/search'}><i className="fas fa-search mgr5"></i>Tra cứu đơn</Link>
+                                    </div>
+                                </div>
+                            </div>}
                             {/*<div className="col">*/}
                             {/*    <div className="header-right1">*/}
                             {/*        <div className="header-intro">*/}
