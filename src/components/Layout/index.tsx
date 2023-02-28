@@ -261,14 +261,14 @@ function MainLayout(props: MainLayoutProps) {
                                     lệ, tổng tài sản, tổng doanh thu, lợi nhuận từ hoạt động kinh doanh bảo hiểm, lợi
                                     nhuận trước thuế và tỉ suất lợi nhuận/vốn chủ sở hữu…, top 50 Doanh nghiệp lợi nhuận
                                     tốt nhất Việt Nam 2021.
-                                    Xếp hạng năng lực tài chính A.M Best của Bảo hiểm PVI hiện ở mức B++ (Tốt).
+                                    Xếp hạng năng lực tài chính A.M Best của Bảo hiểm PVI hiện ở mức A- (rất tốt).
                                 </p>
                             </div>
                             <div className="col-md-6" style={{paddingLeft: 100}}>
                                 <h2>Contact</h2>
                                 <ul>
                                     <li>Tầng 24, Tòa nhà PVI tower, Số 1 Phạm Văn Bạch, Cầu Giấy, Hà Nội</li>
-                                    <li><i className="fal fa-phone-alt mgr5"></i>(84-24) 37733 5588 - Fax: (84-24) 3733 6284</li>
+                                    <li><i className="fal fa-phone-alt mgr5"></i>(84-24) 3733 5588 - Fax: (84-24) 3733 6284</li>
                                     <li><i className="fal fa-envelope mgr5"></i>baohiempvi@pvi.com.vn</li>
                                 </ul>
                             </div>
