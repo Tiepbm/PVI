@@ -19,6 +19,7 @@ function SearchOrder(){
     const [datasource, setDatasource] = useState<any>([]);
     const [selected, setSelected] = useState<any>();
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
+    const [profile, setProfile] = useSessionStorage('profile', false);
     const handleChange=(key: string, value: any)=>{
         let temp = lodash.cloneDeep(filter);
         temp[key] = value;
@@ -29,7 +30,7 @@ function SearchOrder(){
     }
     const handleSearch=()=>{
         setLoading(true);
-        productRepository.searchOrderByImei(filter, webCode).then(res=>{
+        productRepository.searchOrderByImei(filter, webCode, profile.ma_user).then(res=>{
             setDatasource(res)
         }).catch(err=>{
 

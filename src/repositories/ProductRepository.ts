@@ -89,12 +89,13 @@ export class ProductRepository extends Repository {
                 return response.data;
             });
     };
-    public searchOrderByImei = (filter: any, webCode: any): Promise<any> => {
+    public searchOrderByImei = (filter: any, webCode: any, ma_user: any): Promise<any> => {
         let body={
             CpId: CPID,
             serial_IMEI: lodash.get(filter,'imei',''),
             dien_thoai: lodash.get(filter,'phone',''),
             web_code: webCode,
+            ma_user,
             Sign: sign(`${lodash.get(filter,'imei','')}${lodash.get(filter,'phone','')}${webCode}`)
         }
         return this.http
