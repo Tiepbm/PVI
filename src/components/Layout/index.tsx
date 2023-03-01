@@ -175,7 +175,7 @@ function MainLayout(props: MainLayoutProps) {
                 <header>
                     <div className="container">
                         <Row className={'align-items-center justify-content-between'}>
-                            <Col lg={10} md={8}>
+                            <Col lg={6} md={6}>
                                 <div className="">
                                     <div className="">
                                         <img  className={'logo'} src={require('../../resources/images/logo.png')} alt=""/>
@@ -196,14 +196,7 @@ function MainLayout(props: MainLayoutProps) {
                                     </div>
                                 </div>
                             </div>}
-                            {/*<div className="col">*/}
-                            {/*    <div className="header-right1">*/}
-                            {/*        <div className="header-intro">*/}
-                            {/*            <a><img src={require('../../resources/images/logo_viettel.png')} alt=""/></a>*/}
-                            {/*        </div>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
-                            <Col  lg={14} md={16}>
+                            <Col  lg={6} md={6}>
                                 <Popover
                                     visible={isShowMenuDropDown}
                                     onVisibleChange={handleVisibleChange}
