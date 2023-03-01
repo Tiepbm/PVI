@@ -3,18 +3,19 @@ import {useEffect, useState} from "react";
 import {productRepository} from "../../repositories/ProductRepository";
 import lodash from "lodash";
 import {formatNumber} from "../../core/helpers/string";
+import {useSessionStorage} from "../../hooks/useSessionStorage";
 
 
 function CustomerSearch(){
     const [loading, setLoading] = useState<boolean>(false);
     let [searchParams, setSearchParams] = useSearchParams();
     const [detail, setDetail] = useState();
-
+    const [profile, setProfile] = useSessionStorage('profile', false);
     useEffect(()=>{
         let serialIMEI = searchParams.get('serial_IMEI');
         if(serialIMEI){
             setLoading(true);
-            productRepository.searchOrderByImei({imei: serialIMEI}, 'KHNA').then(res=>{
+            productRepository.searchOrderByImei({imei: serialIMEI}, 'KHNA', profile.ma_user).then(res=>{
                 if(Array.isArray(res)&&res.length>0)
                     setDetail(res[0]);
             }).catch(err=>{

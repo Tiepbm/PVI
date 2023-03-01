@@ -1090,6 +1090,7 @@ function CategoryDetail() {
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
     const [devicesCategory, setDevicesCategory] = useState<any>([]);
     const [motoCategories, setMotoCategories] = useState<any>([]);
+    const [profile, setProfile] = useSessionStorage('profile', false);
     const [formValues, setFormValues] = useState<any>(
         {loai_thietbi:'DTDD',
             thoihan_batdau_baohanh_nsx: formatDate(moment(), STANDARD_DATE_FORMAT),
@@ -1476,7 +1477,7 @@ function CategoryDetail() {
     const onSearchIMEI=()=>{
         if(!formValues?.so_serial) return;
         setDuplicateImei(false);
-        productRepository.searchOrderByImei({imei: formValues?.so_serial}, webCode).then(res=>{
+        productRepository.searchOrderByImei({imei: formValues?.so_serial}, webCode, profile.ma_user).then(res=>{
             if(Array.isArray(res)&&res.length>0){
                 // M24Notification.notifyError('Thông báo', 'Trùng IMEI');
                 confirm({
