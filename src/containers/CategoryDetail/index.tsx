@@ -1635,7 +1635,7 @@ function CategoryDetail() {
                 <Select.Option value={'0102'}>12 tháng</Select.Option>
                 {checkTIVI()&&<Select.Option value={'0103'}>2 năm</Select.Option>}
             </Select>
-            <label>Giá trị thiết bị tại thời điểm tham gia bảo hiểm (VNĐ)</label>
+            <label>Giá trị thiết bị tại thời điểm tham gia bảo hiểm (VNĐ - bao gồm VAT)</label>
             <Input value={formatNumber(formValues?.giatri_thietbi)} placeholder="Ví dụ: 2100000"
                    onChange={e => handleChangeFormValues('giatri_thietbi', e.target.value)}/>
             {/*<Checkbox checked={formValues?.khuyen_mai} onChange={e=> handleChangeFormValues('khuyen_mai', e.target.checked?1:0)}>Khuyến mại</Checkbox>*/}
