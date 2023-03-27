@@ -20,7 +20,7 @@ function Login(){
         userRepository.login(values.username, values.password).then(res=>{
             M24Notification.messageSuccess('Đăng nhập thành công');
             setProfile(res.DataUser);
-            setMarketCode(values.password);
+            setMarketCode(res.DataUser.ma_sieuthi);
             setWebCode(lodash.get(res,'DataUser.web_code'));
             navigate('/categories/asset?productId=baohanhmorong');
         }).catch(err=>{

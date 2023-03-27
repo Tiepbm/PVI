@@ -205,7 +205,7 @@ function MainLayout(props: MainLayoutProps) {
                                     <div style={{height: 64}}
                                          className={'dpl-flex justify-content-end align-items-center'}>
                                         <a><img src={require('../../resources/images/logo_viettel.png')} alt=""/></a>
-                                        <p className={'_user-name mgt15 txt-size-h7 robotoregular txt-color-black mgr3 mgl3'}>{marketCode} - {lodash.get(profile, 'full_name', null)}
+                                        <p className={'_user-name mgt15 txt-size-h7 robotoregular txt-color-black mgr3 mgl3'}>{marketCode? `${marketCode} - `:''}{lodash.get(profile, 'full_name', null)}
                                             <DownOutlined
                                                 className={'txt-size-h9 txt-color-gray mgl5'}/>
                                         </p>
