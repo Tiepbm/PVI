@@ -13,7 +13,7 @@ function Login(){
     const [loading, setLoading]= useState<boolean>(false);
     const [profile, setProfile] = useSessionStorage('profile', false);
     const [webCode, setWebCode] = useSessionStorage('web_code', '');
-    const [marketCode, setMarketCode] = useSessionStorage('market_code', '');
+    const [marketCode, setMarketCode] = useSessionStorage('ma_sieuthi', '');
 
     const onFinish = (values: any) => {
         setLoading(true);

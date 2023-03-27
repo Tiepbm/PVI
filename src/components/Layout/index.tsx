@@ -71,7 +71,7 @@ function MainLayout(props: MainLayoutProps) {
     const [intervalTime, setIntervalTime] = useState<number>(200);
     const [isShowMenuDropDown, setShowMenuDropDown] = useState<boolean>(false);
     const [profile, setProfile] = useSessionStorage('profile', false);
-    const [marketCode, setMarketCode] = useSessionStorage('market_code', '');
+    const [marketCode, setMarketCode] = useSessionStorage('ma_sieuthi', '');
     const [activeKey, setActiveKey] = useState<string>('');
     let {categoryId} = useParams();
     let [searchParams, setSearchParams] = useSearchParams();
