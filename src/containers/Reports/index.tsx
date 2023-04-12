@@ -71,6 +71,12 @@ function SearchOrder(){
             width: 150,
         },
         {
+            title: 'Mã User',
+            dataIndex: 'ma_user',
+            key: 'ma_user',
+            width: 150,
+        },
+        {
             title: 'Mã nhân viên',
             dataIndex: 'ma_nhanvien',
             key: 'ma_nhanvien',
