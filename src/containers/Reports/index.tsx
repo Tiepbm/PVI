@@ -158,6 +158,7 @@ function SearchOrder(){
                 stt: index+1,
                 ngay_cap:row.ngay_cap,
                 ma_sieuthi: row.ma_sieuthi,
+                ma_user: row.ma_user,
                 ma_nhanvien: row.ma_nhanvien,
                 nhan_vien: row.nhan_vien,
                 ten_khach_hang:row.ten_khach_hang,
