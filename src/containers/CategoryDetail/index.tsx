@@ -1477,7 +1477,7 @@ function CategoryDetail() {
     const onSearchIMEI=()=>{
         if(!formValues?.so_serial) return;
         setDuplicateImei(false);
-        productRepository.searchOrderByImei({imei: formValues?.so_serial}, webCode, profile.ma_user).then(res=>{
+        productRepository.searchOrderByImei({imei: formValues?.so_serial}, webCode, '').then(res=>{
             if(Array.isArray(res)&&res.length>0){
                 // M24Notification.notifyError('Thông báo', 'Trùng IMEI');
                 confirm({
