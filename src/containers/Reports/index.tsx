@@ -17,6 +17,7 @@ function SearchOrder(){
     const [filter, setFilter] = useState<any>({});
     const [showProgressBar, setShowProgressBar] = useState<boolean>(false);
     const [isLoading, setLoading] = useState<boolean>(false);
+    const [isLoadingExportUser, setLoadingUser] = useState<boolean>(false);
     const [showEdit, setShowEdit] = useState<boolean>(false);
     const [isUpdating, setUpdating] = useState<boolean>(false);
     const [datasource, setDatasource] = useState<any>([]);
@@ -39,6 +40,32 @@ function SearchOrder(){
 
         }).finally(()=> setLoading(false));
     }
+     const exportUsers=()=>{
+        setLoadingUser(true);
+        productRepository.getUserReports().then(res=>{
+            let headers: any = ['STT','Mã nhân viên','Mã siêu thị','Mã user','Tên user','Họ tên'];
+            let items: any=[];
+            res.map((row: any, index: number)=>{
+                items.push({
+                    stt: index+1,
+                    ma_nhanvien: row.ma_nhanvien,
+                    ma_sieuthi: row.ma_sieuthi,
+                    ma_user: row.ma_user,
+                    ten_user: row.ten_user,
+                    full_name: row.full_name,
+                });
+                return row;
+            });
+            const worksheet = XLSX.utils.json_to_sheet(items);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Danh sách ");
+            XLSX.utils.sheet_add_aoa(worksheet, [headers]);
+            XLSX.writeFile(workbook, "users.xlsx");
+        }).catch(err=>{
+
+        }).finally(()=> setLoadingUser(false));
+    }
+
     const onCancel=()=>{
         setShowEdit(false);
         setSelected(null);
@@ -232,8 +259,13 @@ function SearchOrder(){
                               style={{backgroundColor: 'gray'}}
                           />
                       </Space>
-                      <Button onClick={onExport} type={'primary'} icon={<i
-                          className="far fa-download mgr5"></i>}>Xuất excel</Button>
+                     <Space>
+                         <Button loading={isLoadingExportUser} onClick={exportUsers} type={'default'} icon={<i
+                             className="far fa-download mgr5"></i>}>Export user</Button>
+                         <Button onClick={onExport} type={'default'} icon={<i
+                             className="far fa-download mgr5"></i>}>Xuất excel</Button>
+
+                     </Space>
                   </Row>
                   <Table className={''} dataSource={datasource} columns={columns} pagination={{hideOnSinglePage:true, pageSize:50}}/>
               </div>
