@@ -42,7 +42,7 @@ function SearchOrder(){
     }
      const exportUsers=()=>{
         setLoadingUser(true);
-        productRepository.getUserReports().then(res=>{
+        productRepository.getUserReports(profile.ma_user).then(res=>{
             let headers: any = ['STT','Mã nhân viên','Mã siêu thị','Mã user','Tên user','Họ tên'];
             let items: any=[];
             res.map((row: any, index: number)=>{

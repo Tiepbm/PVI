@@ -144,9 +144,10 @@ export class ProductRepository extends Repository {
                 return response.data.Data;
             });
     };
-    public getUserReports = (): Promise<any> => {
+    public getUserReports = (ma_user: any): Promise<any> => {
         let body = {
             CpId: CPID,
+            ma_user,
             Sign:sign(``)
         }
         return this.http
