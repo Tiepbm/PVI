@@ -524,9 +524,13 @@ function RegisterInsurance() {
                     window.location.href=res.URL_Payment;
                     // window.open(res.URL_Payment);
                 }
-                // setResult(true);
+                else {
+                    setResult(true);
+                    setShowResult(true);
+                }
             }).catch(err => {
                 setResult(false);
+                setShowResult(true);
             }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
@@ -538,9 +542,13 @@ function RegisterInsurance() {
                     // window.open(res.URL_Payment);ắc
                     window.location.href=res.URL_Payment;
                 }
-                // setResult(true);
+                else {
+                    setResult(true);
+                    setShowResult(true);
+                }
             }).catch(err => {
                 setResult(false);
+                setShowResult(true);
             }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
@@ -552,9 +560,13 @@ function RegisterInsurance() {
                     // window.open(res.URL_Payment);
                     window.location.href=res.URL_Payment;
                 }
-                // setResult(true);
+                else {
+                    setResult(true);
+                    setShowResult(true);
+                }
             }).catch(err => {
                 setResult(false);
+                setShowResult(true);
             }).finally(() => {
                 setShowConfirm(false);
                 setLoading(false);
@@ -580,7 +592,7 @@ function RegisterInsurance() {
                     // window.open(res.URL_Payment);
                     window.location.href=res.URL_Payment;
                 }
-                // setResult(true);
+                else setResult(true);
             }).catch(err => {
                 setResult(false);
             }).finally(() => {
