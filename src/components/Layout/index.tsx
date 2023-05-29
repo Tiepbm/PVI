@@ -18,6 +18,7 @@ import iconInsurance1 from '../../resources/images/insurance-2 1.svg';
 import iconInsurance2 from '../../resources/images/insurance-2 2.svg';
 import iconAsset1 from '../../resources/images/asset 1.svg';
 import iconTralve1 from '../../resources/images/travel 1.svg';
+import {checkViettelPost} from "../../utils/StringUtils";
 
 const {Header, Sider, Content, Footer} = Layout;
 const PERCENT_COMPLETE = 100;
@@ -203,6 +204,9 @@ function MainLayout(props: MainLayoutProps) {
                         <div className="container">
                             <ul>
                                 {MENU.map((x: any)=>{
+                                    if(x.code!=='transport'&&x.code!=='accident'&&checkViettelPost(webCode)){
+                                        return;
+                                    }
                                     return  <li onClick={()=>{
                                         navigate(`/categories/${x.code}`);
                                         // window.location.reload();

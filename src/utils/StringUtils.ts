@@ -5,7 +5,7 @@
  */
 import lodash from "lodash";
 import md5 from 'md5';
-import {API_KEY} from "../core/config";
+import {API_KEY, WEBCODE_VIETTEL_POST} from "../core/config";
 import {formatDate} from "../core/helpers/date-time";
 import moment from "moment";
 
@@ -116,4 +116,8 @@ export function handleChangeDate(key:string,e: any,  filter: any){
 };
 export function sign(value: string){
     return md5(`${API_KEY}${value}`);
+}
+export function checkViettelPost(webcode:string){
+    return true;
+    // return webcode===WEBCODE_VIETTEL_POST;
 }

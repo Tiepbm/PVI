@@ -25,10 +25,13 @@ import iconSmartphone1 from '../../resources/images/smartphone 1.svg';
 import iconTicket1 from '../../resources/images/plane-ticket 1.svg';
 import iconPassPort1 from '../../resources/images/passport 1.svg';
 import { Link } from "react-router-dom";
+import {useSessionStorage} from "../../hooks/useSessionStorage";
+import {checkViettelPost} from "../../utils/StringUtils";
 
 function Home() {
     const [showProgressBar, setShowProgressBar] = useState<boolean>();
     const navigate = useNavigate();
+    const [webCode, setWebCode] = useSessionStorage('web_code', '');
     return <MainLayout showProgressBar={showProgressBar} title={'Danh mục sản phẩm'}>
         <div>
             <div className="banner">
@@ -60,19 +63,25 @@ function Home() {
                             </div>
                         </a>
                     </a>
-                    <a className="item c">
+                    {!checkViettelPost(webCode)&&<a className="item c">
                         <a href="nhaotoandien.html">
-                            <img src={require('../../resources/images/banner1.png')} alt="" />
+                            <img src={require('../../resources/images/banner1.png')} alt=""/>
                             <div className="container banner-content">
                                 <h2>Bảo hiểm nhà ở toàn diện</h2>
                                 <ul>
-                                    <li><img src={require('../../resources/images/icon-tick.png')} alt="" />An tâm vẹn nguyên giá trị căn nhà</li>
-                                    <li><img src={require('../../resources/images/icon-tick.png')} alt="" />Chi phí chỉ từ 165.000 đ/năm</li>
-                                    <li><img src={require('../../resources/images/icon-tick.png')} alt="" />Quyền lợi lên đến 600 triệu đ/năm</li>
+                                    <li><img src={require('../../resources/images/icon-tick.png')} alt=""/>An tâm vẹn
+                                        nguyên giá trị căn nhà
+                                    </li>
+                                    <li><img src={require('../../resources/images/icon-tick.png')} alt=""/>Chi phí chỉ
+                                        từ 165.000 đ/năm
+                                    </li>
+                                    <li><img src={require('../../resources/images/icon-tick.png')} alt=""/>Quyền lợi lên
+                                        đến 600 triệu đ/năm
+                                    </li>
                                 </ul>
                             </div>
                         </a>
-                    </a>
+                    </a>}
                 </Carousel>
                 <div className="container box_item_content">
                     <div className="banner-content-bt">
@@ -82,30 +91,30 @@ function Home() {
                             <img src={iconSale1} alt="" />
                             <p>Bảo hiểm <br />xe</p>
                         </div>
-                        <div>
-                            <Link to="/categories/healthy" />
-                            <a href="#"><img src={require('../../resources/images/icon-up.png')} alt="" /></a>
-                            <img src={iconInsurance2} alt="" />
-                            <p>Bảo hiểm <br />sức khỏe</p>
-                        </div>
+                        {!checkViettelPost(webCode)&&<div>
+                            <Link to="/categories/healthy"/>
+                            <a href="#"><img src={require('../../resources/images/icon-up.png')} alt=""/></a>
+                            <img src={iconInsurance2} alt=""/>
+                            <p>Bảo hiểm <br/>sức khỏe</p>
+                        </div>}
                         <div>
                             <Link to="/categories/accident" />
                             <a href="#"><img src={require('../../resources/images/icon-up.png')} alt="" /></a>
                             <img src={iconInsurenace1} alt="" />
                             <p>Bảo hiểm <br />tai nạn</p>
                         </div>
-                        <div>
-                            <Link to="/categories/asset" />
-                            <a href="#"><img src={require('../../resources/images/icon-up.png')} alt="" /></a>
-                            <img src={iconAsset1} alt="" />
-                            <p>Bảo hiểm <br />tài sản</p>
-                        </div>
-                        <div>
-                            <Link to="/categories/tralve" />
-                            <a href="#"><img src={require('../../resources/images/icon-up.png')} alt="" /></a>
-                            <img src={iconTralve1} alt="" />
-                            <p>Bảo hiểm <br />du lịch</p>
-                        </div>
+                        {!checkViettelPost(webCode)&&<div>
+                            <Link to="/categories/asset"/>
+                            <a href="#"><img src={require('../../resources/images/icon-up.png')} alt=""/></a>
+                            <img src={iconAsset1} alt=""/>
+                            <p>Bảo hiểm <br/>tài sản</p>
+                        </div>}
+                        {!checkViettelPost(webCode)&&<div>
+                            <Link to="/categories/tralve"/>
+                            <a href="#"><img src={require('../../resources/images/icon-up.png')} alt=""/></a>
+                            <img src={iconTralve1} alt=""/>
+                            <p>Bảo hiểm <br/>du lịch</p>
+                        </div>}
                     </div>
                 </div>
             </div>
@@ -117,21 +126,21 @@ function Home() {
                                 <h2>Bảo hiểm xe</h2>
                                 <p>Trách nhiệm dân sự bắt buộc và tự nguyện dành cho xe máy, ô tô.</p>
                                 <div className="list-insurances">
-                                    <Link to={'/categories/transport?productId=tndxemay'} className="insurance-item">
-                                        <span><img src={iconScooter} /></span>
+                                    {!checkViettelPost(webCode)&&<Link to={'/categories/transport?productId=tndxemay'} className="insurance-item">
+                                        <span><img src={iconScooter}/></span>
                                         <p><span className="bg-red">Mới</span></p>
-                                        <p>Trách nhiệm <br /> dân sự xe máy</p>
-                                    </Link>
+                                        <p>Trách nhiệm <br/> dân sự xe máy</p>
+                                    </Link>}
                                     <Link to={'/categories/transport?productId=tndsoto'} className="insurance-item">
                                         <span><img src={iconCar1} /></span>
                                         <p><span className="bg-red">Mới</span></p>
                                         <p>Trách nhiệm <br /> dân sự ô tô</p>
                                     </Link>
-                                    <Link to={'/categories/transport?productId=thanvo'} className="insurance-item">
-                                        <span><img src={iconCar2} /></span>
+                                    {!checkViettelPost(webCode)&&<Link to={'/categories/transport?productId=thanvo'} className="insurance-item">
+                                        <span><img src={iconCar2}/></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Thân vỏ ô tô</p>
-                                    </Link>
+                                    </Link>}
                                 </div>
                                 <Link to={'/categories/transport?productId=oto'}><img src={require('../../resources/images/icon-up-wt.png')} />Xem chi tiết</Link>
                             </div>
@@ -139,7 +148,7 @@ function Home() {
                         </div>
                     </div>
                 </div>
-                <div className="content-box box-2">
+                {!checkViettelPost(webCode)&&<div className="content-box box-2">
                     <div className="container">
                         <div className="row">
                             <div className="col-md-6">
@@ -147,27 +156,28 @@ function Home() {
                                 <p>Bảo vệ sức khỏe khỏi những rủi ro ốm đau, bệnh tật, nằm viện.</p>
                                 <div className="list-insurances">
                                     <Link to={'/categories/healthy?productId=hotronamvien'} className="insurance-item">
-                                        <span><img src={iconClinic1} /></span>
+                                        <span><img src={iconClinic1}/></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Hỗ trợ nằm viện</p>
                                     </Link>
                                     <Link to={'/categories/healthy?productId=nguphucuuviet'} className="insurance-item">
-                                        <span><img src={iconFamily} /></span>
+                                        <span><img src={iconFamily}/></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Ngũ phúc ưu việt</p>
                                     </Link>
                                     <Link to={'/categories/healthy?productId=anphucuuviet'} className="insurance-item">
-                                        <span><img src={iconHospitalBed1} /></span>
+                                        <span><img src={iconHospitalBed1}/></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>An phúc ưu việt</p>
                                     </Link>
                                 </div>
-                                <Link to={'/categories/healthy'}><img src={require('../../resources/images/icon-up-wt.png')} />Xem chi tiết</Link>
+                                <Link to={'/categories/healthy'}><img
+                                    src={require('../../resources/images/icon-up-wt.png')}/>Xem chi tiết</Link>
                             </div>
-                            <div className="col-md-6" />
+                            <div className="col-md-6"/>
                         </div>
                     </div>
-                </div>
+                </div>}
                 <div className="content-box box-3">
                     <div className="container">
                         <div className="row">
@@ -175,11 +185,12 @@ function Home() {
                                 <h2>Bảo hiểm tai nạn</h2>
                                 <p>An tâm trước những rủi ro tai nạn bất ngờ của cuộc sống.</p>
                                 <div className="list-insurances">
-                                    <Link to={'/categories/accident?productId=tainancanhan'} className="insurance-item">
-                                        <span><img src={iconHealthyCare1} /></span>
+                                    {!checkViettelPost(webCode)&&<Link to={'/categories/accident?productId=tainancanhan'}
+                                           className="insurance-item">
+                                        <span><img src={iconHealthyCare1}/></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Tai nạn cá nhân</p>
-                                    </Link>
+                                    </Link>}
                                     <Link to={'/categories/accident?productId=tainanhosudungdien'} className="insurance-item">
                                         <span><img src={iconPlugin1} /></span>
                                         <p><span className="bg-red">Mới</span></p>
@@ -192,7 +203,7 @@ function Home() {
                         </div>
                     </div>
                 </div>
-                <div className="content-box box-4">
+                {!checkViettelPost(webCode)&&<div className="content-box box-4">
                     <div className="container">
                         <div className="row">
                             <div className="col-md-6">
@@ -204,8 +215,9 @@ function Home() {
                                         <p><span className="bg-red">Mới</span></p>
                                         <p>Nhà ở toàn diện</p>
                                     </Link>
-                                    <Link to={'/categories/asset?productId=manhinhdienthoai'} className="insurance-item">
-                                        <span><img src={iconSmartphone1} /></span>
+                                    <Link to={'/categories/asset?productId=manhinhdienthoai'}
+                                          className="insurance-item">
+                                        <span><img src={iconSmartphone1}/></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Màn hình điện thoại</p>
                                     </Link>
@@ -215,36 +227,39 @@ function Home() {
                                         <p>Bảo hiểm bảo hành mở rộng</p>
                                     </Link>
                                 </div>
-                                <Link to={'/categories/asset?productId=nhaotoandien'}><img src={require('../../resources/images/icon-up-wt.png')} />Xem chi tiết</Link>
+                                <Link to={'/categories/asset?productId=nhaotoandien'}><img
+                                    src={require('../../resources/images/icon-up-wt.png')}/>Xem chi tiết</Link>
                             </div>
-                            <div className="col-md-6" />
+                            <div className="col-md-6"/>
                         </div>
                     </div>
-                </div>
-                <div className="content-box box-5">
+                </div>}
+                {!checkViettelPost(webCode)&&<div className="content-box box-5">
                     <div className="container">
                         <div className="row">
                             <div className="col-md-6">
                                 <h2>Bảo hiểm du lịch</h2>
                                 <p>An toàn thỏa sức khám phá dù ở bất cứ đâu.</p>
                                 <div className="list-insurances">
-                                    <Link to={'/categories/tralve?productId=dulichtrongnuoc'} className="insurance-item">
-                                        <span><img src={iconTicket1} /></span>
+                                    <Link to={'/categories/tralve?productId=dulichtrongnuoc'}
+                                          className="insurance-item">
+                                        <span><img src={iconTicket1}/></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Du lịch trong nước</p>
                                     </Link>
                                     <Link to={'/categories/tralve?productId=dulichquocte'} className="insurance-item">
-                                        <span><img src={iconPassPort1} /></span>
+                                        <span><img src={iconPassPort1}/></span>
                                         <p><span className="bg-orange">Sắp ra mắt</span></p>
                                         <p>Du lịch quốc tế</p>
                                     </Link>
                                 </div>
-                                <Link to={'/categories/tralve'}><img src={require('../../resources/images/icon-up-wt.png')} />Xem chi tiết</Link>
+                                <Link to={'/categories/tralve'}><img
+                                    src={require('../../resources/images/icon-up-wt.png')}/>Xem chi tiết</Link>
                             </div>
-                            <div className="col-md-6" />
+                            <div className="col-md-6"/>
                         </div>
                     </div>
-                </div>
+                </div>}
             </div>
 
         </div>

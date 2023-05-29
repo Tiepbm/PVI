@@ -127,6 +127,8 @@ function RegisterInsurance() {
                     return 'Gói Bạc';
                 case '03':
                     return 'Gói Vàng';
+                case '04':
+                    return 'Gói tai nạn sử dụng điện';
             }
         } else if (productId === ENSURE_CAR||productId === ENSURE_MOTOR) {
             switch (packageCode) {
@@ -178,6 +180,7 @@ function RegisterInsurance() {
                 if (productId === ENSURE_ELECTRIC) {
                     let listThamGia = [];
                     listThamGia.push({
+                        loai: 3,
                         ten_khach: values.ownerName,
                         so_cmnd: values.ownerCMND,
                         ngay_sinh: '',
@@ -186,6 +189,7 @@ function RegisterInsurance() {
                     values.persons?.map((x: any) => {
                         if(x.fullname&&x.so_cmnd)
                         listThamGia.push({
+                            loai:0,
                             ten_khach: x.fullname,
                             so_cmnd: x.so_cmnd
                         });
@@ -518,6 +522,7 @@ function RegisterInsurance() {
         setLoading(true);
         if (webCode)
             bodyRegister.web_code = webCode;
+        bodyRegister.CardId=cardId;
         if (productId === ENSURE_ELECTRIC) {
             productRepository.createOrderHSDD(bodyRegister).then(res => {
                 if(res.URL_Payment){

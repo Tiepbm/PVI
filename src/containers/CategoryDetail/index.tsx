@@ -24,10 +24,10 @@ import {
     ENSURE_EXTEND,
     ENSURE_HOUSE, ENSURE_MOTOR,
     FEE, FEE_REQUEST,
-    STANDARD_DATE_FORMAT, WEBCODE_VIETTEL_STORE
+    STANDARD_DATE_FORMAT, WEBCODE_VIETTEL_POST, WEBCODE_VIETTEL_STORE
 } from "../../core/config";
 import {localStorageSave} from "../../utils/LocalStorageUtils";
-import {handleChangeDate, sign} from "../../utils/StringUtils";
+import {checkViettelPost, handleChangeDate, sign} from "../../utils/StringUtils";
 import {productRepository} from "../../repositories/ProductRepository";
 import M24ErrorUtils from "../../utils/M24ErrorUtils";
 import {convertStringToNumber, formatMoneyByUnit, formatNumber} from "../../core/helpers/string";
@@ -1345,6 +1345,8 @@ function CategoryDetail() {
             // console.log('category: ',category);
             if (webCode===WEBCODE_VIETTEL_STORE){
                 category.products = category.products.filter((x: any)=> x.code==='baohanhmorong');
+            }else if(checkViettelPost(webCode)&&categoryId==='transport'){
+                category.products = category.products.filter((x: any)=> x.code===ENSURE_CAR);
             }else
                 category.products = category.products.filter((x: any)=> x.code!=='baohanhmorong');
             setDetail(category);
@@ -1355,7 +1357,10 @@ function CategoryDetail() {
             }
             if (!product) product = category.products[0];
             setCurrentProduct(product);
-            if (product.code !== ENSURE_EXTEND)
+            if(checkViettelPost(webCode)&&product.code===ENSURE_ELECTRIC){
+                setCurrentPackage('04');
+            }
+            else if (product.code !== ENSURE_EXTEND)
                 setCurrentPackage(product?.benefit?.packages[0]?.code);
             else getDevicesCategory();
         }
@@ -1540,10 +1545,12 @@ function CategoryDetail() {
     const renderFeeElectric = () => {
         return <div className={'txt-left'}>
             <label>Gói bảo hiểm</label>
-            <Select value={currentPackage} onChange={handleChangePackage} className={'width100'}>
+            {checkViettelPost(webCode)&&currentProduct.code === ENSURE_ELECTRIC?<Select value={currentPackage} onChange={handleChangePackage} className={'width100'}>
+                <Select.Option value={'04'}>{'Gói tai nạn sử dụng điện'}</Select.Option>
+            </Select>:<Select value={currentPackage} onChange={handleChangePackage} className={'width100'}>
                 {currentProduct?.benefit.packages.map((x: any) => <Select.Option
                     value={x.code}>{x.name}</Select.Option>)}
-            </Select>
+            </Select>}
             <label>Ngày hiệu lực</label>
             <DatePicker  allowClear={false} disabledDate={disabledDate} defaultValue={moment(moment().add(1,'d'), STANDARD_DATE_FORMAT)}
                         suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
@@ -1663,6 +1670,8 @@ function CategoryDetail() {
                 <div className={`menu-tab ${detail?.tabClassName}`}>
                     <ul>
                         {detail?.products?.map((x: any) => {
+                            if(x.code!==ENSURE_CAR&&x.code!==ENSURE_ELECTRIC&&checkViettelPost(webCode))
+                                return;
                             return <li onClick={() => tabClick(x)} key={x.code}><a
                                 className={x.code === currentProduct?.code ? 'active' : ''}>{x.tabName}</a></li>
                         })}
@@ -1671,7 +1680,7 @@ function CategoryDetail() {
                 <div className="tab-content">
                     {currentProduct?.isReady ? <div className="tab-content1">
                         <div className="container">
-                            <div className="type-insurrance">
+                            {checkViettelPost(webCode)&&currentProduct.code !== ENSURE_CAR?null:<div className="type-insurrance">
                                 <div className="row">
                                     <div className="col-md-7">
                                         {currentProduct?.description}
@@ -1683,7 +1692,8 @@ function CategoryDetail() {
                                         <img src={currentProduct?.banner} className="mb-show"/>
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
+                            {checkViettelPost(webCode)&&currentProduct.code !== ENSURE_CAR?null:
                             <div className="benefit-insurrance">
                                 <h2><img src={iconH22}/>Quyền lợi</h2>
                                 {currentProduct && currentProduct.code !== 'baohanhmorong' ? <div className="row">
@@ -1726,6 +1736,7 @@ function CategoryDetail() {
                                     <div className={'baohiembaohanhmorong'}>{currentProduct?.benefit?.content}</div>
                                 }
                             </div>
+                            }
                             {currentProduct && currentProduct.code !== 'baohanhmorong' &&
                                 <div className={`benefit-insurrance-mb ${currentProduct?.benefit?.classNameValue}mb`}>
                                     <h2><img src={iconH22}/>Quyền lợi</h2>
@@ -1804,5 +1815,4 @@ function CategoryDetail() {
         </div>
     </MainLayout>
 }
-
 export default CategoryDetail;
