@@ -737,6 +737,14 @@ function RegisterInsurance() {
                     <Input placeholder={'CMND/CCCD/Hộ chiếu'}/>
                 </Form.Item>
                 {checkViettelPost(webCode)&&<Form.Item
+                    label="Địa chỉ"
+                    name="customerAddress"
+                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
+                >
+                    <Input.TextArea placeholder={''}
+                                    rows={2}></Input.TextArea>
+                </Form.Item>}
+                {checkViettelPost(webCode)&&<Form.Item
                     label="Số thành viên trong hộ khẩu"
                     name="SoNguoi_HoKhau"
                     className={'mgbt5'}
@@ -919,6 +927,7 @@ function RegisterInsurance() {
                     <h3>Chủ hộ</h3>
                     <RowItem title={'Họ và tên'} value={bodyRegister.list_nguoithamgia[0].ten_khach}></RowItem>
                     <RowItem title={'CMND/CCCD/Hộ chiếu'} value={bodyRegister.list_nguoithamgia[0].so_cmnd}></RowItem>
+                    {checkViettelPost(webCode)&&<RowItem title={'Địa chỉ'} value={bodyRegister.dia_chi}></RowItem>}
                     {/*<RowItem title={'Số điện thoại'} value={bodyRegister.list_nguoithamgia[0].dien_thoai}></RowItem>*/}
                     {/*<RowItem title={'Ngày sinh'} value={bodyRegister.list_nguoithamgia[0].ngay_sinh}></RowItem>*/}
                     {bodyRegister.list_nguoithamgia?.length>1&&<h3>Thành viên bổ sung</h3>}
