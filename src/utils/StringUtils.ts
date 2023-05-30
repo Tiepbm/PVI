@@ -118,6 +118,6 @@ export function sign(value: string){
     return md5(`${API_KEY}${value}`);
 }
 export function checkViettelPost(webcode:string){
-    return true;
-    // return webcode===WEBCODE_VIETTEL_POST;
+    // return true;
+    return webcode===WEBCODE_VIETTEL_POST;
 }

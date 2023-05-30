@@ -17,7 +17,7 @@ import {
 import {formatDate} from "../../core/helpers/date-time";
 import lodash from "lodash";
 import {localStorageRead} from "../../utils/LocalStorageUtils";
-import {sign} from "../../utils/StringUtils";
+import {checkViettelPost, sign} from "../../utils/StringUtils";
 import {productRepository} from "../../repositories/ProductRepository";
 import {formatMoneyByUnit} from "../../core/helpers/string";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
@@ -223,6 +223,9 @@ function RegisterInsurance() {
                         'ma_kh_th': '',
                         'dia_chi_th': '',
                         'Sign': sign(`${values.customerEmail}${datePaid}${duration}${dateStart}${fee.TotalFee}${totalAmount}`)
+                    }
+                    if(checkViettelPost(webCode)){
+                        body.SoNguoi_HoKhau= parseInt(values.SoNguoi_HoKhau)
                     }
                 } else if (productId === ENSURE_HOUSE) {
                     let totalAmount = packageCode === '01' ? 100000000 : packageCode === '02' ? 200000000 : 400000000;
@@ -733,6 +736,27 @@ function RegisterInsurance() {
                 >
                     <Input placeholder={'CMND/CCCD/Hộ chiếu'}/>
                 </Form.Item>
+                {checkViettelPost(webCode)&&<Form.Item
+                    label="Số thành viên trong hộ khẩu"
+                    name="SoNguoi_HoKhau"
+                    className={'mgbt5'}
+                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'},
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                let raw = value.replace(/[^\d]/g, "");
+                                let max = parseInt(raw);
+                                if(max==0) return Promise.reject(new Error(`Không hợp lệ`));
+                                else if (max>8) return Promise.reject(new Error(`Số thành viên trong hộ khẩu không vượt quá 8 người`));
+                                return Promise.resolve()
+                            },
+                        })]}
+                    normalize={(value, prevValue) => {
+                        let raw = value.replace(/[^\d]/g, "");
+                        return raw;
+                    }}
+                >
+                    <Input placeholder={'Số thành viên trong hộ khẩu'}/>
+                </Form.Item>}
                 <h3>Thành viên bổ sung</h3>
                 <Row className={'mgt5 mgbt5'}><p className={'info-italic'}>* Thành viên trong gia đình sống cùng chủ hộ nhưng không có tên trong hộ khẩu</p></Row>
                 <Form.List name={'persons'}>
