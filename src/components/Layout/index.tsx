@@ -167,13 +167,13 @@ function MainLayout(props: MainLayoutProps) {
                                     </div>
                                 </div>
                             </div>}
-                            {showSearch&&<div className="col">
-                                <div className="header-right">
-                                    <div className="header-intro">
-                                        <Link to={'/search'}><i className="fas fa-search mgr5"></i>Tra cứu đơn</Link>
-                                    </div>
-                                </div>
-                            </div>}
+                            {/*{showSearch&&<div className="col">*/}
+                            {/*    <div className="header-right">*/}
+                            {/*        <div className="header-intro">*/}
+                            {/*            <Link to={'/search'}><i className="fas fa-search mgr5"></i>Tra cứu đơn</Link>*/}
+                            {/*        </div>*/}
+                            {/*    </div>*/}
+                            {/*</div>}*/}
                             <div className="col">
                                 {!showLogoViettel ? <div className="header-right">
                                     <div className="header-intro">
