@@ -192,7 +192,7 @@ function RegisterInsurance() {
                             loai:0,
                             ten_khach: x.fullname,
                             so_cmnd: x.so_cmnd,
-                            ngay_sinh:x.ngay_sinh,
+                            ngay_sinh:formatDate(x.ngay_sinh),
                             nhom_khach: x.nhom_khach
                         });
                     });
