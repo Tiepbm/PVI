@@ -1737,7 +1737,7 @@ function CategoryDetail() {
                                 }
                             </div>
                             }
-                            {currentProduct && currentProduct.code !== 'baohanhmorong' &&
+                            {checkViettelPost(webCode)&&currentProduct.code !== ENSURE_CAR?null:currentProduct && currentProduct.code !== 'baohanhmorong' &&
                                 <div className={`benefit-insurrance-mb ${currentProduct?.benefit?.classNameValue}mb`}>
                                     <h2><img src={iconH22}/>Quyền lợi</h2>
                                     <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
