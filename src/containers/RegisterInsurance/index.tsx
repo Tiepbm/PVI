@@ -191,7 +191,9 @@ function RegisterInsurance() {
                         listThamGia.push({
                             loai:0,
                             ten_khach: x.fullname,
-                            so_cmnd: x.so_cmnd
+                            so_cmnd: x.so_cmnd,
+                            ngay_sinh:x.ngay_sinh,
+                            nhom_khach: x.nhom_khach
                         });
                     });
                     let totalAmount = packageCode === '01' ? 10000000 : packageCode === '02' ? 20000000 : 40000000;
@@ -381,7 +383,7 @@ function RegisterInsurance() {
                         "PhiBHLaiPhu": "0",
                         "PhiBHTNDS": "0",
                         "ThamGiaVatChat": false,
-                        "MaMucDichSD": "1",
+                        "MaMucDichSD": lodash.get(feeRequest, 'ma_mdsd', false),
                         "MayKeo": lodash.get(feeRequest, 'MayKeo', false),
                         "XeChuyenDung": lodash.get(feeRequest, 'XeChuyenDung', false),
                         "XeChoTien": lodash.get(feeRequest, 'XeChoTien', false),
@@ -794,6 +796,24 @@ function RegisterInsurance() {
                                     >
                                         <Input placeholder={'Nhập CMND/CCCD/Hộ chiếu'}/>
                                     </Form.Item>
+                                    {checkViettelPost(webCode)&&<Form.Item
+                                        {...restField}
+                                        label="Ngày sinh"
+                                        className={'mgbt5'}
+                                        name={[name, 'ngay_sinh']}
+                                    >
+                                        <DatePicker  allowClear={false} disabledDate={disabledDate}
+                                                     suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
+                                                     format={STANDARD_DATE_FORMAT} />
+                                    </Form.Item>}
+                                    {checkViettelPost(webCode)&&<Form.Item
+                                        {...restField}
+                                        label="Quan hệ với chủ hộ"
+                                        className={'mgbt5'}
+                                        name={[name, 'nhom_khach']}
+                                    >
+                                        <Input placeholder={'Nhập mối quan hệ với chủ hộ'}/>
+                                    </Form.Item>}
                                 </div>
                             ))}
                             <Form.Item>
