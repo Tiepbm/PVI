@@ -311,7 +311,7 @@ function RegisterInsurance() {
                         "CardId": lodash.get(values,'customerCardId',''),
                         "DiaChiKH": "",
                         "TenChuXe": values.carName,
-                        "DiaChiChuXe": '',
+                        "DiaChiChuXe": values.carAddress,
                         "KhuyenMai": "",
                         "Ma_Phong": "",
                         "MaKH": "",
@@ -860,14 +860,14 @@ function RegisterInsurance() {
                         }
                     </Select>
                 </Form.Item>
-                {/*<Form.Item*/}
-                {/*    label="Địa chỉ"*/}
-                {/*    name="carAddress"*/}
-                {/*    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}*/}
-                {/*>*/}
-                {/*    <Input.TextArea placeholder={''}*/}
-                {/*                    rows={5}></Input.TextArea>*/}
-                {/*</Form.Item>*/}
+                <Form.Item
+                    label="Địa chỉ"
+                    name="carAddress"
+                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
+                >
+                    <Input.TextArea placeholder={''}
+                                    rows={3}></Input.TextArea>
+                </Form.Item>
             </div>
         } else if (productId === ENSURE_HOUSE) {
             return <div>
