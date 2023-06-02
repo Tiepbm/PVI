@@ -535,15 +535,19 @@ function RegisterInsurance() {
                     // window.open(res.URL_Payment);
                 }
                 else {
+                    setLoading(false);
+                    setShowConfirm(false);
                     setResult(true);
                     setShowResult(true);
                 }
             }).catch(err => {
+                setLoading(false);
+                setShowConfirm(false);
                 setResult(false);
                 setShowResult(true);
             }).finally(() => {
-                setShowConfirm(false);
-                setLoading(false);
+                // setShowConfirm(false);
+                // setLoading(false);
                 // setShowResult(true);
             });
         } else if (productId === ENSURE_HOUSE) {
@@ -553,15 +557,19 @@ function RegisterInsurance() {
                     window.location.href=res.URL_Payment;
                 }
                 else {
+                    setLoading(false);
+                    setShowConfirm(false);
                     setResult(true);
                     setShowResult(true);
                 }
             }).catch(err => {
+                setLoading(false);
+                setShowConfirm(false);
                 setResult(false);
                 setShowResult(true);
             }).finally(() => {
-                setShowConfirm(false);
-                setLoading(false);
+                // setShowConfirm(false);
+                // setLoading(false);
                 // setShowResult(true);
             });
         } else if (productId === ENSURE_CAR) {
@@ -571,15 +579,20 @@ function RegisterInsurance() {
                     window.location.href=res.URL_Payment;
                 }
                 else {
+                    setLoading(false);
+                    setShowConfirm(false);
                     setResult(true);
                     setShowResult(true);
+
                 }
             }).catch(err => {
+                setLoading(false);
+                setShowConfirm(false);
                 setResult(false);
                 setShowResult(true);
             }).finally(() => {
-                setShowConfirm(false);
-                setLoading(false);
+                // setShowConfirm(false);
+                // setLoading(false);
                 // setShowResult(true);
             });
         }else if(productId===ENSURE_EXTEND){
@@ -602,12 +615,20 @@ function RegisterInsurance() {
                     // window.open(res.URL_Payment);
                     window.location.href=res.URL_Payment;
                 }
-                else setResult(true);
+                else {
+                    setLoading(false);
+                    setShowConfirm(false);
+                    setResult(true);
+                    setShowResult(true);
+                }
             }).catch(err => {
-                setResult(false);
-            }).finally(() => {
-                setShowConfirm(false);
                 setLoading(false);
+                setShowConfirm(false);
+                setResult(false);
+                setShowResult(true);
+            }).finally(() => {
+                // setShowConfirm(false);
+                // setLoading(false);
                 // setShowResult(true);
             });
         }
