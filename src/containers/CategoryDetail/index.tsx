@@ -47,6 +47,7 @@ function CategoryDetail() {
     const [fromDate, setFromDate] = useState<string>(formatDate(moment(), STANDARD_DATE_FORMAT));
     const [currentProduct, setCurrentProduct] = useState<any>();
     const [currentPackage, setCurrentPackage] = useState<string>('');
+    const [rangeItems, setRangeItems] = useState<any>([]);
     const [products, setProducts] = useState<any>([
         {
             code: 'transport',
@@ -208,24 +209,24 @@ function CategoryDetail() {
                                     }
                                 ]
                             },
-                            {
-                                name: 'Gói Tiêu Chuẩn',
-                                code: '02',
-                                benefits: [
-                                    {
-                                        category: '1',
-                                        value: 'Tối đa 150 triệu đồng/người/vụ'
-                                    },
-                                    {
-                                        category: '2',
-                                        value: 'Tối đa 100 triệu đồng/vụ'
-                                    },
-                                    {
-                                        category: '3',
-                                        value: 'Tối đa 10 triệu đồng/người/vụ'
-                                    }
-                                ]
-                            },
+                            // {
+                            //     name: 'Gói Tiêu Chuẩn',
+                            //     code: '02',
+                            //     benefits: [
+                            //         {
+                            //             category: '1',
+                            //             value: 'Tối đa 150 triệu đồng/người/vụ'
+                            //         },
+                            //         {
+                            //             category: '2',
+                            //             value: 'Tối đa 100 triệu đồng/vụ'
+                            //         },
+                            //         {
+                            //             category: '3',
+                            //             value: 'Tối đa 10 triệu đồng/người/vụ'
+                            //         }
+                            //     ]
+                            // },
                             {
                                 name: 'Gói Nâng Cao',
                                 code: '03',
@@ -1162,6 +1163,10 @@ function CategoryDetail() {
     useEffect(() => {
         localStorageSave('DATE', '');
         getMotoCategories();
+        let temp: any= [];
+        for(let i=1;i<=10;i++)
+            temp.push(i*10000000);
+        setRangeItems(temp);
     }, []);
     const getMotoCategories = () => {
         categoryRepository.getCategories('LOAIXEMOTOR').then(res => {
@@ -1293,7 +1298,9 @@ function CategoryDetail() {
         if (currentProduct?.code === ENSURE_CAR) {
             if (!bodyOto.so_cho)
                 return true;
-            else if (purpose.code === '3' && !bodyOto.ma_trongtai)
+            else if(!bodyOto.mtn_laiphu&&currentPackage!='01'){
+                return true;
+            } else if (purpose.code === '3' && !bodyOto.ma_trongtai)
                 return true;
         } else if (currentProduct?.code === ENSURE_EXTEND) {
             if (!formValues?.so_serial || !formValues?.thoihan_batdau_baohanh_nsx || !formValues?.thoihan_ketthuc_baohanh_nsx||
@@ -1312,9 +1319,9 @@ function CategoryDetail() {
         let body: any = lodash.cloneDeep(bodyOto);
         if (currentPackage != '01') {
             body.thamgia_laiphu = true;
-            if (currentPackage === '02')
-                body.mtn_laiphu = 10000000;
-            else body.mtn_laiphu = 100000000;
+            // if (currentPackage === '02')
+            //     body.mtn_laiphu = 10000000;
+            // else body.mtn_laiphu = 100000000;
         } else {
             body.thamgia_laiphu = false;
             body.mtn_laiphu = 0;
@@ -1462,7 +1469,8 @@ function CategoryDetail() {
     }
     const changeValueCar = (key: string, value: any) => {
         let body = lodash.cloneDeep(bodyOto);
-        value = value.replace(/[^\d]/g, '');
+        if(key!=='mtn_laiphu')
+            value = value.replace(/[^\d]/g, '');
         // @ts-ignore
         body[key] = value;
         setBodyOto(body);
@@ -1502,6 +1510,13 @@ function CategoryDetail() {
                 {currentProduct?.benefit.packages.map((x: any) => <Select.Option
                     value={x.code}>{x.name}</Select.Option>)}
             </Select>
+            {currentPackage!=='01'&&<div>
+                <label><span className={'txt-color-red'}>* </span>Mức trách nhiệm</label>
+                <Select value={bodyOto.mtn_laiphu?bodyOto.mtn_laiphu:null} onChange={(value:number)=> changeValueCar('mtn_laiphu', value)} className={'width100'}>
+                    {rangeItems.map((x:number)=><Select.Option key={x}
+                        value={x}>{formatNumber(x)} đồng</Select.Option>)}
+                </Select>
+            </div>}
             <label>Ngày hiệu lực</label>
             <DatePicker  allowClear={false} disabledDate={disabledDate} defaultValue={moment(moment().add(1,'d'), STANDARD_DATE_FORMAT)}
                         suffixIcon={<i className="fas fa-calendar-alt"></i>} className={'width100'}
