@@ -761,7 +761,7 @@ function RegisterInsurance() {
                     rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'},
                         ({ getFieldValue }) => ({
                             validator(_, value) {
-                                if(value&&value?.length>12) return Promise.reject(new Error(`CMND/CCCD/Hộ chiếu tối đa 12 ký tự`));
+                                if(value&&(value?.length<8||value?.length>12)) return Promise.reject(new Error(`CMND/CCCD/Hộ chiếu tối đa 12 ký tự`));
                                 return Promise.resolve()
                             },
                         })]}
@@ -825,7 +825,7 @@ function RegisterInsurance() {
                                         name={[name, 'so_cmnd']}
                                         rules={[({ getFieldValue }) => ({
                                                 validator(_, value) {
-                                                    if(value&&value?.length>12) return Promise.reject(new Error(`CMND/CCCD/Hộ chiếu tối đa 12 ký tự`));
+                                                    if(value&&(value?.length<8||value?.length>12)) return Promise.reject(new Error(`CMND/CCCD/Hộ chiếu tối đa 12 ký tự`));
                                                     return Promise.resolve()
                                                 },
                                             })]}
