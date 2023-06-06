@@ -697,7 +697,14 @@ function RegisterInsurance() {
                                         label="Số điện thoại"
                                         name="customerPhone"
                                         className={'mgbt5'}
-                                        rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
+                                        rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'},
+                                            ({ getFieldValue }) => ({
+                                                validator(_, value) {
+                                                    let raw = value.replace(/[^\d]/g, "");
+                                                    if(raw &&(raw?.length<10||raw?.length>12)) return Promise.reject(new Error(`Số điện thoại chỉ từ 10 đến 12 số`));
+                                                    return Promise.resolve()
+                                                },
+                                            })]}
                                         normalize={(value, prevValue) => {
                                             let raw = value.replace(/[^\d]/g, "");
                                             return raw;
@@ -751,11 +758,13 @@ function RegisterInsurance() {
                     label="CMND/CCCD/Hộ chiếu"
                     name="ownerCMND"
                     className={'mgbt5'}
-                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'}]}
-                    normalize={(value, prevValue) => {
-                        let raw = value.replace(/[^\d]/g, "");
-                        return raw;
-                    }}
+                    rules={[{required: true, message: 'Vui lòng nhập đầy đủ thông tin'},
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                if(value&&value?.length>12) return Promise.reject(new Error(`CMND/CCCD/Hộ chiếu tối đa 12 ký tự`));
+                                return Promise.resolve()
+                            },
+                        })]}
                 >
                     <Input placeholder={'CMND/CCCD/Hộ chiếu'}/>
                 </Form.Item>
@@ -814,6 +823,12 @@ function RegisterInsurance() {
                                         label="Số CMND/CCCD/Hộ chiếu"
                                         className={'mgbt5'}
                                         name={[name, 'so_cmnd']}
+                                        rules={[({ getFieldValue }) => ({
+                                                validator(_, value) {
+                                                    if(value&&value?.length>12) return Promise.reject(new Error(`CMND/CCCD/Hộ chiếu tối đa 12 ký tự`));
+                                                    return Promise.resolve()
+                                                },
+                                            })]}
                                     >
                                         <Input placeholder={'Nhập CMND/CCCD/Hộ chiếu'}/>
                                     </Form.Item>
