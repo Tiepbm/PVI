@@ -1404,6 +1404,8 @@ function CategoryDetail() {
                 let duration = formatDate(moment(temp.ngay_batdau,STANDARD_DATE_FORMAT).add(temp.chuong_trinh === '0101' ? 6 :temp.chuong_trinh === '0102' ? 12: 24, 'months'));
                 temp.thoihan_bh = duration;
             }
+        }else if(key==='so_serial'){
+            temp = temp.replace(/[^\d]/g, "");
         }
         // console.log(temp);
         setFormValues(temp);
