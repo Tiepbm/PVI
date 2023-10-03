@@ -1405,7 +1405,7 @@ function CategoryDetail() {
                 temp.thoihan_bh = duration;
             }
         }else if(key==='so_serial'){
-            temp = temp.replace(/[^\d]/g, "");
+            temp.so_serial = temp.so_serial.replace(/[^\d]/g, "");
         }
         // console.log(temp);
         setFormValues(temp);
@@ -1477,6 +1477,7 @@ function CategoryDetail() {
         localStorageSave('DATE', dateString);
     }
     const onSearchIMEI=()=>{
+        console.log("vao day");
         if(!formValues?.so_serial) return;
         setDuplicateImei(false);
         productRepository.searchOrderByImei({imei: formValues?.so_serial}, webCode, '').then(res=>{
