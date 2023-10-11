@@ -1405,7 +1405,7 @@ function CategoryDetail() {
                 temp.thoihan_bh = duration;
             }
         }else if(key==='so_serial'){
-            temp.so_serial = temp.so_serial.replace(/[^\d]/g, "");
+            temp.so_serial = temp.so_serial.replace(/[^a-zA-Z0-9]/g, "");
         }
         // console.log(temp);
         setFormValues(temp);
